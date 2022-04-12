@@ -13,6 +13,11 @@ public class SQLite extends AbstractSQL implements IDatabaseProvider {
     }
 
     @Override
+    public String getPrepareDatabaseQuery() {
+        return "";
+    }
+
+    @Override
     public boolean connect() {
         return connect("sqlite", "bridger.db");
     }
@@ -24,19 +29,6 @@ public class SQLite extends AbstractSQL implements IDatabaseProvider {
 
     @Override
     public boolean prepareDatabase() {
-        if(!isConnectionOpen()){
-            getPlugin().getLogger().severe("The plugin was unable to connect to the database!");
-            getPlugin().getLogger().severe("The plugin will now disable!");
-            return false;
-        }
-
-        try(final PreparedStatement ps = connection.prepareStatement("")) {
-            ps.execute();
-            ps.close();
-            return true;
-        }catch (Exception e){
-            e.printStackTrace();
-            return false;
-        }
+        return createDatabase();
     }
 }

@@ -3,11 +3,13 @@ package io.github.alenalex.bridger.abstracts;
 import com.zaxxer.hikari.HikariConfig;
 import io.github.alenalex.bridger.Bridger;
 import io.github.alenalex.bridger.database.sql.config.ConnectionConfig;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public abstract class AbstractSQL {
@@ -54,6 +56,31 @@ public abstract class AbstractSQL {
             return false;
         }
     }
+
+    public boolean createDatabase(){
+        if(!isConnected()){
+            this.plugin.getLogger().severe("The plugin was unable to connect to the database!");
+            return false;
+        }
+
+        final String query = getPrepareDatabaseQuery();
+
+        if(StringUtils.isBlank(query)){
+            this.plugin.getLogger().severe("Contact the developer of the plugin. "+getClass().getName()+" returned an empty query!");
+            return false;
+        }
+
+        try(final PreparedStatement ps = connection.prepareStatement(getPrepareDatabaseQuery())) {
+            ps.execute();
+            ps.close();
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public abstract String getPrepareDatabaseQuery();
 
     public boolean connect(@NotNull String driver, @NotNull ConnectionConfig connectionConfig) {
         try {

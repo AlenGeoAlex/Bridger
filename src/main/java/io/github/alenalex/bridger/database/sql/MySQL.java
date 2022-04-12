@@ -15,6 +15,11 @@ public class MySQL extends AbstractSQL implements  IDatabaseProvider {
     }
 
     @Override
+    public String getPrepareDatabaseQuery() {
+        return "";
+    }
+
+    @Override
     public boolean connect() {
         return super.connect("mysql",
                 ConnectionConfig.of(getPlugin().configurationHandler().getConfigurationFile().getSectionOf("storage"))
@@ -29,19 +34,6 @@ public class MySQL extends AbstractSQL implements  IDatabaseProvider {
 
     @Override
     public boolean prepareDatabase() {
-        if(!isConnectionOpen()){
-            getPlugin().getLogger().severe("The plugin was unable to connect to the database!");
-            getPlugin().getLogger().severe("The plugin will now disable!");
-            return false;
-        }
-
-        try(final PreparedStatement ps = connection.prepareStatement("")) {
-            ps.execute();
-            ps.close();
-            return true;
-        }catch (Exception e){
-            e.printStackTrace();
-            return false;
-        }
+        return createDatabase();
     }
 }

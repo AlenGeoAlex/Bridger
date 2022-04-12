@@ -22,6 +22,7 @@ public final class Bridger extends JavaPlugin {
 
         if(!this.configurationHandler.initHandler()){
             getLogger().severe("Failed to load configurations!");
+            getLogger().severe("The plugin will be disabled!");
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
@@ -30,17 +31,26 @@ public final class Bridger extends JavaPlugin {
 
         if(!this.dataProvider.initConnection()){
             getLogger().severe("Failed to connect to database!");
+            getLogger().severe("The plugin will be disabled!");
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
 
         if(!this.workloadHandler.initHandler()){
             getLogger().severe("Failed to load workload threads!");
+            getLogger().severe("The plugin will be disabled!");
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
 
         this.workloadHandler.prepareHandler();
+
+        if( !this.dataProvider.getDatabaseProvider().prepareDatabase() ){
+            getLogger().severe("Failed to prepare database!");
+            getLogger().severe("The plugin will be disabled!");
+            getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
     }
 
     @Override
