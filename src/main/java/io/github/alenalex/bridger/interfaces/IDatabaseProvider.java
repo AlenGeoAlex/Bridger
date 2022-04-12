@@ -8,4 +8,6 @@ public interface IDatabaseProvider {
 
     void closeConnection();
 
+    boolean prepareDatabase();
+
 }
