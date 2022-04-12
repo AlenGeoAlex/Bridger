@@ -4,7 +4,8 @@ import io.github.alenalex.bridger.Bridger;
 import io.github.alenalex.bridger.abstracts.AbstractSQL;
 import io.github.alenalex.bridger.interfaces.IDatabaseProvider;
 
-import java.sql.PreparedStatement;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SQLite extends AbstractSQL implements IDatabaseProvider {
 
@@ -13,8 +14,10 @@ public class SQLite extends AbstractSQL implements IDatabaseProvider {
     }
 
     @Override
-    public String getPrepareDatabaseQuery() {
-        return "";
+    public List<String> getPrepareDatabaseQuery() {
+        return new ArrayList<String>(){{
+
+        }};
     }
 
     @Override

@@ -11,6 +11,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.List;
 
 public abstract class AbstractSQL {
 
@@ -63,24 +64,33 @@ public abstract class AbstractSQL {
             return false;
         }
 
-        final String query = getPrepareDatabaseQuery();
+        final List<String> queries = getPrepareDatabaseQuery();
 
-        if(StringUtils.isBlank(query)){
-            this.plugin.getLogger().severe("Contact the developer of the plugin. "+getClass().getName()+" returned an empty query!");
-            return false;
+        boolean completed = true;
+
+        for(String query : queries){
+            if(StringUtils.isBlank(query)){
+                getPlugin().getLogger().warning("Located an empty query while creating database, contact the developer! "+getClass().getName()+".");
+                continue;
+            }
+
+            try(final PreparedStatement ps = connection.prepareStatement(query)) {
+                ps.execute();
+                ps.close();
+            }catch (Exception e){
+                e.printStackTrace();
+                completed = false;
+                break;
+            }
         }
 
-        try(final PreparedStatement ps = connection.prepareStatement(getPrepareDatabaseQuery())) {
-            ps.execute();
-            ps.close();
-            return true;
-        }catch (Exception e){
-            e.printStackTrace();
-            return false;
-        }
+        if(!completed)
+            getPlugin().getLogger().severe("The plugin was forced to abort creating database, Checkout the errors above and report it to the developer!");
+
+        return completed;
     }
 
-    public abstract String getPrepareDatabaseQuery();
+    public abstract List<String> getPrepareDatabaseQuery();
 
     public boolean connect(@NotNull String driver, @NotNull ConnectionConfig connectionConfig) {
         try {

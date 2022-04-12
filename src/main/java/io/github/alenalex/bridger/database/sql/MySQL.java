@@ -5,7 +5,8 @@ import io.github.alenalex.bridger.abstracts.AbstractSQL;
 import io.github.alenalex.bridger.database.sql.config.ConnectionConfig;
 import io.github.alenalex.bridger.interfaces.IDatabaseProvider;
 
-import java.sql.PreparedStatement;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class MySQL extends AbstractSQL implements  IDatabaseProvider {
@@ -15,8 +16,10 @@ public class MySQL extends AbstractSQL implements  IDatabaseProvider {
     }
 
     @Override
-    public String getPrepareDatabaseQuery() {
-        return "";
+    public List<String> getPrepareDatabaseQuery() {
+        return new ArrayList<String>(){{
+
+        }};
     }
 
     @Override
