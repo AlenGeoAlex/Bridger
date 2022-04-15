@@ -19,6 +19,8 @@ public interface IDatabaseProvider {
 
     CompletableFuture<UserData> loadOrRegisterUser(@NotNull UUID uuid);
 
+    void saveAllUserSync(@NotNull List<UserData> users);
+
     void saveUserAsync(@NotNull UserData user);
 
     void saveAllUsersAsync(@NotNull List<UserData> users);

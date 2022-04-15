@@ -1,4 +1,5 @@
 package io.github.alenalex.bridger.utils.adventure;
+import io.github.alenalex.bridger.utils.adventure.internal.MessagePlaceholder;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
@@ -74,17 +75,17 @@ public final class MessageFormatter {
         return messages.stream().map(MessageFormatter::transform).collect(Collectors.toList());
     }
 
-    public static Component transform(String message, InternalPlaceholders... placeholders){
+    public static Component transform(String message, MessagePlaceholder... placeholders){
         String messageToTransform = message;
-        for (InternalPlaceholders pl : placeholders){
+        for (MessagePlaceholder pl : placeholders){
             messageToTransform = pl.replacePlaceholders(messageToTransform);
         }
         return transform(messageToTransform);
     }
 
-    public static List<Component> transform(@NotNull List<String> messages, InternalPlaceholders... placeholders){
+    public static List<Component> transform(@NotNull List<String> messages, MessagePlaceholder... placeholders){
         List<String> messagesToTransform = new ArrayList<>(messages);
-        for(InternalPlaceholders pl: placeholders){
+        for(MessagePlaceholder pl: placeholders){
             messagesToTransform = pl.replacePlaceholders(messagesToTransform);
         }
         return transform(messagesToTransform);

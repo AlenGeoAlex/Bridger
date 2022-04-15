@@ -7,6 +7,7 @@ import io.github.alenalex.bridger.models.player.UserData;
 import io.github.alenalex.bridger.models.player.UserSettings;
 import io.github.alenalex.bridger.models.player.UserStats;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -59,11 +60,14 @@ public class SQLite extends AbstractSQL implements IDatabaseProvider {
         return createDatabase();
     }
 
-    @Override
+    @Override @Nullable
     public CompletableFuture<UserData> loadOrRegisterUser(@NotNull UUID uuid) {
         return CompletableFuture.supplyAsync(new Supplier<UserData>() {
             @Override
             public UserData get() {
+
+                if(!isConnected()) return null;
+
                 try (final PreparedStatement userSettings = connection.prepareStatement("SELECT * FROM bridger_us_settings WHERE uid = ?")) {
                     try (final PreparedStatement userData = connection.prepareStatement("SELECT * FROM bridger_user WHERE uid = ?")) {
 
@@ -81,7 +85,7 @@ public class SQLite extends AbstractSQL implements IDatabaseProvider {
                         }
                         if (settings == null) {
                             settings = UserSettings.DEFAULT;
-
+                            //This should mean that the user has never played before. So registering him to database
                             final PreparedStatement insertSettings = connection.prepareStatement("INSERT INTO bridger_us_settings (uid, language, particle, material, scoreboard) VALUES (?, ?, ?, ?, ?)");
                             insertSettings.setString(1, uuid.toString());
                             insertSettings.setString(2, settings.getLanguageAsString());
@@ -107,6 +111,7 @@ public class SQLite extends AbstractSQL implements IDatabaseProvider {
                             dataSet.close();
                         }
                         if (dataSet == null) {
+                            //This should mean that the user has never played before. So registering him to database
                             final PreparedStatement insertData = connection.prepareStatement("INSERT INTO bridger_user (uid, wins, blocks_placed, games_played, best_time) VALUES (?, ?, ?, ?, ?)");
                             insertData.setString(1, uuid.toString());
                             insertData.setInt(2, 0);
@@ -151,7 +156,7 @@ public class SQLite extends AbstractSQL implements IDatabaseProvider {
                     updateData.setInt(2, user.userStats().getBlocksPlaced());
                     updateData.setInt(3, user.userStats().getGamesPlayed());
                     updateData.setLong(4, user.userStats().getBestTime());
-                    updateData.setString(5, user.userStats().toString());
+                    updateData.setString(5, user.getPlayerUID().toString());
 
                     updateData.executeUpdate();
                     updateData.close();
@@ -160,6 +165,38 @@ public class SQLite extends AbstractSQL implements IDatabaseProvider {
                 }
             }
         });
+    }
+
+    @Override
+    public void saveAllUserSync(@NotNull List<UserData> users) {
+        try {
+            final PreparedStatement updateSettings = connection.prepareStatement("UPDATE bridger_us_settings SET language = ?, particle = ?, material = ?, scoreboard = ? WHERE uid = ?");
+            final PreparedStatement updateData = connection.prepareStatement("UPDATE bridger_user SET wins = ?, blocks_placed = ?, games_played = ?, best_time = ? WHERE uid = ?");
+
+            for (UserData user : users) {
+                updateSettings.setString(1, user.userSettings().getLanguageAsString());
+                updateSettings.setString(2, user.userSettings().getParticleAsString());
+                updateSettings.setString(3, user.userSettings().getMaterialAsString());
+                updateSettings.setBoolean(4, user.userSettings().isScoreboardEnabled());
+                updateSettings.setString(5, user.getPlayerUID().toString());
+
+                updateSettings.executeUpdate();
+
+                updateData.setInt(1, user.userStats().getWins());
+                updateData.setInt(2, user.userStats().getBlocksPlaced());
+                updateData.setInt(3, user.userStats().getGamesPlayed());
+                updateData.setLong(4, user.userStats().getBestTime());
+                updateData.setString(5, user.getPlayerUID().toString());
+
+                updateData.executeUpdate();
+            }
+
+            updateSettings.close();
+            updateData.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 
     @Override
@@ -184,7 +221,7 @@ public class SQLite extends AbstractSQL implements IDatabaseProvider {
                         updateData.setInt(2, user.userStats().getBlocksPlaced());
                         updateData.setInt(3, user.userStats().getGamesPlayed());
                         updateData.setLong(4, user.userStats().getBestTime());
-                        updateData.setString(5, user.userStats().toString());
+                        updateData.setString(5, user.getPlayerUID().toString());
 
                         updateData.executeUpdate();
                     }

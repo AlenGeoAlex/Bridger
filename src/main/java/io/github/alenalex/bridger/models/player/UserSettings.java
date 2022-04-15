@@ -17,12 +17,14 @@ public final class UserSettings {
     private String material;
     private String particle;
     private boolean scoreboardEnabled;
+    private boolean setBackEnabled;
 
     public UserSettings(@NotNull String language, String material, String particle, boolean scoreboardEnabled) {
         this.language = language;
         this.material = material;
         this.particle = particle;
         this.scoreboardEnabled = scoreboardEnabled;
+        this.setBackEnabled = false;
     }
 
     public UserSettings(String material, String particle, boolean scoreboardEnabled) {
@@ -30,6 +32,7 @@ public final class UserSettings {
         this.material = material;
         this.particle = particle;
         this.scoreboardEnabled = scoreboardEnabled;
+        this.setBackEnabled = false;
     }
 
     public String getLanguageAsString() {
@@ -76,17 +79,25 @@ public final class UserSettings {
         this.scoreboardEnabled = scoreboardEnabled;
     }
 
+    public boolean isSetBackEnabled() {
+        return setBackEnabled;
+    }
+
+    public void setSetBackEnabled(boolean setBackEnabled) {
+        this.setBackEnabled = setBackEnabled;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        UserSettings that = (UserSettings) o;
-        return scoreboardEnabled == that.scoreboardEnabled && Objects.equal(language, that.language) && Objects.equal(material, that.material) && Objects.equal(particle, that.particle);
+        UserSettings settings = (UserSettings) o;
+        return scoreboardEnabled == settings.scoreboardEnabled && setBackEnabled == settings.setBackEnabled && Objects.equal(language, settings.language) && Objects.equal(material, settings.material) && Objects.equal(particle, settings.particle);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(language, material, particle, scoreboardEnabled);
+        return Objects.hashCode(language, material, particle, scoreboardEnabled, setBackEnabled);
     }
 
     @Override
@@ -96,6 +107,7 @@ public final class UserSettings {
                 ", material='" + material + '\'' +
                 ", particle='" + particle + '\'' +
                 ", scoreboardEnabled=" + scoreboardEnabled +
+                ", setBackEnabled=" + setBackEnabled +
                 '}';
     }
 }

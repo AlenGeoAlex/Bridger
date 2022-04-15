@@ -1,4 +1,4 @@
-package io.github.alenalex.bridger.utils.adventure;
+package io.github.alenalex.bridger.utils.adventure.internal;
 
 import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Bukkit;
@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
-public final class InternalPlaceholders {
+public final class MessagePlaceholder {
 
     private static final boolean placeholderAPIEnabled;
 
@@ -19,37 +19,37 @@ public final class InternalPlaceholders {
     private final String placeholder;
     private final String toReplace;
 
-    public InternalPlaceholders(String placeholder, String toReplace) {
+    public MessagePlaceholder(String placeholder, String toReplace) {
         this.placeholder = placeholder;
         this.toReplace = toReplace;
     }
 
-    public InternalPlaceholders(String placeholder, UUID toReplace){
+    public MessagePlaceholder(String placeholder, UUID toReplace){
         this.placeholder = placeholder;
         this.toReplace = toReplace.toString();
     }
 
-    public InternalPlaceholders(String placeholder, Integer toReplace) {
+    public MessagePlaceholder(String placeholder, Integer toReplace) {
         this.placeholder = placeholder;
         this.toReplace = String.valueOf(toReplace);
     }
 
-    public InternalPlaceholders(String placeholder, Float toReplace) {
+    public MessagePlaceholder(String placeholder, Float toReplace) {
         this.placeholder = placeholder;
         this.toReplace = String.valueOf(toReplace);
     }
 
-    public InternalPlaceholders(String placeholder, Long toReplace) {
+    public MessagePlaceholder(String placeholder, Long toReplace) {
         this.placeholder = placeholder;
         this.toReplace = String.valueOf(toReplace);
     }
 
-    public InternalPlaceholders(String placeholder, Boolean toReplace) {
+    public MessagePlaceholder(String placeholder, Boolean toReplace) {
         this.placeholder = placeholder;
         this.toReplace = String.valueOf(toReplace);
     }
 
-    public InternalPlaceholders(String placeholder, Double toReplace) {
+    public MessagePlaceholder(String placeholder, Double toReplace) {
         this.placeholder = placeholder;
         this.toReplace = String.valueOf(toReplace);
     }
@@ -76,7 +76,7 @@ public final class InternalPlaceholders {
         return strings.stream().map(this::replacePlaceholders).collect(java.util.stream.Collectors.toList());
     }
 
-    public static String replacePlaceholders(@NotNull List<InternalPlaceholders> placeholders, String message){
+    public static String replacePlaceholders(@NotNull List<MessagePlaceholder> placeholders, String message){
         AtomicReference<String> retMessage = new AtomicReference<>(message);
         placeholders.forEach((placeholder -> {
             retMessage.set(placeholder.replacePlaceholders(message));

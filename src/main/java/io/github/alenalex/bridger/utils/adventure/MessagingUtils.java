@@ -1,6 +1,7 @@
 package io.github.alenalex.bridger.utils.adventure;
 
 import io.github.alenalex.bridger.Bridger;
+import io.github.alenalex.bridger.utils.adventure.internal.MessagePlaceholder;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
@@ -42,11 +43,11 @@ public final class MessagingUtils {
         });
     }
 
-    public void sendTo(@NotNull final Player player, String message, InternalPlaceholders... placeholders){
+    public void sendTo(@NotNull final Player player, String message, MessagePlaceholder... placeholders){
         audiences.player(player).sendMessage(MessageFormatter.transform(message,placeholders));
     }
 
-    public void sendInInterval(@NotNull final Player player, List<String> message, int interval, InternalPlaceholders... placeholders){
+    public void sendInInterval(@NotNull final Player player, List<String> message, int interval, MessagePlaceholder... placeholders){
         message.forEach(m->{
             plugin.getServer().getScheduler().runTaskLater(plugin, new Runnable() {
                 @Override
@@ -66,7 +67,7 @@ public final class MessagingUtils {
         });
     }
 
-    public void sendTo(@NotNull final Player player, List<String> messages, InternalPlaceholders... placeholders){
+    public void sendTo(@NotNull final Player player, List<String> messages, MessagePlaceholder... placeholders){
         messages.forEach(m -> {
             this.sendTo(player,m,placeholders);
         });
