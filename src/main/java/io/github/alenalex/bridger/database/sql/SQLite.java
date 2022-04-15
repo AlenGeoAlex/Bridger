@@ -19,6 +19,8 @@ import java.util.function.Supplier;
 
 public class SQLite extends AbstractSQL implements IDatabaseProvider {
 
+    public static final String SQLITE_DRIVER = "org.sqlite.JDBC";
+
     public SQLite(Bridger plugin) {
         super(plugin);
     }
@@ -47,6 +49,13 @@ public class SQLite extends AbstractSQL implements IDatabaseProvider {
 
     @Override
     public boolean connect() {
+        try {
+            Class.forName(SQLITE_DRIVER);
+        } catch (ClassNotFoundException e) {
+            getPlugin().getLogger().severe("Failed to load SQLite driver!");
+            e.printStackTrace();
+            return false;
+        }
         return connect("sqlite", "bridger.db");
     }
 

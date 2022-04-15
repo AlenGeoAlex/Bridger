@@ -14,7 +14,6 @@ import java.sql.SQLException;
 import java.util.List;
 
 public abstract class AbstractSQL {
-
     protected static final String JDBC_REMOTE_URL = "jdbc:"
             + "%s" //Type of DB (postgresql,mysql)
             + "://"
@@ -44,13 +43,18 @@ public abstract class AbstractSQL {
 
     public boolean connect(@NotNull String driver, @NotNull String fileName) {
         try {
-                this.connection = DriverManager.getConnection(
-                        String.format(
-                                JDBC_LOCAL_URL,
-                                driver,
-                                plugin.getDataFolder().getPath()+ File.separator+"database"+File.separator+fileName
-                        )
-                );
+            final File parentFolder = new File(plugin.getDataFolder().getPath()+File.separator+"database");
+
+            if(!parentFolder.exists())
+                parentFolder.mkdirs();
+
+            this.connection = DriverManager.getConnection(
+                    String.format(
+                            JDBC_LOCAL_URL,
+                            driver,
+                            plugin.getDataFolder().getPath()+ File.separator+"database"+File.separator+fileName
+                    )
+            );
             return isConnected();
         }catch (Exception e){
             e.printStackTrace();
