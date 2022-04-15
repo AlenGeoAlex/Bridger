@@ -15,6 +15,8 @@ import java.util.concurrent.CompletableFuture;
 
 public class MySQL extends AbstractSQL implements  IDatabaseProvider {
 
+    public static final String MYSQL_DRIVER = "com.mysql.jdbc.Driver";
+
     public MySQL(Bridger plugin) {
         super(plugin);
     }
@@ -28,6 +30,13 @@ public class MySQL extends AbstractSQL implements  IDatabaseProvider {
 
     @Override
     public boolean connect() {
+        try {
+            Class.forName(MYSQL_DRIVER);
+        } catch (ClassNotFoundException e) {
+            getPlugin().getLogger().severe("MySQL driver not found!");
+            e.printStackTrace();
+            return false;
+        }
         return super.connect("mysql",
                 ConnectionConfig.of(getPlugin().configurationHandler().getConfigurationFile().getSectionOf("storage"))
                 );
