@@ -1,7 +1,8 @@
 package io.github.alenalex.bridger.variables;
 
 public enum LangConfigurationPaths {
-    PREFIX("prefix")
+    PREFIX("prefix"),
+    KICK_MESSAGE_FAILED_TO_LOAD_DATA("kick-message.failed-to-load-data"),
     ;
     private final String path;
 

@@ -1,2 +1,5 @@
 lang-id: "en"
 prefix: ""
+
+kick-message:
+  failed-to-load-data: "<red>Failed to load data your user data from the database. Please contact an administrator."

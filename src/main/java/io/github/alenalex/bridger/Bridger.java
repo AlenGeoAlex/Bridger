@@ -5,7 +5,9 @@ import io.github.alenalex.bridger.exceptions.FailedLocaleLoading;
 import io.github.alenalex.bridger.exceptions.IllegalInitializationException;
 import io.github.alenalex.bridger.handler.ConfigurationHandler;
 import io.github.alenalex.bridger.handler.WorkloadHandler;
+import io.github.alenalex.bridger.listener.ConnectionListener;
 import io.github.alenalex.bridger.manager.LocaleManager;
+import io.github.alenalex.bridger.manager.UserManager;
 import io.github.alenalex.bridger.utils.adventure.MessagingUtils;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -24,6 +26,7 @@ public final class Bridger extends JavaPlugin {
     private DataProvider dataProvider;
     private LocaleManager localeManager;
     private MessagingUtils messagingUtils;
+    private UserManager userManager;
 
     @Override
     public void onEnable() {
@@ -33,6 +36,7 @@ public final class Bridger extends JavaPlugin {
         this.messagingUtils = new MessagingUtils(this);
         this.dataProvider = new DataProvider(this);
         this.localeManager = new LocaleManager(this);
+        this.userManager = new UserManager(this);
 
         if(!this.configurationHandler.initHandler()){
             getLogger().severe("Failed to load configurations!");
@@ -77,7 +81,8 @@ public final class Bridger extends JavaPlugin {
             return;
         }
 
-
+        //Register all the plugin listener
+        getServer().getPluginManager().registerEvents(new ConnectionListener(this), this);
     }
 
     @Override
@@ -101,7 +106,11 @@ public final class Bridger extends JavaPlugin {
         return dataProvider;
     }
 
-    public LocaleManager getLocaleManager() {
+    public LocaleManager localManager() {
         return localeManager;
+    }
+
+    public UserManager userManager() {
+        return userManager;
     }
 }

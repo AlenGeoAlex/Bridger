@@ -145,10 +145,14 @@ public abstract class AbstractRegistry<K, V> {
         return true;
     }
 
+    public V onDefault(){
+        if(defaultKey == null)
+            throw new IllegalRegistryOperation("Default key is not set!");
+
+        return get(defaultKey);
+    }
+
     public CompletableFuture<Boolean> runTaskAsync(Consumer<Pair<K, V>> task) {
         return CompletableFuture.supplyAsync(() -> runTask(task));
     }
-
-
-
 }

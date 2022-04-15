@@ -57,4 +57,12 @@ public class MessageConfiguration {
         return MessageFormatter.transform(asStringList(path));
     }
 
+    public String asLegacyColorizedString(String path){
+        return MessageFormatter.colorizeLegacy(asString(path));
+    }
+
+    public List<String> asLegacyColorizedStringList(String path){
+        return MessageFormatter.colorizeLegacy(asStringList(path));
+    }
+
 }

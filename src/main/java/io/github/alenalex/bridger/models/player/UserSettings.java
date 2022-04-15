@@ -40,7 +40,7 @@ public final class UserSettings {
     }
 
     public MessageConfiguration getLanguage() {
-        return Bridger.instance().getLocaleManager().getOrDefault(language);
+        return Bridger.instance().localManager().getOrDefault(language);
     }
 
     public String getMaterialAsString() {
