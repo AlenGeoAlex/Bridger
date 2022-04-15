@@ -132,11 +132,69 @@ public class SQLite extends AbstractSQL implements IDatabaseProvider {
 
     @Override
     public void saveUserAsync(@NotNull UserData user) {
+        getPlugin().getServer().getScheduler().runTaskAsynchronously(getPlugin(), new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    final PreparedStatement updateSettings = connection.prepareStatement("UPDATE bridger_us_settings SET language = ?, particle = ?, material = ?, scoreboard = ? WHERE uid = ?");
+                    updateSettings.setString(1, user.userSettings().getLanguageAsString());
+                    updateSettings.setString(2, user.userSettings().getParticleAsString());
+                    updateSettings.setString(3, user.userSettings().getMaterialAsString());
+                    updateSettings.setBoolean(4, user.userSettings().isScoreboardEnabled());
+                    updateSettings.setString(5, user.getPlayerUID().toString());
 
+                    updateSettings.executeUpdate();
+                    updateSettings.close();
+
+                    final PreparedStatement updateData = connection.prepareStatement("UPDATE bridger_user SET wins = ?, blocks_placed = ?, games_played = ?, best_time = ? WHERE uid = ?");
+                    updateData.setInt(1, user.userStats().getWins());
+                    updateData.setInt(2, user.userStats().getBlocksPlaced());
+                    updateData.setInt(3, user.userStats().getGamesPlayed());
+                    updateData.setLong(4, user.userStats().getBestTime());
+                    updateData.setString(5, user.userStats().toString());
+
+                    updateData.executeUpdate();
+                    updateData.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     @Override
     public void saveAllUsersAsync(@NotNull List<UserData> users) {
+        getPlugin().getServer().getScheduler().runTaskAsynchronously(getPlugin(), new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    final PreparedStatement updateSettings = connection.prepareStatement("UPDATE bridger_us_settings SET language = ?, particle = ?, material = ?, scoreboard = ? WHERE uid = ?");
+                    final PreparedStatement updateData = connection.prepareStatement("UPDATE bridger_user SET wins = ?, blocks_placed = ?, games_played = ?, best_time = ? WHERE uid = ?");
 
+                    for (UserData user : users) {
+                        updateSettings.setString(1, user.userSettings().getLanguageAsString());
+                        updateSettings.setString(2, user.userSettings().getParticleAsString());
+                        updateSettings.setString(3, user.userSettings().getMaterialAsString());
+                        updateSettings.setBoolean(4, user.userSettings().isScoreboardEnabled());
+                        updateSettings.setString(5, user.getPlayerUID().toString());
+
+                        updateSettings.executeUpdate();
+
+                        updateData.setInt(1, user.userStats().getWins());
+                        updateData.setInt(2, user.userStats().getBlocksPlaced());
+                        updateData.setInt(3, user.userStats().getGamesPlayed());
+                        updateData.setLong(4, user.userStats().getBestTime());
+                        updateData.setString(5, user.userStats().toString());
+
+                        updateData.executeUpdate();
+                    }
+
+                    updateSettings.close();
+                    updateData.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 }
