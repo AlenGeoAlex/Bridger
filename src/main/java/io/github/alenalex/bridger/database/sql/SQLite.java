@@ -30,19 +30,19 @@ public class SQLite extends AbstractSQL implements IDatabaseProvider {
         return new ArrayList<String>(){{
             //Table -> Player data like blocks placed, games played, etc.
             add("CREATE TABLE IF NOT EXISTS bridger_user " +
-                    "`uid` VARCHAR(40) NOT NULL PRIMARY KEY, " +
+                    "(`uid` VARCHAR(40) NOT NULL PRIMARY KEY, " +
                     "`wins` INTEGER DEFAULT '0' NOT NULL, " +
                     "`blocks_placed` INTEGER DEFAULT '0' NOT NULL, " +
                     "`games_played` INTEGER DEFAULT '0' NOT NULL, " +
-                    "`best_time` BIGINT DEFAULT '0' NOT NULL, ");
+                    "`best_time` BIGINT DEFAULT '0' NOT NULL) ");
 
             //Table -> Player settings like language particles, material, scoreboard, etc.
             add("CREATE TABLE IF NOT EXISTS bridger_us_settings " +
-                    "`uid` VARCHAR(40) NOT NULL, " +
+                    "(`uid` VARCHAR(40) NOT NULL, " +
                     "`language` VARCHAR(40) DEFAULT 'en' NOT NULL , " +
                     "`particle` VARCHAR(40) , " +
                     "`material` VARCHAR(40) , " +
-                    "`scoreboard` BOOLEAN NOT NULL, "
+                    "`scoreboard` BOOLEAN NOT NULL) "
                     );
         }};
     }
