@@ -119,7 +119,7 @@ public class SQLite extends AbstractSQL implements IDatabaseProvider {
                             );
                             dataSet.close();
                         }
-                        if (dataSet == null) {
+                        if (stats == null) {
                             //This should mean that the user has never played before. So registering him to database
                             final PreparedStatement insertData = connection.prepareStatement("INSERT INTO bridger_user (uid, wins, blocks_placed, games_played, best_time) VALUES (?, ?, ?, ?, ?)");
                             insertData.setString(1, uuid.toString());
@@ -149,8 +149,8 @@ public class SQLite extends AbstractSQL implements IDatabaseProvider {
         getPlugin().getServer().getScheduler().runTaskAsynchronously(getPlugin(), new Runnable() {
             @Override
             public void run() {
-                try {
-                    final PreparedStatement updateSettings = connection.prepareStatement("UPDATE bridger_us_settings SET language = ?, particle = ?, material = ?, scoreboard = ? WHERE uid = ?");
+                try(final PreparedStatement updateSettings = connection.prepareStatement("UPDATE bridger_us_settings SET language = ?, particle = ?, material = ?, scoreboard = ? WHERE uid = ?");) {
+
                     updateSettings.setString(1, user.userSettings().getLanguageAsString());
                     updateSettings.setString(2, user.userSettings().getParticleAsString());
                     updateSettings.setString(3, user.userSettings().getMaterialAsString());
@@ -159,8 +159,8 @@ public class SQLite extends AbstractSQL implements IDatabaseProvider {
 
                     updateSettings.executeUpdate();
                     updateSettings.close();
+                try (final PreparedStatement updateData = connection.prepareStatement("UPDATE bridger_user SET wins = ?, blocks_placed = ?, games_played = ?, best_time = ? WHERE uid = ?");){
 
-                    final PreparedStatement updateData = connection.prepareStatement("UPDATE bridger_user SET wins = ?, blocks_placed = ?, games_played = ?, best_time = ? WHERE uid = ?");
                     updateData.setInt(1, user.userStats().getWins());
                     updateData.setInt(2, user.userStats().getBlocksPlaced());
                     updateData.setInt(3, user.userStats().getGamesPlayed());
@@ -169,6 +169,7 @@ public class SQLite extends AbstractSQL implements IDatabaseProvider {
 
                     updateData.executeUpdate();
                     updateData.close();
+                }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
