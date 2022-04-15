@@ -6,6 +6,7 @@ import io.github.alenalex.bridger.exceptions.IllegalInitializationException;
 import io.github.alenalex.bridger.handler.ConfigurationHandler;
 import io.github.alenalex.bridger.handler.WorkloadHandler;
 import io.github.alenalex.bridger.listener.ConnectionListener;
+import io.github.alenalex.bridger.manager.IslandManager;
 import io.github.alenalex.bridger.manager.LocaleManager;
 import io.github.alenalex.bridger.manager.UserManager;
 import io.github.alenalex.bridger.utils.adventure.MessagingUtils;
@@ -27,6 +28,7 @@ public final class Bridger extends JavaPlugin {
     private LocaleManager localeManager;
     private MessagingUtils messagingUtils;
     private UserManager userManager;
+    private IslandManager islandManager;
 
     @Override
     public void onEnable() {
@@ -37,6 +39,7 @@ public final class Bridger extends JavaPlugin {
         this.dataProvider = new DataProvider(this);
         this.localeManager = new LocaleManager(this);
         this.userManager = new UserManager(this);
+        this.islandManager = new IslandManager(this);
 
         if(!this.configurationHandler.initHandler()){
             getLogger().severe("Failed to load configurations!");
@@ -70,6 +73,8 @@ public final class Bridger extends JavaPlugin {
             return;
         }
 
+        this.islandManager.loadAllIslands();
+
         this.localeManager.initLocaleManager();
         try {
             this.localeManager.loadLocales();
@@ -87,7 +92,14 @@ public final class Bridger extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        if(dataProvider != null) {
+            dataProvider.getDatabaseProvider().saveAllUserSync(userManager.getModifiableValueList());
+            dataProvider.closeConnection();
+        }
 
+        if(workloadHandler != null){
+            workloadHandler.disableHandler();
+        }
     }
 
     public ConfigurationHandler configurationHandler() {
@@ -112,5 +124,9 @@ public final class Bridger extends JavaPlugin {
 
     public UserManager userManager() {
         return userManager;
+    }
+
+    public IslandManager islandManager() {
+        return islandManager;
     }
 }

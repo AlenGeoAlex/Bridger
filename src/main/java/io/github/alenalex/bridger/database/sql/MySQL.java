@@ -52,6 +52,11 @@ public class MySQL extends AbstractSQL implements  IDatabaseProvider {
     }
 
     @Override
+    public void saveAllUserSync(@NotNull List<UserData> users) {
+
+    }
+
+    @Override
     public void saveUserAsync(@NotNull UserData user) {
 
     }
