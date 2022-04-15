@@ -1,10 +1,10 @@
 package io.github.alenalex.bridger.configs;
 
-import io.github.alenalex.bridger.abstracts.AbstractSettings;
+import io.github.alenalex.bridger.abstracts.AbstractFileSettings;
 import io.github.alenalex.bridger.handler.ConfigurationHandler;
 import io.github.alenalex.bridger.variables.ConfigurationPaths;
 
-public class ConfigurationFile extends AbstractSettings {
+public class ConfigurationFile extends AbstractFileSettings {
 
     private String storageType;
 

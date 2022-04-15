@@ -22,19 +22,19 @@ import org.bukkit.World;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Pattern;
 
-public abstract class AbstractSettings {
+public abstract class AbstractFileSettings {
 
     public static final ItemStack DEFAULT_ITEM_STACK = new ItemStack(Material.AIR);
 
     protected final ConfigurationHandler handler;
     protected FlatFile file;
 
-    public AbstractSettings(ConfigurationHandler handler) {
+    public AbstractFileSettings(ConfigurationHandler handler) {
         this.handler = handler;
     }
 
@@ -63,6 +63,17 @@ public abstract class AbstractSettings {
     public boolean initYamlFile(@NotNull String name, @NotNull String path){
         try {
             this.file = new Yaml(name, path);
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
+    }
+
+    public boolean initYamlFile(File file){
+        try {
+            this.file = new Yaml(file);
         }catch (Exception e){
             e.printStackTrace();
             return false;
@@ -157,6 +168,10 @@ public abstract class AbstractSettings {
         }else {
             return EnumUtils.isValidEnum(Material.class, itemStackString) ? new ItemStack(Material.valueOf(itemStackString)) : DEFAULT_ITEM_STACK;
         }
+    }
+
+    public FlatFile file(){
+        return file;
     }
 
     public Component getComponent(@NotNull String path){

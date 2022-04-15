@@ -4,9 +4,13 @@ import io.github.alenalex.bridger.Bridger;
 import io.github.alenalex.bridger.abstracts.AbstractSQL;
 import io.github.alenalex.bridger.database.sql.config.ConnectionConfig;
 import io.github.alenalex.bridger.interfaces.IDatabaseProvider;
+import io.github.alenalex.bridger.models.player.UserData;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 
 public class MySQL extends AbstractSQL implements  IDatabaseProvider {
@@ -38,5 +42,22 @@ public class MySQL extends AbstractSQL implements  IDatabaseProvider {
     @Override
     public boolean prepareDatabase() {
         return createDatabase();
+    }
+
+
+
+    @Override
+    public CompletableFuture<UserData> loadOrRegisterUser(@NotNull UUID uuid) {
+        return null;
+    }
+
+    @Override
+    public void saveUserAsync(@NotNull UserData user) {
+
+    }
+
+    @Override
+    public void saveAllUsersAsync(@NotNull List<UserData> users) {
+
     }
 }
