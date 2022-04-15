@@ -92,7 +92,7 @@ public final class Bridger extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        if(dataProvider != null) {
+        if(dataProvider != null && dataProvider.getDatabaseProvider().isConnectionOpen()) {
             dataProvider.getDatabaseProvider().saveAllUserSync(userManager.getModifiableValueList());
             dataProvider.closeConnection();
         }

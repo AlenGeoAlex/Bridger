@@ -1,7 +1,7 @@
 package io.github.alenalex.bridger.variables;
 
 public enum ConfigurationPaths {
-    STORAGE_TYPE("type"),
+    STORAGE_TYPE("storage.type"),
     STORAGE_HOST("host"),
     STORAGE_PORT("port"),
     STORAGE_DATABASE_NAME("database"),
