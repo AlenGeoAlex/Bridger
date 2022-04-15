@@ -4,6 +4,7 @@ import io.github.alenalex.bridger.database.DataProvider;
 import io.github.alenalex.bridger.exceptions.FailedLocaleLoading;
 import io.github.alenalex.bridger.exceptions.IllegalInitializationException;
 import io.github.alenalex.bridger.handler.ConfigurationHandler;
+import io.github.alenalex.bridger.handler.GameHandler;
 import io.github.alenalex.bridger.handler.WorkloadHandler;
 import io.github.alenalex.bridger.listener.ConnectionListener;
 import io.github.alenalex.bridger.manager.IslandManager;
@@ -27,8 +28,7 @@ public final class Bridger extends JavaPlugin {
     private DataProvider dataProvider;
     private LocaleManager localeManager;
     private MessagingUtils messagingUtils;
-    private UserManager userManager;
-    private IslandManager islandManager;
+    private GameHandler gameHandler;
 
     @Override
     public void onEnable() {
@@ -38,8 +38,8 @@ public final class Bridger extends JavaPlugin {
         this.messagingUtils = new MessagingUtils(this);
         this.dataProvider = new DataProvider(this);
         this.localeManager = new LocaleManager(this);
-        this.userManager = new UserManager(this);
-        this.islandManager = new IslandManager(this);
+        this.gameHandler = new GameHandler(this);
+
 
         if(!this.configurationHandler.initHandler()){
             getLogger().severe("Failed to load configurations!");
@@ -73,7 +73,7 @@ public final class Bridger extends JavaPlugin {
             return;
         }
 
-        this.islandManager.loadAllIslands();
+        this.gameHandler.islandManager().loadAllIslands();
 
         this.localeManager.initLocaleManager();
         try {
@@ -93,7 +93,7 @@ public final class Bridger extends JavaPlugin {
     @Override
     public void onDisable() {
         if(dataProvider != null && dataProvider.getDatabaseProvider().isConnectionOpen()) {
-            dataProvider.getDatabaseProvider().saveAllUserSync(userManager.getModifiableValueList());
+            dataProvider.getDatabaseProvider().saveAllUserSync(gameHandler.userManager().getModifiableValueList());
             dataProvider.closeConnection();
         }
 
@@ -122,11 +122,7 @@ public final class Bridger extends JavaPlugin {
         return localeManager;
     }
 
-    public UserManager userManager() {
-        return userManager;
-    }
-
-    public IslandManager islandManager() {
-        return islandManager;
+    public GameHandler gameHandler(){
+        return gameHandler;
     }
 }

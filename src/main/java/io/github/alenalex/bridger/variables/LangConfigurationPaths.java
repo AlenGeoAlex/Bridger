@@ -1,8 +1,10 @@
 package io.github.alenalex.bridger.variables;
 
 public enum LangConfigurationPaths {
-    PREFIX("prefix"),
     KICK_MESSAGE_FAILED_TO_LOAD_DATA("kick-message.failed-to-load-data"),
+    NO_FREE_ISLANDS("no-free-islands"),
+    TELEPORTED_TO_ISLAND("teleporting-to-island"),
+    PLAYER_QUIT_MATCH("player-quit-game")
     ;
     private final String path;
 

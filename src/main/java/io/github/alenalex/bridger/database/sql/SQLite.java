@@ -3,6 +3,7 @@ package io.github.alenalex.bridger.database.sql;
 import io.github.alenalex.bridger.Bridger;
 import io.github.alenalex.bridger.abstracts.AbstractSQL;
 import io.github.alenalex.bridger.interfaces.IDatabaseProvider;
+import io.github.alenalex.bridger.models.player.UserCosmetics;
 import io.github.alenalex.bridger.models.player.UserData;
 import io.github.alenalex.bridger.models.player.UserSettings;
 import io.github.alenalex.bridger.models.player.UserStats;
@@ -44,6 +45,14 @@ public class SQLite extends AbstractSQL implements IDatabaseProvider {
                     "`material` VARCHAR(40) , " +
                     "`scoreboard` BOOLEAN NOT NULL) "
                     );
+
+            //Table -> Unlockables
+            add("CREATE TABLE IF NOT EXISTS bridger_us_unlockables " +
+                    "(`uid` VARCHAR(40) NOT NULL, " +
+                    "`fireworks` TEXT " +
+                    "`particles` TEXT " +
+                    "`materials` TEXT" +
+                    ")");
         }};
     }
 
@@ -78,18 +87,19 @@ public class SQLite extends AbstractSQL implements IDatabaseProvider {
                 if(!isConnected()) return null;
 
                 try (final PreparedStatement userSettings = connection.prepareStatement("SELECT * FROM bridger_us_settings WHERE uid = ?")) {
-                    try (final PreparedStatement userData = connection.prepareStatement("SELECT * FROM bridger_user WHERE uid = ?")) {
-
+                    try (final PreparedStatement userData = connection.prepareStatement("SELECT * FROM bridger_user WHERE uid = ?"); final PreparedStatement userCos = connection.prepareStatement("SELECT * FROM bridger_us_unlockables WHERE uid = ?")) {
                         //Load user settings
                         final ResultSet settingsSet = userSettings.executeQuery();
                         UserSettings settings = null;
-                        if (settingsSet != null && settingsSet.next()) {
-                            settings = new UserSettings(
-                                    settingsSet.getString("language"),
-                                    settingsSet.getString("particle"),
-                                    settingsSet.getString("material"),
-                                    settingsSet.getBoolean("scoreboard")
-                            );
+                        if (settingsSet != null) {
+                            if( settingsSet.next()) {
+                                settings = new UserSettings(
+                                        settingsSet.getString("language"),
+                                        settingsSet.getString("particle"),
+                                        settingsSet.getString("material"),
+                                        settingsSet.getBoolean("scoreboard")
+                                );
+                            }
                             settingsSet.close();
                         }
                         if (settings == null) {
@@ -110,13 +120,15 @@ public class SQLite extends AbstractSQL implements IDatabaseProvider {
                         //Load user data
                         final ResultSet dataSet = userData.executeQuery();
                         UserStats stats = null;
-                        if (dataSet != null && dataSet.next()) {
-                            stats = new UserStats(
-                                    dataSet.getInt("wins"),
-                                    dataSet.getInt("blocks_placed"),
-                                    dataSet.getInt("games_played"),
-                                    dataSet.getLong("best_time")
-                            );
+                        if (dataSet != null) {
+                            if(dataSet.next()) {
+                                stats = new UserStats(
+                                        dataSet.getInt("wins"),
+                                        dataSet.getInt("blocks_placed"),
+                                        dataSet.getInt("games_played"),
+                                        dataSet.getLong("best_time")
+                                );
+                            }
                             dataSet.close();
                         }
                         if (stats == null) {
@@ -134,7 +146,35 @@ public class SQLite extends AbstractSQL implements IDatabaseProvider {
                         }
                         userData.close();
 
-                        return new UserData(uuid, stats, settings);
+                        //Load user cosmetics
+                        UserCosmetics cosmetics = null;
+                        final ResultSet cosmeticsSet = userCos.executeQuery();
+                        if(cosmeticsSet != null) {
+                            if (cosmeticsSet.next()) {
+                                cosmetics = new UserCosmetics(
+                                        UserCosmetics.deserialize(cosmeticsSet.getString("fireworks")),
+                                        UserCosmetics.deserialize(cosmeticsSet.getString("particles")),
+                                        UserCosmetics.deserialize(cosmeticsSet.getString("materials"))
+                                );
+                            }
+                            cosmeticsSet.close();
+
+                        }
+
+                        if(cosmetics == null){
+                            final PreparedStatement insertCosmetics = connection.prepareStatement("INSERT INTO bridger_user_cosmetics (uid, fireworks, particles, materials) VALUES (?, ?, ?, ?)");
+                            insertCosmetics.setString(1, uuid.toString());
+                            insertCosmetics.setString(2, UserCosmetics.serialize(UserCosmetics.DEFAULT.getFireWorkUnlocked()));
+                            insertCosmetics.setString(3, UserCosmetics.serialize(UserCosmetics.DEFAULT.getParticleUnlocked()));
+                            insertCosmetics.setString(4, UserCosmetics.serialize(UserCosmetics.DEFAULT.getMaterialUnlocked()));
+
+                            insertCosmetics.executeUpdate();
+                            insertCosmetics.close();
+                            cosmetics = UserCosmetics.DEFAULT;
+                        }
+
+                        userCos.close();
+                        return new UserData(uuid, stats, settings, cosmetics);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

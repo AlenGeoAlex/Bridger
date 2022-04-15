@@ -6,6 +6,7 @@ import de.leonhard.storage.internal.FlatFile;
 import de.leonhard.storage.internal.settings.ReloadSettings;
 import io.github.alenalex.bridger.Bridger;
 import io.github.alenalex.bridger.utils.adventure.MessageFormatter;
+import io.github.alenalex.bridger.utils.adventure.internal.MessagePlaceholder;
 import io.github.alenalex.bridger.variables.LangConfigurationPaths;
 import net.kyori.adventure.text.Component;
 
@@ -39,6 +40,14 @@ public class MessageConfiguration {
 
     public Component asComponent(String path){
         return MessageFormatter.transform(asString(path));
+    }
+
+    public Component asComponent(String path, MessagePlaceholder... placeholders){
+        return MessageFormatter.transform(asString(path), placeholders);
+    }
+
+    public Component asComponent(LangConfigurationPaths paths, MessagePlaceholder... placeholders){
+        return MessageFormatter.transform(asString(paths.getPath()), placeholders);
     }
 
     public String asString(LangConfigurationPaths path) {

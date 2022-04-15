@@ -10,10 +10,8 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public final class MessagePlaceholder {
 
-    private static final boolean placeholderAPIEnabled;
-
-    static {
-        placeholderAPIEnabled = Bukkit.getServer().getPluginManager().isPluginEnabled("PlaceholderAPI");
+    public static MessagePlaceholder of(@NotNull String placeholder, String toReplace){
+        return new MessagePlaceholder(placeholder, toReplace);
     }
 
     private final String placeholder;
@@ -76,6 +74,7 @@ public final class MessagePlaceholder {
         return strings.stream().map(this::replacePlaceholders).collect(java.util.stream.Collectors.toList());
     }
 
+    /*
     public static String replacePlaceholders(@NotNull List<MessagePlaceholder> placeholders, String message){
         AtomicReference<String> retMessage = new AtomicReference<>(message);
         placeholders.forEach((placeholder -> {
@@ -83,6 +82,8 @@ public final class MessagePlaceholder {
         }));
         return retMessage.get();
     }
+
+     */
 
 
 }

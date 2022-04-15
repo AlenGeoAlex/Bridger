@@ -20,9 +20,12 @@ public final class MessagingUtils {
     private final Bridger plugin;
     private final BukkitAudiences audiences;
 
+    private final boolean placeholderAPIEnabled;
+
     public MessagingUtils(Bridger plugin) {
         this.plugin = plugin;
         this.audiences = BukkitAudiences.create(plugin);
+        this.placeholderAPIEnabled = plugin.getServer().getPluginManager().isPluginEnabled("PlaceholderAPI");
     }
 
     public void sendTo(@NotNull final Player player, String message){

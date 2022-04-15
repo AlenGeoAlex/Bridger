@@ -15,14 +15,12 @@ public final class UserStats {
     private int blocksPlaced;
     private int gamesPlayed;
     private long bestTime;
-    private long currentTime;
 
     public UserStats(int wins, int blocksPlaced, int gamesPlayed, long bestTime) {
         this.wins = wins;
         this.blocksPlaced = blocksPlaced;
         this.gamesPlayed = gamesPlayed;
         this.bestTime = bestTime;
-        this.currentTime = 0;
     }
 
     public int getWins() {
@@ -41,10 +39,6 @@ public final class UserStats {
         return bestTime;
     }
 
-    public long getCurrentTime() {
-        return currentTime;
-    }
-
     public void setWins(int wins) {
         this.wins = wins;
     }
@@ -59,14 +53,6 @@ public final class UserStats {
 
     public void setBestTime(long bestTime) {
         this.bestTime = bestTime;
-    }
-
-    public void setCurrentTime() {
-        this.currentTime = System.currentTimeMillis();
-    }
-
-    public void setCurrentTimeAsBest(){
-        bestTime = currentTime;
     }
 
     public void addWin() {
@@ -99,12 +85,12 @@ public final class UserStats {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UserStats userStats = (UserStats) o;
-        return wins == userStats.wins && blocksPlaced == userStats.blocksPlaced && gamesPlayed == userStats.gamesPlayed && bestTime == userStats.bestTime && currentTime == userStats.currentTime;
+        return wins == userStats.wins && blocksPlaced == userStats.blocksPlaced && gamesPlayed == userStats.gamesPlayed && bestTime == userStats.bestTime;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(wins, blocksPlaced, gamesPlayed, bestTime, currentTime);
+        return Objects.hashCode(wins, blocksPlaced, gamesPlayed, bestTime);
     }
 
     @Override
@@ -114,7 +100,6 @@ public final class UserStats {
                 ", blocksPlaced=" + blocksPlaced +
                 ", gamesPlayed=" + gamesPlayed +
                 ", bestTime=" + bestTime +
-                ", currentTime=" + currentTime +
                 '}';
     }
 }

@@ -14,6 +14,17 @@ public class UserManager extends AbstractRegistry<UUID, UserData> {
         super(plugin);
     }
 
+    public static void setLobbyItemsOnPlayer(@NotNull Player player){
+
+    }
+
+    public static void setIslandItemsOnPlayer(@NotNull Player player){
+
+    }
+
+    public static void setBlocksOnPlayer(@NotNull Player player){
+
+    }
 
 
 }

@@ -8,6 +8,8 @@ public enum ConfigurationPaths {
     STORAGE_USERNAME("username"),
     STORAGE_PASSWORD("password"),
     STORAGE_SSL("ssl"),
+
+    SPAWN_LOCATION("spawn-location"),
     ;
 
     private String path;

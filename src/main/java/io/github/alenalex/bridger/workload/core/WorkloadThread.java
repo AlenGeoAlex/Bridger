@@ -27,7 +27,7 @@ public final class WorkloadThread implements Runnable {
     }
 
 
-    public void add(Workload workload) {
+    public void submit(Workload workload) {
         deque.add(workload);
     }
 

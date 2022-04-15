@@ -7,6 +7,7 @@ import io.github.alenalex.bridger.utils.Pair;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 public abstract class AbstractRegistry<K, V> {
 
@@ -39,7 +40,7 @@ public abstract class AbstractRegistry<K, V> {
     public Optional<Pair<K, V>> registerOverride(K key, V value) {
         Pair<K, V> pair = null;
         if(isKeyRegistered(key)) {
-             pair = new Pair<>(key, get(key));
+             pair = new Pair<>(key, of(key));
         }
 
         registry.put(key, value);
@@ -53,7 +54,7 @@ public abstract class AbstractRegistry<K, V> {
         registry.replace(key, value);
     }
 
-    public V get(K key) {
+    public V of(K key) {
         return registry.get(key);
     }
 
@@ -69,7 +70,7 @@ public abstract class AbstractRegistry<K, V> {
     }
 
     public V getOrDefaultKey(K key, K defaultKey) {
-        return registry.getOrDefault(key, get(defaultKey));
+        return registry.getOrDefault(key, of(defaultKey));
     }
 
     public boolean isKeyRegistered(K key) {
@@ -137,7 +138,7 @@ public abstract class AbstractRegistry<K, V> {
     }
 
     public Pair<K, V> getPair(K key) {
-        return new Pair<>(key, get(key));
+        return new Pair<>(key, of(key));
     }
 
     public boolean runTask(Consumer<Pair<K, V>> task) {
@@ -149,10 +150,28 @@ public abstract class AbstractRegistry<K, V> {
         if(defaultKey == null)
             throw new IllegalRegistryOperation("Default key is not set!");
 
-        return get(defaultKey);
+        return of(defaultKey);
     }
 
     public CompletableFuture<Boolean> runTaskAsync(Consumer<Pair<K, V>> task) {
         return CompletableFuture.supplyAsync(() -> runTask(task));
     }
+
+    public Stream<V> getValueStream(){
+        return registry.values().stream();
+    }
+
+    public Stream<K> getKeyStream(){
+        return registry.keySet().stream();
+    }
+
+    public Collection<V> getValueCollection(){
+        return registry.values();
+    }
+
+    public Collection<K> getKeyCollection(){
+        return registry.keySet();
+    }
+
+
 }

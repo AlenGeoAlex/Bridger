@@ -1,5 +1,6 @@
 lang-id: "en"
-prefix: ""
-
 kick-message:
   failed-to-load-data: "<red>Failed to load data your user data from the database. Please contact an administrator."
+no-free-islands: "<gray>[<red>✘<gray>]<red> There are no free islands currently!"
+teleporting-to-island: "<gray>[<red>✔<gray>] <green>You have been assigned to %island-name%."
+player-quit-game: "<gray>You have quit the match!"

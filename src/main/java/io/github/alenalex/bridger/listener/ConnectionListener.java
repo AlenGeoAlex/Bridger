@@ -31,7 +31,7 @@ public class ConnectionListener implements Listener {
                return;
            }
 
-           plugin.userManager().registerOverride(playerUUID, user);
+           plugin.gameHandler().userManager().registerOverride(playerUUID, user);
         });
     }
 
@@ -39,7 +39,7 @@ public class ConnectionListener implements Listener {
     public void onPlayerDisconnect(PlayerQuitEvent event){
 
         final UUID playerUUID = event.getPlayer().getUniqueId();
-        final UserData userData = plugin.userManager().get(playerUUID);
+        final UserData userData = plugin.gameHandler().userManager().of(playerUUID);
 
         if(userData == null){
             plugin.getLogger().warning("Failed to save user " + event.getPlayer().getName()+". The data returned null from registry.");
@@ -47,6 +47,6 @@ public class ConnectionListener implements Listener {
         }
 
         plugin.dataProvider().getDatabaseProvider().saveUserAsync(userData);
-        plugin.userManager().remove(playerUUID);
+        plugin.gameHandler().userManager().remove(playerUUID);
     }
 }

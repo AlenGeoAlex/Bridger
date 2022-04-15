@@ -15,11 +15,13 @@ public final class UserData {
     @NotNull private final UUID playerUID;
     @NotNull private final UserStats userStats;
     @NotNull private final UserSettings userSettings;
+    @NotNull private final UserCosmetics userCosmetics;
 
-    public UserData(@NotNull UUID playerUID, @NotNull UserStats userStats, @NotNull UserSettings userSettings) {
+    public UserData(@NotNull UUID playerUID, @NotNull UserStats userStats, @NotNull UserSettings userSettings, @NotNull UserCosmetics userCosmetics) {
         this.playerUID = playerUID;
         this.userStats = userStats;
         this.userSettings = userSettings;
+        this.userCosmetics = userCosmetics;
     }
 
     @NotNull
