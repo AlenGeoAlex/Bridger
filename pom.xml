@@ -52,8 +52,8 @@
                                     <shadedPattern>io.github.alenalex.bridger.shaded.adventure</shadedPattern>
                                 </relocation>
                                 <relocation>
-                                    <pattern>me.mattstudios.mf</pattern>
-                                    <shadedPattern>io.github.alenalex.bridger.shaded.mf</shadedPattern>
+                                    <pattern>dev.triumphteam.cmd</pattern>
+                                    <shadedPattern>io.github.alenalex.bridger.shaded.cmd</shadedPattern>
                                 </relocation>
                                 <relocation>
                                     <pattern>dev.triumphteam.gui</pattern>
@@ -104,6 +104,10 @@
             <id>central</id>
             <url>https://repo1.maven.org/maven2/</url>
         </repository>
+        <repository>
+            <id>repo</id>
+            <url>https://repo.triumphteam.dev/snapshots/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -151,9 +155,9 @@
         </dependency>
 
         <dependency>
-            <groupId>me.mattstudios.utils</groupId>
-            <artifactId>matt-framework</artifactId>
-            <version>1.4</version>
+            <groupId>dev.triumphteam</groupId>
+            <artifactId>triumph-cmd-bukkit</artifactId>
+            <version>2.0.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>
@@ -171,7 +175,7 @@
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
-            <version>5.0.0</version>
+            <version>4.0.3</version>
         </dependency>
 
         <dependency>

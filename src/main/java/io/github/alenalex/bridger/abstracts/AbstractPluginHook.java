@@ -1,6 +1,5 @@
 package io.github.alenalex.bridger.abstracts;
 
-import io.github.alenalex.bridger.Bridger;
 import io.github.alenalex.bridger.manager.HookManager;
 
 public abstract class AbstractPluginHook {
@@ -11,9 +10,10 @@ public abstract class AbstractPluginHook {
     public AbstractPluginHook(HookManager manager, String pluginName) {
         this.manager = manager;
         this.pluginName = pluginName;
+        onEnable();
     }
 
-    public abstract boolean onEnable();
+    public abstract void onEnable();
 
     public abstract void onDisable();
 

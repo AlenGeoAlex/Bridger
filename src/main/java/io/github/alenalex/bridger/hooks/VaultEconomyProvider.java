@@ -18,15 +18,14 @@ public class VaultEconomyProvider extends AbstractPluginHook implements IEconomy
     }
 
     @Override
-    public boolean onEnable() {
+    public void onEnable() {
         final RegisteredServiceProvider<Economy> registeredServiceProvider = manager.getPlugin().getServer().getServicesManager().getRegistration(Economy.class);
         if(registeredServiceProvider == null) {
-            return false;
+            return;
         }
 
         economy = registeredServiceProvider.getProvider();
         manager.getPlugin().getLogger().info("Hooked into Vault!");
-        return economy != null;
     }
 
     @Override
@@ -36,6 +35,9 @@ public class VaultEconomyProvider extends AbstractPluginHook implements IEconomy
 
     @Override
     public boolean hasBalance(@NotNull Player player, double amount) {
+        if(amount < 0)
+            return true;
+
         return economy.has(player, amount);
     }
 
@@ -50,6 +52,9 @@ public class VaultEconomyProvider extends AbstractPluginHook implements IEconomy
 
     @Override
     public void withdraw(@NotNull Player player, double amount) {
+        if(amount < 0)
+            return;
+
         try {
             economy.withdrawPlayer(player, amount);
         }catch (Exception e){
@@ -59,6 +64,9 @@ public class VaultEconomyProvider extends AbstractPluginHook implements IEconomy
 
     @Override
     public void deposit(@NotNull Player player, double amount) {
+        if(amount < 0)
+            return;
+
         try {
             economy.depositPlayer(player, amount);
         }catch (Exception e){

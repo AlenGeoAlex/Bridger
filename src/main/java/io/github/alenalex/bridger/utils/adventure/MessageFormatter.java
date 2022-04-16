@@ -49,7 +49,7 @@ public final class MessageFormatter {
         if(StringUtils.isBlank(message))
             return Component.empty();
 
-        return Component.text(message);
+        return messageFormatter.deserialize(message);
     }
 
     public static List<Component> convertToComponent(@NotNull List<String> message){

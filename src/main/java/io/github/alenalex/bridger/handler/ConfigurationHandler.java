@@ -22,7 +22,7 @@ public class ConfigurationHandler implements IHandler {
     @Override
     public boolean initHandler() {
         return configurationFile.initConfigFile("config.yml", plugin.getDataFolder().getPath(), plugin().getResource("config.yml"))
-                && uiConfiguration.initConfigFile("gui.yml", plugin.getDataFolder().getPath()+File.separator+"gui", plugin().getResource("gui.yml"));
+                && uiConfiguration.initConfigFile("gui.yml", plugin.getDataFolder().getPath()+File.separator+"gui", plugin().getResource("gui/gui.yml"));
 
 
     }

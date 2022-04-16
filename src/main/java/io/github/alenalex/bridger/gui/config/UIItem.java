@@ -75,8 +75,9 @@ public class UIItem {
         return lore;
     }
 
+    //TODO Check out this
     public static UIItem buildFrom(@NotNull FlatFileSection section){
-        final ItemStack stack = FlatFileUtils.deserializeItemStack(section, "item");
+        final ItemStack stack = FlatFileUtils.deserializeItemStack(section.getString("item"));
         final String name = section.getString("name");
         final List<String> loreList = section.getStringList("lore");
         final int slot = section.getInt("slot");

@@ -16,6 +16,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class CosmeticShop extends AbstractStaticGUI<Gui> {
 
@@ -32,9 +33,15 @@ public class CosmeticShop extends AbstractStaticGUI<Gui> {
                             1,
                             DyeColor.BLACK.getData()
                     ),
-                    new ArrayList<Integer>(){{
+                    Arrays.asList(0,1,2,3,4,5,6,7,8,9,17,18,19,20,21,23,24,25,26)
+            );
 
-                    }}
+            final UIFiller whiteStainedGlass = new UIFiller(
+                    new ItemStack(Material.STAINED_GLASS_PANE,
+                            1,
+                            DyeColor.WHITE.getData()
+                    ),
+                    Arrays.asList(10,11,15,16)
             );
 
             gui = Gui.gui()
@@ -43,7 +50,7 @@ public class CosmeticShop extends AbstractStaticGUI<Gui> {
                     .rows(3)
                     .create();
 
-            applyFiller(gui, blackStainedFiller);
+            applyFiller(gui, Arrays.asList( blackStainedFiller, whiteStainedGlass));
 
             final GuiItem closeButton = ItemBuilder
                     .from(Material.BARRIER)
@@ -73,11 +80,9 @@ public class CosmeticShop extends AbstractStaticGUI<Gui> {
                     ).asGuiItem(new GuiAction<InventoryClickEvent>() {
                         @Override
                         public void execute(InventoryClickEvent event) {
-                            if(event.getWhoClicked() == null)
-                                return;
-
                             gui.close(event.getWhoClicked());
-                            handler.getCosmeticShop().openFor((Player) event.getWhoClicked());
+
+                            handler.getFireworkShop().openFor((Player) event.getWhoClicked());
                         }
                     });
 

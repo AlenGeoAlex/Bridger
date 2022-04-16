@@ -15,4 +15,4 @@ cosmetics:
       BURST: 5000
       STAR: 5000
       CREEPER: 5000
-      BALL_FAR: 5000
+      BALL_LARGE: 5000

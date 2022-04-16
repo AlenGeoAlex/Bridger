@@ -160,19 +160,10 @@ public abstract class AbstractFileSettings {
     public ItemStack deserializeItemStack(@NotNull String path){
         String itemStackString = file.getString(path);
 
-        if(StringUtils.isEmpty(itemStackString))
+        ItemStack stack = FlatFileUtils.deserializeItemStack(itemStackString);
+        if(stack == null)
             return DEFAULT_ITEM_STACK;
-
-        if(itemStackString.startsWith("[BASE64]:")){
-            final String[] split = itemStackString.split(":");
-            if(split.length != 2)
-                return DEFAULT_ITEM_STACK;
-
-            final String base64 = split[1];
-            return HeadUtils.getHead(base64);
-        }else {
-            return EnumUtils.isValidEnum(Material.class, itemStackString) ? new ItemStack(Material.valueOf(itemStackString)) : DEFAULT_ITEM_STACK;
-        }
+        else return stack;
     }
 
     public FlatFile file(){

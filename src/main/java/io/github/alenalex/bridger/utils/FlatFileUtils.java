@@ -59,13 +59,32 @@ public class FlatFileUtils {
         if(StringUtils.isEmpty(itemStackString))
             return null;
 
-        if(itemStackString.startsWith("[BASE64]:")){
+        if(itemStackString.startsWith("[BASE64]:")) {
             final String[] split = itemStackString.split(":");
-            if(split.length != 2)
+            if (split.length != 2) {
+                Bridger.instance().getLogger().warning("An illegal configuration entry has been found in "+itemStackString+". provide like [BASE64]:value");
                 return null;
+            }
 
             final String base64 = split[1];
             return HeadUtils.getHead(base64);
+        }else if(itemStackString.startsWith("[LEGACY]:")){
+            final String[] split = itemStackString.split(":");
+
+            if (split.length != 3) {
+                Bridger.instance().getLogger().warning("An illegal configuration entry has been found in "+itemStackString+". provide like [LEGACY]:MATERIAL_NAME:DATA");
+                return null;
+            }
+
+            if(!EnumUtils.isValidEnum(Material.class, split[1])){
+                return null;
+            }
+
+            final Material material = Material.getMaterial(split[1]);
+            final byte data = Byte.parseByte(split[2]);
+
+            return new ItemStack(material, 1, data);
+
         }else {
             return EnumUtils.isValidEnum(Material.class, itemStackString) ? new ItemStack(Material.valueOf(itemStackString)) : null;
         }

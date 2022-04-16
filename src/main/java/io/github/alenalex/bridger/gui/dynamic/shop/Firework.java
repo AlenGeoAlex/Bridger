@@ -11,6 +11,7 @@ import io.github.alenalex.bridger.models.player.UserData;
 import io.github.alenalex.bridger.utils.adventure.internal.MessagePlaceholder;
 import io.github.alenalex.bridger.variables.LangConfigurationPaths;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.text.WordUtils;
 import org.bukkit.FireworkEffect;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -46,7 +47,7 @@ public class Firework extends AbstractDynamicGUI<Gui> {
 
                 final UIItem itemConfig = getConfiguration().getFireWorkShopItem();
                 for(FireworkEffect.Type type : data.fetchLockedFireworks()){
-                    final String name = StringUtils.capitalize(type.name());
+                    final String name = WordUtils.capitalize(type.name().toLowerCase()).replace("_"," ");
                     final int amount = handler.plugin().configurationHandler().getConfigurationFile().getEnabledFireWorkModels().get(type);
 
                     final GuiItem button = ItemBuilder.from(itemConfig.itemStack())
@@ -62,15 +63,17 @@ public class Firework extends AbstractDynamicGUI<Gui> {
                                 @Override
                                 public void execute(InventoryClickEvent event) {
 
-                                    if(!handler.plugin().pluginHookManager().getEconomyProvider().hasBalance(player, amount)){
+                                    if(!handler.plugin().pluginHookManager().getEconomyProvider().hasBalance((Player) event.getWhoClicked(), amount)){
                                         handler.plugin().messagingUtils().sendTo(
                                                 player,
-                                                data.userSettings().getLanguage().asComponent(LangConfigurationPaths.SHOP_PURCHASE_FAIL_NO_CASH)
+                                                data.userSettings().getLanguage().asComponent(LangConfigurationPaths.SHOP_PURCHASE_FAIL_NO_CASH,
+                                                        MessagePlaceholder.of(" %item-name%", name)
+                                                )
                                         );
                                         return;
                                     }
 
-                                    handler.plugin().pluginHookManager().getEconomyProvider().withdraw(player, amount);
+                                    handler.plugin().pluginHookManager().getEconomyProvider().withdraw((Player) event.getWhoClicked(), amount);
                                     data.userCosmetics().unlockFirework(type.name());
                                     handler.plugin().messagingUtils().sendTo(
                                             player,

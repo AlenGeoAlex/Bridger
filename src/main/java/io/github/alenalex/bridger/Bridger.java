@@ -8,6 +8,7 @@ import io.github.alenalex.bridger.handler.GameHandler;
 import io.github.alenalex.bridger.handler.UIHandler;
 import io.github.alenalex.bridger.handler.WorkloadHandler;
 import io.github.alenalex.bridger.listener.ConnectionListener;
+import io.github.alenalex.bridger.manager.CommandManager;
 import io.github.alenalex.bridger.manager.HookManager;
 import io.github.alenalex.bridger.manager.LocaleManager;
 import io.github.alenalex.bridger.utils.adventure.MessagingUtils;
@@ -43,6 +44,7 @@ public final class Bridger extends JavaPlugin {
     private GameHandler gameHandler;
     private UIHandler uiHandler;
     private HookManager pluginHookManager;
+    private CommandManager commandManager;
 
     @Override
     public void onEnable() {
@@ -55,6 +57,7 @@ public final class Bridger extends JavaPlugin {
         this.gameHandler = new GameHandler(this);
         this.uiHandler = new UIHandler(this);
         this.pluginHookManager = new HookManager(this);
+        this.commandManager = new CommandManager(this);
 
         if(!pluginHookManager.validateMinHookRequirements()) {
             getServer().getPluginManager().isPluginEnabled(this);
@@ -116,6 +119,12 @@ public final class Bridger extends JavaPlugin {
         }
         //Register all the plugin listener
         getServer().getPluginManager().registerEvents(new ConnectionListener(this), this);
+
+        this.pluginHookManager.registerHooks();
+
+        this.commandManager.registerCompletions();
+        this.commandManager.registerMessages();
+        this.commandManager.registerCommands();
     }
 
     @Override

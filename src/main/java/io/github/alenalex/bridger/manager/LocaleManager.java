@@ -26,8 +26,8 @@ public class LocaleManager extends AbstractRegistry<String, MessageConfiguration
             File langFile = new File(this.langFolder, "en.yml");
             if(!langFile.exists()) {
                 plugin.saveResource("lang/en.yml", false);
-                setDefaultKey("en");
             }
+            setDefaultKey("en");
             return true;
         }catch (Exception e){
             e.printStackTrace();
