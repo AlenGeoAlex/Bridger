@@ -35,7 +35,7 @@ public final class Fireworks {
     public static Optional<FireworkEffect.Type> getFireworkTypeByName(String name) {
         if(EnumUtils.isValidEnum(FireworkEffect.Type.class, name)) {
             final FireworkEffect.Type type = EnumUtils.getEnum(FireworkEffect.Type.class, name);
-            if(Bridger.instance().configurationHandler().getConfigurationFile().getAllowedFireworkModels().contains(type)) {
+            if(Bridger.instance().configurationHandler().getConfigurationFile().getEnabledFireWorkModels().containsKey(type)) {
                 return Optional.of(type);
             }else return Optional.empty();
         }else return Optional.empty();

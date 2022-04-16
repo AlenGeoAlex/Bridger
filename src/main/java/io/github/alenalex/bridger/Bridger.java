@@ -8,6 +8,7 @@ import io.github.alenalex.bridger.handler.GameHandler;
 import io.github.alenalex.bridger.handler.UIHandler;
 import io.github.alenalex.bridger.handler.WorkloadHandler;
 import io.github.alenalex.bridger.listener.ConnectionListener;
+import io.github.alenalex.bridger.manager.HookManager;
 import io.github.alenalex.bridger.manager.LocaleManager;
 import io.github.alenalex.bridger.utils.adventure.MessagingUtils;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -41,6 +42,7 @@ public final class Bridger extends JavaPlugin {
     private MessagingUtils messagingUtils;
     private GameHandler gameHandler;
     private UIHandler uiHandler;
+    private HookManager pluginHookManager;
 
     @Override
     public void onEnable() {
@@ -52,7 +54,12 @@ public final class Bridger extends JavaPlugin {
         this.localeManager = new LocaleManager(this);
         this.gameHandler = new GameHandler(this);
         this.uiHandler = new UIHandler(this);
+        this.pluginHookManager = new HookManager(this);
 
+        if(!pluginHookManager.validateMinHookRequirements()) {
+            getServer().getPluginManager().isPluginEnabled(this);
+            return;
+        }
 
         if(!this.configurationHandler.initHandler()){
             getLogger().severe("Failed to load configurations!");
@@ -149,5 +156,9 @@ public final class Bridger extends JavaPlugin {
 
     public UIHandler uiHandler(){
         return uiHandler;
+    }
+
+    public HookManager pluginHookManager(){
+        return pluginHookManager;
     }
 }

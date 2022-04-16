@@ -6,6 +6,9 @@ public enum LangConfigurationPaths {
     TELEPORTED_TO_ISLAND("teleporting-to-island"),
     PLAYER_QUIT_MATCH("player-quit-game"),
     UNABLE_TO_PROCESS_SELECTED_FIREWORK("unable-to-process-selected-firework"),
+
+    SHOP_SUCCESSFULLY_PURCHASED("shop-purchase.bought-successfully"),
+    SHOP_PURCHASE_FAIL_NO_CASH("shop-purchase.not-enough-cash"),
     ;
     private final String path;
 

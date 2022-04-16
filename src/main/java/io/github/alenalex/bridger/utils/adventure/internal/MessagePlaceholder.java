@@ -14,6 +14,22 @@ public final class MessagePlaceholder {
         return new MessagePlaceholder(placeholder, toReplace);
     }
 
+    public static MessagePlaceholder of(@NotNull String placeholder, int toReplace){
+        return new MessagePlaceholder(placeholder, toReplace);
+    }
+
+    public static MessagePlaceholder of(@NotNull String placeholder, float toReplace){
+        return new MessagePlaceholder(placeholder, toReplace);
+    }
+
+    public static MessagePlaceholder of(@NotNull String placeholder, double toReplace){
+        return new MessagePlaceholder(placeholder, toReplace);
+    }
+
+    public static MessagePlaceholder of(@NotNull String placeholder, boolean toReplace){
+        return new MessagePlaceholder(placeholder, toReplace);
+    }
+
     private final String placeholder;
     private final String toReplace;
 

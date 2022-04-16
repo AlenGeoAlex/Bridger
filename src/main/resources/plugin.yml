@@ -1,6 +1,7 @@
 name: Bridger
 version: '${project.version}'
 main: io.github.alenalex.bridger.Bridger
-api-version: 1.18
 authors: [ AlenAlex ]
 description: A plugin for Bridging Practice
+depend:
+  - "Vault"

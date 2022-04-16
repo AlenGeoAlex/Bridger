@@ -9,6 +9,7 @@ import io.github.alenalex.bridger.gui.config.UIItem;
 import io.github.alenalex.bridger.handler.UIHandler;
 import io.github.alenalex.bridger.models.player.UserData;
 import io.github.alenalex.bridger.utils.adventure.internal.MessagePlaceholder;
+import io.github.alenalex.bridger.variables.LangConfigurationPaths;
 import org.apache.commons.lang3.StringUtils;
 import org.bukkit.FireworkEffect;
 import org.bukkit.entity.Player;
@@ -45,6 +46,7 @@ public class Firework extends AbstractDynamicGUI<Gui> {
                 final UIItem itemConfig = getConfiguration().getFireWorkShopItem();
                 for(FireworkEffect.Type type : data.fetchLockedFireworks()){
                     final String name = StringUtils.capitalize(type.name());
+                    final int amount = handler.plugin().configurationHandler().getConfigurationFile().getEnabledFireWorkModels().get(type);
 
                     final GuiItem button = ItemBuilder.from(itemConfig.itemStack())
                             .name(itemConfig.nameAsComponent(
@@ -52,12 +54,30 @@ public class Firework extends AbstractDynamicGUI<Gui> {
                             ))
                             .lore(
                                     itemConfig.loreAsComponent(
-                                            MessagePlaceholder.of("%name%", name)//Add cost
+                                            MessagePlaceholder.of("%name%", name),
+                                            MessagePlaceholder.of("%cost%", amount)
                                     )
                             ).asGuiItem(new GuiAction<InventoryClickEvent>() {
                                 @Override
                                 public void execute(InventoryClickEvent event) {
-                                    //TODO
+
+                                    if(!handler.plugin().pluginHookManager().getEconomyProvider().hasBalance(player, amount)){
+                                        handler.plugin().messagingUtils().sendTo(
+                                                player,
+                                                data.userSettings().getLanguage().asComponent(LangConfigurationPaths.SHOP_PURCHASE_FAIL_NO_CASH)
+                                        );
+                                        return;
+                                    }
+
+                                    handler.plugin().pluginHookManager().getEconomyProvider().withdraw(player, amount);
+                                    data.userCosmetics().unlockFirework(type.name());
+                                    handler.plugin().messagingUtils().sendTo(
+                                            player,
+                                            data.userSettings().getLanguage().asComponent(LangConfigurationPaths.SHOP_SUCCESSFULLY_PURCHASED,
+                                                    MessagePlaceholder.of(" %item-name%", name),
+                                                    MessagePlaceholder.of("%item-price%", amount)
+                                                    )
+                                    );
                                 }
                             });
 

@@ -11,8 +11,8 @@ cosmetics:
   firework:
     enabled: true
     allowed-firework-models:
-      - "BALL"
-      - "BURST"
-      - "STAR"
-      - "CREEPER"
-      - "BALL_LARGE"
+      BALL: 5000
+      BURST: 5000
+      STAR: 5000
+      CREEPER: 5000
+      BALL_FAR: 5000

@@ -9,7 +9,9 @@ import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
 import org.bukkit.entity.Firework;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public class ConfigurationFile extends AbstractFileSettings {
@@ -18,7 +20,8 @@ public class ConfigurationFile extends AbstractFileSettings {
     private Location spawnLocation;
 
     private boolean isFireworkEnabled;
-    private List<FireworkEffect.Type> allowedFireworkModels;
+
+    private HashMap<FireworkEffect.Type, Integer> enabledFireworkModels;
 
     public ConfigurationFile(ConfigurationHandler handler) {
         super(handler);
@@ -31,9 +34,12 @@ public class ConfigurationFile extends AbstractFileSettings {
         spawnLocation = optionalSpawnLocation.orElseGet(() -> handler.plugin().getServer().getWorlds().get(0).getSpawnLocation());
 
         this.isFireworkEnabled = this.file.getBoolean(ConfigurationPaths.COSMETICS_FIRE_WORK_ENABLED.getPath());
-        for(String s : this.file.getStringList(ConfigurationPaths.COSMETICS_FIRE_WORK_ENABLED.getPath())) {
+
+        for(String s : this.file.keySet(ConfigurationPaths.COSMETICS_ALLOWED_FIREWORK_MODELS.getPath())){
             if(EnumUtils.isValidEnum(FireworkEffect.Type.class, s)) {
-                allowedFireworkModels.add(FireworkEffect.Type.valueOf(s));
+                enabledFireworkModels.put(FireworkEffect.Type.valueOf(s), this.file.getInt(ConfigurationPaths.COSMETICS_ALLOWED_FIREWORK_MODELS.getPath() + "." + s));
+            }else {
+                handler.plugin().getLogger().warning("Invalid firework model: " + s+" found in config.yml");
             }
         }
     }
@@ -55,7 +61,7 @@ public class ConfigurationFile extends AbstractFileSettings {
         return isFireworkEnabled;
     }
 
-    public List<FireworkEffect.Type> getAllowedFireworkModels() {
-        return allowedFireworkModels;
+    public Map<FireworkEffect.Type, Integer> getEnabledFireWorkModels() {
+        return enabledFireworkModels;
     }
 }

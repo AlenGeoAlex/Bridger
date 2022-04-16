@@ -1,6 +1,5 @@
 package io.github.alenalex.bridger.models.player;
 
-import com.google.common.base.Objects;
 import io.github.alenalex.bridger.Bridger;
 import io.github.alenalex.bridger.variables.Fireworks;
 import io.github.alenalex.bridger.variables.LangConfigurationPaths;
@@ -97,7 +96,7 @@ public final class UserData {
     }
 
     public List<FireworkEffect.Type> fetchLockedFireworks(){
-        return Bridger.instance().configurationHandler().getConfigurationFile().getAllowedFireworkModels().
+        return Bridger.instance().configurationHandler().getConfigurationFile().getEnabledFireWorkModels().keySet().
                 stream().
                 filter(type -> {
                     boolean b = !userCosmetics.getFireWorkUnlocked().contains(type.name());
