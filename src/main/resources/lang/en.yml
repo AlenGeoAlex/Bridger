@@ -4,3 +4,4 @@ kick-message:
 no-free-islands: "<gray>[<red>✘<gray>]<red> There are no free islands currently!"
 teleporting-to-island: "<gray>[<red>✔<gray>] <green>You have been assigned to %island-name%."
 player-quit-game: "<gray>You have quit the match!"
+unable-to-process-a-selected-firework: "<red>The firework you selected doesn't seem to be valid as of now, as a precaution, we have removed it from your settings!."

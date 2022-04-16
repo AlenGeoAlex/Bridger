@@ -74,7 +74,6 @@ public final class MessagePlaceholder {
         return strings.stream().map(this::replacePlaceholders).collect(java.util.stream.Collectors.toList());
     }
 
-    /*
     public static String replacePlaceholders(@NotNull List<MessagePlaceholder> placeholders, String message){
         AtomicReference<String> retMessage = new AtomicReference<>(message);
         placeholders.forEach((placeholder -> {
@@ -83,7 +82,9 @@ public final class MessagePlaceholder {
         return retMessage.get();
     }
 
-     */
+    public static List<String> replacePlaceholders(@NotNull List<MessagePlaceholder> placeholders, List<String> message){
+        return message.stream().map(eachMessage -> replacePlaceholders(placeholders, eachMessage)).collect(java.util.stream.Collectors.toList());
+    }
 
 
 }

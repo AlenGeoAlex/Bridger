@@ -4,7 +4,8 @@ public enum LangConfigurationPaths {
     KICK_MESSAGE_FAILED_TO_LOAD_DATA("kick-message.failed-to-load-data"),
     NO_FREE_ISLANDS("no-free-islands"),
     TELEPORTED_TO_ISLAND("teleporting-to-island"),
-    PLAYER_QUIT_MATCH("player-quit-game")
+    PLAYER_QUIT_MATCH("player-quit-game"),
+    UNABLE_TO_PROCESS_SELECTED_FIREWORK("unable-to-process-selected-firework"),
     ;
     private final String path;
 

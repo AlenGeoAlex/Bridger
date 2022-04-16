@@ -3,6 +3,7 @@ package io.github.alenalex.bridger.models.player;
 import com.google.common.base.Objects;
 import io.github.alenalex.bridger.Bridger;
 import io.github.alenalex.bridger.variables.Fireworks;
+import io.github.alenalex.bridger.variables.LangConfigurationPaths;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
@@ -13,10 +14,10 @@ import org.bukkit.inventory.meta.FireworkMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 import java.util.UUID;
-import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 public final class UserData {
 
@@ -86,9 +87,23 @@ public final class UserData {
             });
         }else {
             Bridger.instance().getLogger().warning("User " + player.getName() + " has an unknown firework type "+userSettings.getFireWorkAsString()+" selected as his firework. The plugin will try to remove it!");
+            Bridger.instance().messagingUtils().sendTo(
+                    player,
+                    userSettings.getLanguage().asComponent(LangConfigurationPaths.UNABLE_TO_PROCESS_SELECTED_FIREWORK)
+            );
             userSettings.setFireWork(null);
         }
 
+    }
+
+    public List<FireworkEffect.Type> fetchLockedFireworks(){
+        return Bridger.instance().configurationHandler().getConfigurationFile().getAllowedFireworkModels().
+                stream().
+                filter(type -> {
+                    boolean b = !userCosmetics.getFireWorkUnlocked().contains(type.name());
+                    return b;
+                }).
+                collect(Collectors.toList());
     }
 
     @Nullable

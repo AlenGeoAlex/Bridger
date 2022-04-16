@@ -5,11 +5,10 @@ import io.github.alenalex.bridger.exceptions.FailedLocaleLoading;
 import io.github.alenalex.bridger.exceptions.IllegalInitializationException;
 import io.github.alenalex.bridger.handler.ConfigurationHandler;
 import io.github.alenalex.bridger.handler.GameHandler;
+import io.github.alenalex.bridger.handler.UIHandler;
 import io.github.alenalex.bridger.handler.WorkloadHandler;
 import io.github.alenalex.bridger.listener.ConnectionListener;
-import io.github.alenalex.bridger.manager.IslandManager;
 import io.github.alenalex.bridger.manager.LocaleManager;
-import io.github.alenalex.bridger.manager.UserManager;
 import io.github.alenalex.bridger.utils.adventure.MessagingUtils;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -41,6 +40,7 @@ public final class Bridger extends JavaPlugin {
     private LocaleManager localeManager;
     private MessagingUtils messagingUtils;
     private GameHandler gameHandler;
+    private UIHandler uiHandler;
 
     @Override
     public void onEnable() {
@@ -51,6 +51,7 @@ public final class Bridger extends JavaPlugin {
         this.dataProvider = new DataProvider(this);
         this.localeManager = new LocaleManager(this);
         this.gameHandler = new GameHandler(this);
+        this.uiHandler = new UIHandler(this);
 
 
         if(!this.configurationHandler.initHandler()){
@@ -98,6 +99,14 @@ public final class Bridger extends JavaPlugin {
             return;
         }
 
+        //Load UI's after loading Locales
+        //Actually it won't matter, as we will be loading the static ui's with Hardcoded values and dynamic gui's would fetch the locale from the locale manager
+        if(!this.uiHandler.initHandler()){
+            getLogger().severe("Failed to load UI's!");
+            getLogger().severe("The plugin will be disabled!");
+            getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
         //Register all the plugin listener
         getServer().getPluginManager().registerEvents(new ConnectionListener(this), this);
     }
@@ -136,5 +145,9 @@ public final class Bridger extends JavaPlugin {
 
     public GameHandler gameHandler(){
         return gameHandler;
+    }
+
+    public UIHandler uiHandler(){
+        return uiHandler;
     }
 }
