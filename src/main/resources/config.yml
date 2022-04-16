@@ -7,3 +7,12 @@ storage:
   username: ${DB_USER}
   password: ${DB_PASS}
 
+cosmetics:
+  firework:
+    enabled: true
+    allowed-firework-models:
+      - "BALL"
+      - "BURST"
+      - "STAR"
+      - "CREEPER"
+      - "BALL_LARGE"

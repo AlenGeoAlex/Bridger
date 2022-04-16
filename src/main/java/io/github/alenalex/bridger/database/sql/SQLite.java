@@ -43,6 +43,7 @@ public class SQLite extends AbstractSQL implements IDatabaseProvider {
                     "`language` VARCHAR(40) DEFAULT 'en' NOT NULL , " +
                     "`particle` VARCHAR(40) , " +
                     "`material` VARCHAR(40) , " +
+                    "`firework` VARCHAR(40) ," +
                     "`scoreboard` BOOLEAN NOT NULL) "
                     );
 
@@ -97,6 +98,7 @@ public class SQLite extends AbstractSQL implements IDatabaseProvider {
                                         settingsSet.getString("language"),
                                         settingsSet.getString("particle"),
                                         settingsSet.getString("material"),
+                                        settingsSet.getString("firework"),
                                         settingsSet.getBoolean("scoreboard")
                                 );
                             }
@@ -105,12 +107,13 @@ public class SQLite extends AbstractSQL implements IDatabaseProvider {
                         if (settings == null) {
                             settings = UserSettings.DEFAULT;
                             //This should mean that the user has never played before. So registering him to database
-                            final PreparedStatement insertSettings = connection.prepareStatement("INSERT INTO bridger_us_settings (uid, language, particle, material, scoreboard) VALUES (?, ?, ?, ?, ?)");
+                            final PreparedStatement insertSettings = connection.prepareStatement("INSERT INTO bridger_us_settings (uid, language, particle, material, firework ,scoreboard) VALUES (?, ?, ?, ?, ?, ?)");
                             insertSettings.setString(1, uuid.toString());
                             insertSettings.setString(2, settings.getLanguageAsString());
                             insertSettings.setString(3, settings.getParticleAsString());
                             insertSettings.setString(4, settings.getMaterialAsString());
-                            insertSettings.setBoolean(5, settings.isScoreboardEnabled());
+                            insertSettings.setString(5, settings.getFireWorkAsString());
+                            insertSettings.setBoolean(6, settings.isScoreboardEnabled());
 
                             insertSettings.executeUpdate();
                             insertSettings.close();
@@ -189,7 +192,7 @@ public class SQLite extends AbstractSQL implements IDatabaseProvider {
         getPlugin().getServer().getScheduler().runTaskAsynchronously(getPlugin(), new Runnable() {
             @Override
             public void run() {
-                try(final PreparedStatement updateSettings = connection.prepareStatement("UPDATE bridger_us_settings SET language = ?, particle = ?, material = ?, scoreboard = ? WHERE uid = ?");) {
+                try(final PreparedStatement updateSettings = connection.prepareStatement("UPDATE bridger_us_settings SET language = ?, particle = ?, material = ?, scoreboard = ? WHERE uid = ?")) {
 
                     updateSettings.setString(1, user.userSettings().getLanguageAsString());
                     updateSettings.setString(2, user.userSettings().getParticleAsString());
@@ -210,6 +213,18 @@ public class SQLite extends AbstractSQL implements IDatabaseProvider {
                     updateData.executeUpdate();
                     updateData.close();
                 }
+
+                try(final PreparedStatement updateCosmetics = connection.prepareStatement("UPDATE bridger_user_cosmetics SET fireworks = ?, particles = ?, materials = ? WHERE uid = ?");){
+
+                    updateCosmetics.setString(1, UserCosmetics.serialize(user.userCosmetics().getFireWorkUnlocked()));
+                    updateCosmetics.setString(2, UserCosmetics.serialize(user.userCosmetics().getParticleUnlocked()));
+                    updateCosmetics.setString(3, UserCosmetics.serialize(user.userCosmetics().getMaterialUnlocked()));
+                    updateCosmetics.setString(4, user.getPlayerUID().toString());
+
+                    updateCosmetics.executeUpdate();
+                    updateCosmetics.close();
+
+                }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -219,9 +234,12 @@ public class SQLite extends AbstractSQL implements IDatabaseProvider {
 
     @Override
     public void saveAllUserSync(@NotNull List<UserData> users) {
-        try {
-            final PreparedStatement updateSettings = connection.prepareStatement("UPDATE bridger_us_settings SET language = ?, particle = ?, material = ?, scoreboard = ? WHERE uid = ?");
-            final PreparedStatement updateData = connection.prepareStatement("UPDATE bridger_user SET wins = ?, blocks_placed = ?, games_played = ?, best_time = ? WHERE uid = ?");
+        try(
+                final PreparedStatement updateSettings = connection.prepareStatement("UPDATE bridger_us_settings SET language = ?, particle = ?, material = ?, scoreboard = ? WHERE uid = ?;");
+                final PreparedStatement updateData = connection.prepareStatement("UPDATE bridger_user SET wins = ?, blocks_placed = ?, games_played = ?, best_time = ? WHERE uid = ?;");
+                final PreparedStatement cosmeticUpdate = connection.prepareStatement("UPDATE bridger_cosmetics SET firework = ?, particle = ?, material = ? WHERE uid = ?;")
+        )  {
+
 
             for (UserData user : users) {
                 updateSettings.setString(1, user.userSettings().getLanguageAsString());
@@ -239,10 +257,18 @@ public class SQLite extends AbstractSQL implements IDatabaseProvider {
                 updateData.setString(5, user.getPlayerUID().toString());
 
                 updateData.executeUpdate();
+
+                cosmeticUpdate.setString(1, UserCosmetics.serialize(user.userCosmetics().getFireWorkUnlocked()));
+                cosmeticUpdate.setString(2, UserCosmetics.serialize(user.userCosmetics().getParticleUnlocked()));
+                cosmeticUpdate.setString(3, UserCosmetics.serialize(user.userCosmetics().getMaterialUnlocked()));
+                cosmeticUpdate.setString(4, user.getPlayerUID().toString());
+
+                cosmeticUpdate.executeUpdate();
             }
 
             updateSettings.close();
             updateData.close();
+            cosmeticUpdate.close();
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -254,9 +280,13 @@ public class SQLite extends AbstractSQL implements IDatabaseProvider {
         getPlugin().getServer().getScheduler().runTaskAsynchronously(getPlugin(), new Runnable() {
             @Override
             public void run() {
-                try {
-                    final PreparedStatement updateSettings = connection.prepareStatement("UPDATE bridger_us_settings SET language = ?, particle = ?, material = ?, scoreboard = ? WHERE uid = ?");
-                    final PreparedStatement updateData = connection.prepareStatement("UPDATE bridger_user SET wins = ?, blocks_placed = ?, games_played = ?, best_time = ? WHERE uid = ?");
+                try(
+                    final PreparedStatement updateSettings = connection.prepareStatement("UPDATE bridger_us_settings SET language = ?, particle = ?, material = ?, scoreboard = ? WHERE uid = ?;");
+                    final PreparedStatement updateData = connection.prepareStatement("UPDATE bridger_user SET wins = ?, blocks_placed = ?, games_played = ?, best_time = ? WHERE uid = ?;");
+                    final PreparedStatement cosmeticUpdate = connection.prepareStatement("UPDATE bridger_cosmetics SET firework = ?, particle = ?, material = ? WHERE uid = ?;")
+                    ) {
+
+
 
                     for (UserData user : users) {
                         updateSettings.setString(1, user.userSettings().getLanguageAsString());
@@ -274,10 +304,18 @@ public class SQLite extends AbstractSQL implements IDatabaseProvider {
                         updateData.setString(5, user.getPlayerUID().toString());
 
                         updateData.executeUpdate();
+
+                        cosmeticUpdate.setString(1, UserCosmetics.serialize(user.userCosmetics().getFireWorkUnlocked()));
+                        cosmeticUpdate.setString(2, UserCosmetics.serialize(user.userCosmetics().getParticleUnlocked()));
+                        cosmeticUpdate.setString(3, UserCosmetics.serialize(user.userCosmetics().getMaterialUnlocked()));
+                        cosmeticUpdate.setString(4, user.getPlayerUID().toString());
+
+                        cosmeticUpdate.executeUpdate();
                     }
 
                     updateSettings.close();
                     updateData.close();
+                    cosmeticUpdate.close();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

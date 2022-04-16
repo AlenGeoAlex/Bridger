@@ -10,6 +10,9 @@ public enum ConfigurationPaths {
     STORAGE_SSL("ssl"),
 
     SPAWN_LOCATION("spawn-location"),
+
+    COSMETICS_FIRE_WORK_ENABLED("cosmetics.firework.enabled"),
+    COSMETICS_ALLOWED_FIREWORK_MODELS("cosmetics.firework.allowed-firework-models"),
     ;
 
     private String path;

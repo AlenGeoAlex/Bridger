@@ -3,35 +3,42 @@ package io.github.alenalex.bridger.models.player;
 import com.google.common.base.Objects;
 import io.github.alenalex.bridger.Bridger;
 import io.github.alenalex.bridger.configs.MessageConfiguration;
+import io.github.alenalex.bridger.variables.Fireworks;
+import org.bukkit.FireworkEffect;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Optional;
 
 public final class UserSettings {
 
     public static final UserSettings DEFAULT;
 
     static {
-        DEFAULT = new UserSettings("en", null, null, true);
+        DEFAULT = new UserSettings("en", null, null, null ,true);
     }
 
     @NotNull private String language;
     private String material;
     private String particle;
+    private String fireWork;
     private boolean scoreboardEnabled;
     private boolean setBackEnabled;
 
-    public UserSettings(@NotNull String language, String material, String particle, boolean scoreboardEnabled) {
+    public UserSettings(@NotNull String language, String material, String particle, String fireWork, boolean scoreboardEnabled) {
         this.language = language;
         this.material = material;
         this.particle = particle;
+        this.fireWork = fireWork;
         this.scoreboardEnabled = scoreboardEnabled;
         this.setBackEnabled = false;
     }
 
-    public UserSettings(String material, String particle, boolean scoreboardEnabled) {
+    public UserSettings(String material, String particle, String fireWork, boolean scoreboardEnabled) {
         this.language = "en";
         this.material = material;
         this.particle = particle;
         this.scoreboardEnabled = scoreboardEnabled;
+        this.fireWork = fireWork;
         this.setBackEnabled = false;
     }
 
@@ -55,6 +62,18 @@ public final class UserSettings {
         return particle;
     }
 
+    public boolean hasFireWork() {
+        return fireWork != null;
+    }
+
+    public String getFireWorkAsString() {
+        return fireWork;
+    }
+
+    public Optional<FireworkEffect.Type> getFireWork() {
+        return Fireworks.getFireworkTypeByName(fireWork);
+    }
+
     public boolean hasParticle() {
         return particle != null;
     }
@@ -73,6 +92,10 @@ public final class UserSettings {
 
     public void setParticle(String particle) {
         this.particle = particle;
+    }
+
+    public void setFireWork(String fireWork) {
+        this.fireWork = fireWork;
     }
 
     public void setScoreboardEnabled(boolean scoreboardEnabled) {

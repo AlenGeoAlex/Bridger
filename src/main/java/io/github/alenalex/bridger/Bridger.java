@@ -13,7 +13,19 @@ import io.github.alenalex.bridger.manager.UserManager;
 import io.github.alenalex.bridger.utils.adventure.MessagingUtils;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.Random;
+
 public final class Bridger extends JavaPlugin {
+
+    private static final Random random;
+
+    static {
+        random = new Random(System.currentTimeMillis());
+    }
+
+    public static Random randomInstance() {
+        return random;
+    }
 
     private static Bridger instance = null;
 

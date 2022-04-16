@@ -1,5 +1,6 @@
 package io.github.alenalex.bridger.models.player;
 
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NonBlocking;
 import org.jetbrains.annotations.NotNull;
 
@@ -10,7 +11,11 @@ public class UserCosmetics {
     public static final UserCosmetics DEFAULT;
 
     static {
-        DEFAULT = new UserCosmetics(new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+        DEFAULT = new UserCosmetics(
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>()
+        );
     }
 
     private final List<String> fireWorkUnlocked;
@@ -107,4 +112,8 @@ public class UserCosmetics {
     public List<String> getParticleUnlocked() {
         return particleUnlocked;
     }
+
+
+
+
 }
