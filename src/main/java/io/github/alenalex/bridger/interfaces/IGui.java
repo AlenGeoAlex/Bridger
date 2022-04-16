@@ -11,6 +11,8 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 public interface IGui {
 
     UIConfiguration getConfiguration();
@@ -22,13 +24,17 @@ public interface IGui {
     }
 
     default <T extends BaseGui>  T applyFiller(T gui, @NotNull UIConfig config) {
+        return applyFiller(gui, config.getFillers());
+    }
+
+    default <T extends BaseGui>  T applyFiller(T gui, @NotNull List<UIFiller> fillers) {
         if(gui == null)
             throw new IllegalUIAccess("The gui provided for the filler is null");
 
-        if(config.getFillers().isEmpty())
+        if(fillers.isEmpty())
             return gui;
 
-        for(UIFiller filler : config.getFillers()){
+        for(UIFiller filler : fillers){
             final GuiItem item = ItemBuilder.from(filler.itemStack())
                     .name(Component.empty())
                     .lore(Component.empty())
@@ -38,6 +44,23 @@ public interface IGui {
                 gui.setItem(slots, item);
             }
         }
+
+        return gui;
+    }
+
+    default <T extends BaseGui>  T applyFiller(T gui, @NotNull UIFiller filler) {
+        if(gui == null)
+            throw new IllegalUIAccess("The gui provided for the filler is null");
+
+        final GuiItem item = ItemBuilder.from(filler.itemStack())
+                .name(Component.empty())
+                .lore(Component.empty())
+                .asGuiItem();
+
+        for(Integer slots : filler.slots()){
+            gui.setItem(slots, item);
+        }
+
 
         return gui;
     }

@@ -38,6 +38,7 @@ public class Firework extends AbstractDynamicGUI<Gui> {
 
                 final Gui gui = Gui.
                         gui().
+                        disableAllInteractions().
                         title(getConfiguration().getFireWorkShopConfig().titleAsComponent()).
                         create();
 
