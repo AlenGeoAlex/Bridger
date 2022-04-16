@@ -21,10 +21,11 @@ public class ConfigurationFile extends AbstractFileSettings {
 
     private boolean isFireworkEnabled;
 
-    private HashMap<FireworkEffect.Type, Integer> enabledFireworkModels;
+    private final HashMap<FireworkEffect.Type, Integer> enabledFireworkModels;
 
     public ConfigurationFile(ConfigurationHandler handler) {
         super(handler);
+        this.enabledFireworkModels = new HashMap<>();
     }
 
     @Override
