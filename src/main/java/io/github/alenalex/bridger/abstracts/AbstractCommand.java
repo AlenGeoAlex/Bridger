@@ -19,14 +19,14 @@ public abstract class AbstractCommand extends BaseCommand {
     public abstract Map<String, String> getCommandDescriptionMap();
 
     public void sendHelpMessage(Player player){
-        manager.plugin().messagingUtils().sendTo(player, PluginResponses.CommandHelpLayout.HEADER);
+        manager.plugin().messagingUtils().sendTo(player, PluginResponses.Commands.CommandHelpLayout.HEADER);
         getCommandDescriptionMap().forEach((command, desc) -> {
-            manager.plugin().messagingUtils().sendTo(player, PluginResponses.CommandHelpLayout.HELP_COMMAND,
+            manager.plugin().messagingUtils().sendTo(player, PluginResponses.Commands.CommandHelpLayout.HELP_COMMAND,
                     MessagePlaceholder.of("%command%", command),
                     MessagePlaceholder.of("%description%", desc)
                     );
         });
-        manager.plugin().messagingUtils().sendTo(player, PluginResponses.CommandHelpLayout.FOOTER);
+        manager.plugin().messagingUtils().sendTo(player, PluginResponses.Commands.CommandHelpLayout.FOOTER);
 
     }
 }

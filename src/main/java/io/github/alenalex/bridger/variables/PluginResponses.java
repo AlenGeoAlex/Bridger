@@ -12,13 +12,13 @@ public final class PluginResponses {
         public static final String PURGE_CONFIRM = "<gold>Rerun the command once again to remove your current setup session";
     }
 
-    public static class CommandHelpLayout {
-        public static final String HEADER = "<green>--------<aqua>Bridger<green>--------";
-        public static final String HELP_COMMAND = "<red>%command% <white>  - <aqua>%description%";
-        public static final String FOOTER = "<green>-------------------------------------";
-    }
-
     public static class Commands{
+
+        public static class CommandHelpLayout {
+            public static final String HEADER = "<green>--------<aqua>Bridger<green>--------";
+            public static final String HELP_COMMAND = "<red>%command% <white>  - <aqua>%description%";
+            public static final String FOOTER = "<green>-------------------------------------";
+        }
 
         public static class Sessions{
             public static final String NO_SESSION_NAME_PROVIDED = "<red>You have not provided a valid session name!";
