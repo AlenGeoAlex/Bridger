@@ -1,10 +1,12 @@
 package io.github.alenalex.bridger.models;
 
 import io.github.alenalex.bridger.variables.IslandStatus;
+import io.github.alenalex.bridger.variables.Materials;
 import net.minecraft.server.v1_8_R3.BlockPosition;
 import net.minecraft.server.v1_8_R3.EntityPlayer;
 import net.minecraft.server.v1_8_R3.IBlockData;
 import net.minecraft.server.v1_8_R3.PlayerChunkMap;
+import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -36,7 +38,7 @@ public final class Island {
     private boolean enabled;
     private IslandStatus status;
 
-    public Island(String islandName, String permission, Location spawnLocation, Location endLocation, Location pos1, Location pos2, int minTimeRequired, int minBlocksRequired) {
+    public Island(@NotNull String islandName, String permission,@NotNull Location spawnLocation,@NotNull Location endLocation,@NotNull Location pos1,@NotNull Location pos2, int minTimeRequired, int minBlocksRequired) {
         this.islandName = islandName;
         this.permission = permission;
         this.spawnLocation = spawnLocation;
@@ -111,6 +113,9 @@ public final class Island {
     }
 
     public boolean hasPermission(@NotNull Player player) {
+        if(StringUtils.isBlank(permission))
+            return true;
+
         return player.hasPermission(permission);
     }
 
@@ -187,7 +192,7 @@ public final class Island {
                             //it will check whether its in list of enabled block
 
                             //if block#hasMetaData || block#isInListOfEnabledBlocks
-                            if(block.hasMetadata(PLACED_BLOCK))
+                            if(block.hasMetadata(PLACED_BLOCK) || Materials.isMaterialTypeEnabled(block.getType()))
                                 blocks.add(block);
                         }
                     }

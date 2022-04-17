@@ -92,4 +92,15 @@ public class Materials {
                 .anyMatch(material -> material.isSimilar(stack));
     }
 
+    public static boolean isMaterialTypeEnabled(@NotNull Material material){
+        return Bridger
+                .instance()
+                .configurationHandler()
+                .getConfigurationFile()
+                .getEnabledMaterials()
+                .keySet()
+                .stream()
+                .anyMatch(stack -> material == stack.getType());
+    }
+
 }
