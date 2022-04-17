@@ -11,6 +11,7 @@ import io.github.alenalex.bridger.listener.ConnectionListener;
 import io.github.alenalex.bridger.manager.CommandManager;
 import io.github.alenalex.bridger.manager.HookManager;
 import io.github.alenalex.bridger.manager.LocaleManager;
+import io.github.alenalex.bridger.manager.SetupSessionManager;
 import io.github.alenalex.bridger.utils.adventure.MessagingUtils;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -45,6 +46,7 @@ public final class Bridger extends JavaPlugin {
     private UIHandler uiHandler;
     private HookManager pluginHookManager;
     private CommandManager commandManager;
+    private SetupSessionManager setupSessionManager;
 
     @Override
     public void onEnable() {
@@ -58,6 +60,7 @@ public final class Bridger extends JavaPlugin {
         this.uiHandler = new UIHandler(this);
         this.pluginHookManager = new HookManager(this);
         this.commandManager = new CommandManager(this);
+        this.setupSessionManager = new SetupSessionManager(this);
 
         if(!pluginHookManager.validateMinHookRequirements()) {
             getServer().getPluginManager().isPluginEnabled(this);
@@ -169,5 +172,9 @@ public final class Bridger extends JavaPlugin {
 
     public HookManager pluginHookManager(){
         return pluginHookManager;
+    }
+
+    public SetupSessionManager setupSessionManager(){
+        return setupSessionManager;
     }
 }

@@ -1,4 +1,4 @@
-package io.github.alenalex.bridger.setup;
+package io.github.alenalex.bridger.models.setup;
 
 import io.github.alenalex.bridger.models.Island;
 import io.github.alenalex.bridger.utils.FlatFileUtils;

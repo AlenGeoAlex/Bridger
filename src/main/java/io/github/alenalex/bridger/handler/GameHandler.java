@@ -64,7 +64,7 @@ public class GameHandler {
             return Optional.empty();
         }
         Island island = null;
-        Optional<Island> islandOptional = islandManager.getAnyFreeIsland();
+        Optional<Island> islandOptional = islandManager.getAnyFreeIsland(player);
 
         if(!islandOptional.isPresent()){
             plugin.messagingUtils().sendTo(player, userData.userSettings().getLanguage().asComponent(LangConfigurationPaths.NO_FREE_ISLANDS));

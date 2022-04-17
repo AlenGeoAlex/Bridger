@@ -5,3 +5,4 @@ authors: [ AlenAlex ]
 description: A plugin for Bridging Practice
 depend:
   - "Vault"
+permissions:

@@ -2,6 +2,7 @@ package io.github.alenalex.bridger.manager;
 
 import io.github.alenalex.bridger.Bridger;
 import io.github.alenalex.bridger.abstracts.AbstractRegistry;
+import io.github.alenalex.bridger.models.setup.SetupSession;
 import io.github.alenalex.bridger.utils.adventure.internal.MessagePlaceholder;
 import io.github.alenalex.bridger.variables.PluginResponses;
 import org.bukkit.entity.Player;
@@ -11,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class SetupSessionManager extends AbstractRegistry<UUID, io.github.alenalex.bridger.setup.SetupSession> {
+public class SetupSessionManager extends AbstractRegistry<UUID, SetupSession> {
 
     private final List<UUID> sessionRemoveConfirmList;
 
@@ -36,7 +37,7 @@ public class SetupSessionManager extends AbstractRegistry<UUID, io.github.alenal
             return;
         }
 
-        final io.github.alenalex.bridger.setup.SetupSession setupSession = new io.github.alenalex.bridger.setup.SetupSession(player.getUniqueId(), sessionName);
+        final SetupSession setupSession = new SetupSession(player.getUniqueId(), sessionName);
         register(setupSession.getPlayerUID(), setupSession);
         plugin.messagingUtils().sendTo(player, PluginResponses.SetupSession.CREATED_SETUP_SESSION, MessagePlaceholder.of("%session-name%", sessionName));
     }
