@@ -7,6 +7,7 @@ import io.github.alenalex.bridger.models.Island;
 import io.github.alenalex.bridger.models.player.UserData;
 import io.github.alenalex.bridger.utils.adventure.internal.MessagePlaceholder;
 import io.github.alenalex.bridger.variables.LangConfigurationPaths;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -57,6 +58,15 @@ public class GameHandler {
         return Optional.ofNullable(islandManager.of(activeBridges.get(pUID)));
     }
 
+    public Optional<Player> getPlayerOfIsland(@NotNull String islandName){
+        return activeBridges
+                .values()
+                .stream()
+                .filter(islandName::equals)
+                .findAny()
+                .map(Bukkit::getPlayer);
+    }
+
     public Optional<Island> toIsland(@NotNull Player player){
         final UserData userData = userManager.of(player.getUniqueId());
         if(userData == null) {
@@ -97,6 +107,20 @@ public class GameHandler {
         plugin.messagingUtils().sendTo(player,
                 userData.userSettings().getLanguage().asComponent(LangConfigurationPaths.PLAYER_QUIT_MATCH)
                 );
+    }
+
+    public void kickPlayerFromIsland(@NotNull Player player){
+        if(!activeBridges.containsKey(player.getUniqueId()))
+            return;
+
+        final UserData userData = userManager.of(player.getUniqueId());
+        if(userData == null) {
+            plugin.getLogger().severe("Failed to get the data for user @"+getClass().getSimpleName()+"#kickPlayerFromIsland(Player)");
+            return;
+        }
+
+        //TODO
+
     }
 
 }

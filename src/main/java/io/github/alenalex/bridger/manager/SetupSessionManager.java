@@ -2,15 +2,14 @@ package io.github.alenalex.bridger.manager;
 
 import io.github.alenalex.bridger.Bridger;
 import io.github.alenalex.bridger.abstracts.AbstractRegistry;
+import io.github.alenalex.bridger.models.Island;
 import io.github.alenalex.bridger.models.setup.SetupSession;
 import io.github.alenalex.bridger.utils.adventure.internal.MessagePlaceholder;
 import io.github.alenalex.bridger.variables.PluginResponses;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class SetupSessionManager extends AbstractRegistry<UUID, SetupSession> {
 
@@ -27,6 +26,11 @@ public class SetupSessionManager extends AbstractRegistry<UUID, SetupSession> {
     }
 
     public void createNewSession(@NotNull Player player, @NotNull String sessionName){
+        if(plugin.gameHandler().islandManager().isKeyRegistered(sessionName)){
+            plugin.messagingUtils().sendTo(player, PluginResponses.SetupSession.ISLAND_NAME_EXISTS);
+            return;
+        }
+
         if(isSessionWithNameActive(sessionName)){
             plugin.messagingUtils().sendTo(player, PluginResponses.SetupSession.SESSION_WITH_NAME_EXISTS);
             return;
@@ -63,6 +67,15 @@ public class SetupSessionManager extends AbstractRegistry<UUID, SetupSession> {
         if(!isKeyRegistered(player.getUniqueId()))
             return;
 
+        final SetupSession setupSession = of(player.getUniqueId());
+        final Island island = setupSession.asIsland();
+        final Map<String, Object> islandData = setupSession.asSerializedSession();
+
+        plugin.gameHandler().islandManager().registerIsland(island);
+        plugin.configurationHandler().getIslandConfiguration().setIslandData(island.getIslandName(), islandData);
+        plugin.messagingUtils().sendTo(player, PluginResponses.SetupSession.SUCCESS
+            ,MessagePlaceholder.of("%name%", island.getIslandName())
+        );
         remove(player.getUniqueId());
     }
 

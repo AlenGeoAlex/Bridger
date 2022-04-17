@@ -1,5 +1,6 @@
 package io.github.alenalex.bridger.models;
 
+import de.leonhard.storage.sections.FlatFileSection;
 import io.github.alenalex.bridger.variables.IslandStatus;
 import io.github.alenalex.bridger.variables.Materials;
 import net.minecraft.server.v1_8_R3.BlockPosition;
@@ -16,8 +17,7 @@ import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashSet;
-import java.util.Iterator;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
@@ -38,6 +38,8 @@ public final class Island {
     private boolean enabled;
     private IslandStatus status;
 
+    private final List<UUID> spectators;
+
     public Island(@NotNull String islandName, String permission,@NotNull Location spawnLocation,@NotNull Location endLocation,@NotNull Location pos1,@NotNull Location pos2, int minTimeRequired, int minBlocksRequired) {
         this.islandName = islandName;
         this.permission = permission;
@@ -50,6 +52,7 @@ public final class Island {
 
         this.enabled = true;
         this.status = IslandStatus.IDLE;
+        this.spectators = new ArrayList<>();
     }
 
     public String getIslandName() {
@@ -139,6 +142,10 @@ public final class Island {
         player.teleport(spawnLocation);
     }
 
+    public List<UUID> getSpectators() {
+        return spectators;
+    }
+
     public CompletableFuture<Boolean> resetIsland() {
         return CompletableFuture.supplyAsync(new Supplier<Boolean>() {
             @Override
@@ -200,6 +207,10 @@ public final class Island {
                 return blocks.iterator();
             }
         });
+    }
+
+    public static Island deserialize(FlatFileSection section){
+        return null;
     }
 
 }

@@ -118,17 +118,14 @@ public class SetupSession {
         return ValidityStatus.VALID;
     }
 
-    public Optional<Island> asIsland(){
+    public Island asIsland(){
         if(minBlocksRequired <= 0)
             minBlocksRequired = -1;
 
         if(minSecRequired <= 0)
             minSecRequired = -1;
 
-        if(isValid() == ValidityStatus.VALID)
-            return Optional.of(new Island(islandName, permissionRequired, spawnPoint, endPoint, pos1, pos2, minBlocksRequired, minSecRequired));
-
-        else return Optional.empty();
+        return new Island(islandName, permissionRequired, spawnPoint, endPoint, pos1, pos2, minBlocksRequired, minSecRequired);
     }
 
     public static SetupSession asSession(@NotNull Player player, @NotNull Island island){
@@ -160,7 +157,7 @@ public class SetupSession {
         return map;
     }
 
-    enum ValidityStatus{
+    public enum ValidityStatus{
         VALID,
         INVALID_SPAWN_LOCATION,
         INVALID_END_LOCATION,

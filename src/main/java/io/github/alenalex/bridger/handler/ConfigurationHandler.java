@@ -2,6 +2,7 @@ package io.github.alenalex.bridger.handler;
 
 import io.github.alenalex.bridger.Bridger;
 import io.github.alenalex.bridger.configs.ConfigurationFile;
+import io.github.alenalex.bridger.configs.IslandConfiguration;
 import io.github.alenalex.bridger.configs.UIConfiguration;
 import io.github.alenalex.bridger.interfaces.IHandler;
 
@@ -12,17 +13,20 @@ public class ConfigurationHandler implements IHandler {
     private final Bridger plugin;
     private final ConfigurationFile configurationFile;
     private final UIConfiguration uiConfiguration;
+    private final IslandConfiguration islandConfiguration;
 
     public ConfigurationHandler(Bridger plugin) {
         this.plugin = plugin;
         this.configurationFile = new ConfigurationFile(this);
         this.uiConfiguration = new UIConfiguration(this);
+        this.islandConfiguration = new IslandConfiguration(this);
     }
 
     @Override
     public boolean initHandler() {
         return configurationFile.initConfigFile("config.yml", plugin.getDataFolder().getPath(), plugin().getResource("config.yml"))
-                && uiConfiguration.initConfigFile("gui.yml", plugin.getDataFolder().getPath()+File.separator+"gui", plugin().getResource("gui/gui.yml"));
+                && uiConfiguration.initConfigFile("gui.yml", plugin.getDataFolder().getPath()+File.separator+"gui", plugin().getResource("gui/gui.yml"))
+                && islandConfiguration.initYamlFile("islands.yml", plugin.getDataFolder().getPath()+File.separator+"data");
 
 
     }
@@ -31,6 +35,7 @@ public class ConfigurationHandler implements IHandler {
     public void prepareHandler() {
         configurationFile.loadFile();
         uiConfiguration.loadFile();
+        islandConfiguration.loadFile();
     }
 
     @Override
@@ -42,6 +47,7 @@ public class ConfigurationHandler implements IHandler {
     public void reloadHandler() {
         configurationFile.prepareReload();
         uiConfiguration.prepareReload();
+        islandConfiguration.prepareReload();
     }
 
 
@@ -51,5 +57,9 @@ public class ConfigurationHandler implements IHandler {
 
     public UIConfiguration getUiConfiguration() {
         return uiConfiguration;
+    }
+
+    public IslandConfiguration getIslandConfiguration() {
+        return islandConfiguration;
     }
 }

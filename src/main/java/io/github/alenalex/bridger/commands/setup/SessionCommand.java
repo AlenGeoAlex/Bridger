@@ -9,6 +9,7 @@ import io.github.alenalex.bridger.utils.adventure.internal.MessagePlaceholder;
 import io.github.alenalex.bridger.variables.Permissions;
 import io.github.alenalex.bridger.variables.PluginResponses;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.text.WordUtils;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -48,6 +49,7 @@ public class SessionCommand extends AbstractCommand {
 
     @SubCommand("create")
     @Async
+    @Permission(Permissions.Commands.Sessions.DEFAULT)
     public void onCreateCommand(@NotNull Player player, @Nullable String sessionName){
         if(StringUtils.isBlank(sessionName)){
             manager.plugin().messagingUtils().sendTo(player, PluginResponses.Commands.Sessions.NO_SESSION_NAME_PROVIDED);
@@ -59,12 +61,14 @@ public class SessionCommand extends AbstractCommand {
 
     @SubCommand("delete")
     @Async
+    @Permission(Permissions.Commands.Sessions.DEFAULT)
     public void onDeleteCommand(@NotNull Player player){
         manager.plugin().setupSessionManager().removeSession(player);
     }
 
     @SubCommand("pos1")
     @Async
+    @Permission(Permissions.Commands.Sessions.DEFAULT)
     public void onSetPos1Command(@NotNull Player player){
         final SetupSession setupSession = manager.plugin().setupSessionManager().of(player.getUniqueId());
 
@@ -82,6 +86,7 @@ public class SessionCommand extends AbstractCommand {
 
     @SubCommand("pos2")
     @Async
+    @Permission(Permissions.Commands.Sessions.DEFAULT)
     public void onSetPos2Command(@NotNull Player player){
         final SetupSession setupSession = manager.plugin().setupSessionManager().of(player.getUniqueId());
 
@@ -99,6 +104,7 @@ public class SessionCommand extends AbstractCommand {
 
     @SubCommand("spawn")
     @Async
+    @Permission(Permissions.Commands.Sessions.DEFAULT)
     public void onSetSpawnCommand(@NotNull Player player){
         final SetupSession setupSession = manager.plugin().setupSessionManager().of(player.getUniqueId());
 
@@ -116,6 +122,7 @@ public class SessionCommand extends AbstractCommand {
 
     @SubCommand("end")
     @Async
+    @Permission(Permissions.Commands.Sessions.DEFAULT)
     public void onSetEndCommand(@NotNull Player player){
         final SetupSession setupSession = manager.plugin().setupSessionManager().of(player.getUniqueId());
 
@@ -133,6 +140,7 @@ public class SessionCommand extends AbstractCommand {
 
     @SubCommand("min-blocks")
     @Async
+    @Permission(Permissions.Commands.Sessions.DEFAULT)
     public void onSetMinBlocks(@NotNull Player player, Integer integer){
         if(integer == null) {
             manager.plugin().messagingUtils().sendTo(player, PluginResponses.Commands.Sessions.NOT_PROVIDED_VALID_VALUE);
@@ -156,6 +164,7 @@ public class SessionCommand extends AbstractCommand {
 
     @SubCommand("min-time")
     @Async
+    @Permission(Permissions.Commands.Sessions.DEFAULT)
     public void onSetMinTime(@NotNull Player player, Integer integer){
         if(integer == null) {
             manager.plugin().messagingUtils().sendTo(player, PluginResponses.Commands.Sessions.NOT_PROVIDED_VALID_VALUE);
@@ -180,6 +189,7 @@ public class SessionCommand extends AbstractCommand {
     @SubCommand("perm")
     @Async
     @Suggestion("bridger.join.")
+    @Permission(Permissions.Commands.Sessions.DEFAULT)
     public void onSetPerm(@NotNull Player player, String perm){
         if(StringUtils.isBlank(perm)) {
             manager.plugin().messagingUtils().sendTo(player, PluginResponses.Commands.Sessions.NOT_PROVIDED_VALID_VALUE);
@@ -202,6 +212,28 @@ public class SessionCommand extends AbstractCommand {
     }
 
     //TODO Validate Command
+    @SubCommand("validate")
+    @Async
+    @Permission(Permissions.Commands.Sessions.DEFAULT)
+    public void onValidateCommand(@NotNull Player player){
+        final SetupSession setupSession = manager.plugin().setupSessionManager().of(player.getUniqueId());
+
+        if(setupSession == null){
+            manager.plugin().messagingUtils().sendTo(player, PluginResponses.Commands.Sessions.DOES_NOT_HAVE_AN_ACTIVE_SESSION);
+            return;
+        }
+
+        SetupSession.ValidityStatus valid = setupSession.isValid();
+        if(valid == SetupSession.ValidityStatus.VALID){
+            manager.plugin().setupSessionManager().completeSession(player);
+        }else {
+            final String reason = WordUtils.capitalize(valid.name().replace("_", " "));
+            manager.plugin().messagingUtils().sendTo(player, PluginResponses.Commands.Sessions.FAILED_VALIDITY
+                ,MessagePlaceholder.of("%reason%",reason)
+            );
+            return;
+        }
+    }
 
 
 }

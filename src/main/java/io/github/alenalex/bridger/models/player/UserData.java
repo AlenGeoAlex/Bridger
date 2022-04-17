@@ -27,12 +27,14 @@ public final class UserData {
     @NotNull private final UserStats userStats;
     @NotNull private final UserSettings userSettings;
     @NotNull private final UserCosmetics userCosmetics;
+    @NotNull private final UserMatchCache userMatchCache;
 
     public UserData(@NotNull UUID playerUID, @NotNull UserStats userStats, @NotNull UserSettings userSettings, @NotNull UserCosmetics userCosmetics) {
         this.playerUID = playerUID;
         this.userStats = userStats;
         this.userSettings = userSettings;
         this.userCosmetics = userCosmetics;
+        this.userMatchCache = new UserMatchCache(this);
     }
 
     @NotNull
@@ -134,5 +136,10 @@ public final class UserData {
     @NotNull
     public UserCosmetics userCosmetics() {
         return userCosmetics;
+    }
+
+    @NotNull
+    public UserMatchCache userMatchCache(){
+        return userMatchCache;
     }
 }

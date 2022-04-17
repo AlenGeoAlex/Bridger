@@ -16,11 +16,13 @@ public class UserMatchCache {
     private final List<Block> placedBlocks;
     private long currentTime;
 
+    private String spectatingIsland;
 
     public UserMatchCache(UserData userData) {
         this.userData = userData;
         this.placedBlocks = new ArrayList<>();
         this.currentTime = 0L;
+        this.spectatingIsland = null;
     }
 
     public void addBlockToCache(@NotNull Block block){
@@ -47,4 +49,19 @@ public class UserMatchCache {
         placedBlocks.clear();
     }
 
+    public String getSpectatingIsland() {
+        return spectatingIsland;
+    }
+
+    public void setSpectatingIsland(String spectatingIsland) {
+        this.spectatingIsland = spectatingIsland;
+    }
+
+    public void clearSpectatingIsland(){
+        setSpectatingIsland(null);
+    }
+
+    public boolean isUserSpectating(){
+        return spectatingIsland != null;
+    }
 }
