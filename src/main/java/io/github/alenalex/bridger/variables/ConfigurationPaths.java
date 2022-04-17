@@ -13,6 +13,9 @@ public enum ConfigurationPaths {
 
     COSMETICS_FIRE_WORK_ENABLED("cosmetics.firework.enabled"),
     COSMETICS_ALLOWED_FIREWORK_MODELS("cosmetics.firework.allowed-firework-models"),
+
+    COSMETICS_DEFAULT_MATERIAL("cosmetics.material.default"),
+    COSMETICS_MATERIALS_ENABLED("cosmetics.material.allowed-materials")
     ;
 
     private String path;

@@ -10,7 +10,6 @@ import io.github.alenalex.bridger.handler.UIHandler;
 import io.github.alenalex.bridger.models.player.UserData;
 import io.github.alenalex.bridger.utils.adventure.internal.MessagePlaceholder;
 import io.github.alenalex.bridger.variables.LangConfigurationPaths;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.WordUtils;
 import org.bukkit.FireworkEffect;
 import org.bukkit.entity.Player;
@@ -20,9 +19,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 
-public class Firework extends AbstractDynamicGUI<Gui> {
+public class FireworkShop extends AbstractDynamicGUI<Gui> {
 
-    public Firework(UIHandler handler) {
+    public FireworkShop(UIHandler handler) {
         super(handler);
     }
 

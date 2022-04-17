@@ -16,3 +16,9 @@ cosmetics:
       STAR: 5000
       CREEPER: 5000
       BALL_LARGE: 5000
+  material:
+    default: "STONE"
+    allowed-materials:
+      STAINED_GLASS_PANE: 2600
+      WOOL: 6500
+      GOLD_BLOCK: 4500

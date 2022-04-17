@@ -2,17 +2,21 @@ package io.github.alenalex.bridger.configs;
 
 import io.github.alenalex.bridger.abstracts.AbstractFileSettings;
 import io.github.alenalex.bridger.handler.ConfigurationHandler;
+import io.github.alenalex.bridger.utils.FlatFileUtils;
 import io.github.alenalex.bridger.variables.ConfigurationPaths;
 import org.apache.commons.lang3.EnumUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Firework;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 public class ConfigurationFile extends AbstractFileSettings {
 
@@ -22,10 +26,13 @@ public class ConfigurationFile extends AbstractFileSettings {
     private boolean isFireworkEnabled;
 
     private final HashMap<FireworkEffect.Type, Integer> enabledFireworkModels;
+    private ItemStack defaultMaterial;
+    private final HashMap<ItemStack, Integer> enabledMaterials;
 
     public ConfigurationFile(ConfigurationHandler handler) {
         super(handler);
         this.enabledFireworkModels = new HashMap<>();
+        this.enabledMaterials = new HashMap<>();
     }
 
     @Override
@@ -43,11 +50,32 @@ public class ConfigurationFile extends AbstractFileSettings {
                 handler.plugin().getLogger().warning("Invalid firework model: " + s+" found in config.yml");
             }
         }
+
+
+        defaultMaterial = deserializeItemStack(ConfigurationPaths.COSMETICS_DEFAULT_MATERIAL.getPath()).orElseGet(new Supplier<ItemStack>() {
+            @Override
+            public ItemStack get() {
+                handler.plugin().getLogger().warning("Default material is missing! Setting to STONE");
+                return new ItemStack(Material.STONE);
+            }
+        });
+
+        for(String s : this.file.keySet(ConfigurationPaths.COSMETICS_MATERIALS_ENABLED.getPath())){
+            final ItemStack stack = FlatFileUtils.deserializeItemStack(s);
+            if(stack == null) {
+                handler.plugin().getLogger().warning("Failed to deserialize ItemStack on the object "+s);
+                return;
+            }
+
+            enabledMaterials.put(stack, this.file.getInt(ConfigurationPaths.COSMETICS_MATERIALS_ENABLED.getPath() +"."+s));
+        }
     }
 
     @Override
     public void prepareReload() {
-
+        this.enabledMaterials.clear();
+        this.enabledFireworkModels.clear();
+        this.loadFile();
     }
 
     public String getStorageType() {
@@ -64,5 +92,13 @@ public class ConfigurationFile extends AbstractFileSettings {
 
     public Map<FireworkEffect.Type, Integer> getEnabledFireWorkModels() {
         return enabledFireworkModels;
+    }
+
+    public ItemStack getDefaultMaterial() {
+        return defaultMaterial;
+    }
+
+    public Map<ItemStack, Integer> getEnabledMaterials() {
+        return enabledMaterials;
     }
 }

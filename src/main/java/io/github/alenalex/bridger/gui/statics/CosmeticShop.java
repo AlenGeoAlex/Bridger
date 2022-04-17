@@ -69,7 +69,7 @@ public class CosmeticShop extends AbstractStaticGUI<Gui> {
                     .from(Material.FIREWORK)
                     .name(MessageFormatter.convertToComponent("<aqua>Fireworks"))
                     .lore(
-                            MessageFormatter.convertToComponent("<gray>Click to open fireworks shop"),                            Component.empty(),
+                            MessageFormatter.convertToComponent("<gray>Click to open fireworks shop"),
                             Component.empty(),
                             MessageFormatter.convertToComponent("<white>Fireworks are extra cosmetics"),
                             MessageFormatter.convertToComponent("<white>which are fired once you "),
@@ -86,8 +86,52 @@ public class CosmeticShop extends AbstractStaticGUI<Gui> {
                         }
                     });
 
+            final GuiItem particleShop = ItemBuilder
+                    .from(Material.FIREWORK)
+                    .name(MessageFormatter.convertToComponent("<aqua>Particles"))
+                    .lore(
+                            MessageFormatter.convertToComponent("<gray>Click to open particles shop"),
+                            Component.empty(),
+                            MessageFormatter.convertToComponent("<white>Particles are cosmetics"),
+                            MessageFormatter.convertToComponent("<white>which are shown along the path"),
+                            MessageFormatter.convertToComponent("<white>of the placed blocks when your"),
+                            MessageFormatter.convertToComponent("<white>island is put to reset the blocks you placed"),
+                            Component.empty(),
+                            MessageFormatter.convertToComponent("<white>There are various particle models"),
+                            MessageFormatter.convertToComponent("<white>from which you can purchase.")
+                    ).asGuiItem(new GuiAction<InventoryClickEvent>() {
+                        @Override
+                        public void execute(InventoryClickEvent event) {
+                            gui.close(event.getWhoClicked());
+
+                            handler.getFireworkShop().openFor((Player) event.getWhoClicked());
+                        }
+                    });
+
+            final GuiItem materialShop = ItemBuilder
+                    .from(Material.FIREWORK)
+                    .name(MessageFormatter.convertToComponent("<aqua>Materials"))
+                    .lore(
+                            MessageFormatter.convertToComponent("<gray>Click to open material shop"),
+                            Component.empty(),
+                            MessageFormatter.convertToComponent("<white>Materials are cosmetics"),
+                            MessageFormatter.convertToComponent("<white>on which you practice building blocks on!"),
+                            Component.empty(),
+                            MessageFormatter.convertToComponent("<white>There are various different materials"),
+                            MessageFormatter.convertToComponent("<white>from which you can purchase.")
+                    ).asGuiItem(new GuiAction<InventoryClickEvent>() {
+                        @Override
+                        public void execute(InventoryClickEvent event) {
+                            gui.close(event.getWhoClicked());
+
+                            handler.getMaterialsShop().openFor((Player) event.getWhoClicked());
+                        }
+                    });
+
                 gui.setItem(12, fireWorkShopButton);
                 gui.setItem(22, closeButton);
+                gui.setItem(23, particleShop);
+                gui.setItem(24, materialShop);
             return true;
         }catch (Exception e){
             e.printStackTrace();

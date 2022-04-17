@@ -4,7 +4,12 @@ import com.google.common.base.Objects;
 import io.github.alenalex.bridger.Bridger;
 import io.github.alenalex.bridger.configs.MessageConfiguration;
 import io.github.alenalex.bridger.variables.Fireworks;
+import io.github.alenalex.bridger.variables.Materials;
+import org.apache.commons.lang3.EnumUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.bukkit.FireworkEffect;
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
@@ -24,6 +29,8 @@ public final class UserSettings {
     private boolean scoreboardEnabled;
     private boolean setBackEnabled;
 
+    private ItemStack currentBlock;
+
     public UserSettings(@NotNull String language, String material, String particle, String fireWork, boolean scoreboardEnabled) {
         this.language = language;
         this.material = material;
@@ -31,6 +38,7 @@ public final class UserSettings {
         this.fireWork = fireWork;
         this.scoreboardEnabled = scoreboardEnabled;
         this.setBackEnabled = false;
+        this.currentBlock = Materials.getItemStackByMaterialName(material);
     }
 
     public UserSettings(String material, String particle, String fireWork, boolean scoreboardEnabled) {
@@ -40,6 +48,7 @@ public final class UserSettings {
         this.scoreboardEnabled = scoreboardEnabled;
         this.fireWork = fireWork;
         this.setBackEnabled = false;
+        this.currentBlock = Materials.getItemStackByMaterialName(material);
     }
 
     public String getLanguageAsString() {
@@ -51,7 +60,15 @@ public final class UserSettings {
     }
 
     public String getMaterialAsString() {
-        return material;
+        return currentBlock.getType().name();
+    }
+
+    public ItemStack getCurrentBlock(){
+        return currentBlock;
+    }
+
+    public String getCurrentBlockAsString(){
+        return Materials.serializeItemStack(currentBlock);
     }
 
     public boolean hasMaterial() {
@@ -83,11 +100,15 @@ public final class UserSettings {
     }
 
     public void setLanguage(String language) {
+        if(StringUtils.isBlank(language))
+            this.language = "en";
+
         this.language = language;
     }
 
     public void setMaterial(String material) {
         this.material = material;
+        this.currentBlock = Materials.getItemStackByMaterialName(material);
     }
 
     public void setParticle(String particle) {
@@ -109,6 +130,8 @@ public final class UserSettings {
     public void setSetBackEnabled(boolean setBackEnabled) {
         this.setBackEnabled = setBackEnabled;
     }
+
+
 
     @Override
     public boolean equals(Object o) {

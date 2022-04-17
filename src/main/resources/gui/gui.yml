@@ -12,3 +12,16 @@ shop:
           - "<gray>Click to buy this firework cosmetics"
           - "<reset>"
           - "<gray>Cost: %cost% coins"
+  materials:
+    title: "<aqua>Unlock Materials</aqua>"
+    rows:
+    fillers:
+    buttons:
+      item-button:
+        item: "FIREWORK"
+        name: "<red>%name%</red>"
+        lore:
+          - "<reset>"
+          - "<gray>Click to buy this material"
+          - "<reset>"
+          - "<gray>Cost: %cost% coins"

@@ -1,9 +1,11 @@
 package io.github.alenalex.bridger.models.player;
 
 import io.github.alenalex.bridger.Bridger;
+import io.github.alenalex.bridger.variables.Materials;
 import io.github.alenalex.bridger.workload.core.Workload;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -13,6 +15,7 @@ public class UserMatchCache {
     private final UserData userData;
     private final List<Block> placedBlocks;
     private long currentTime;
+
 
     public UserMatchCache(UserData userData) {
         this.userData = userData;
@@ -43,4 +46,5 @@ public class UserMatchCache {
         }
         placedBlocks.clear();
     }
+
 }

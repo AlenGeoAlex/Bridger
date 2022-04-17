@@ -3,16 +3,19 @@ package io.github.alenalex.bridger.models.player;
 import io.github.alenalex.bridger.Bridger;
 import io.github.alenalex.bridger.variables.Fireworks;
 import io.github.alenalex.bridger.variables.LangConfigurationPaths;
+import io.github.alenalex.bridger.variables.Materials;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -96,10 +99,28 @@ public final class UserData {
     }
 
     public List<FireworkEffect.Type> fetchLockedFireworks(){
-        return Bridger.instance().configurationHandler().getConfigurationFile().getEnabledFireWorkModels().keySet().
-                stream().
-                filter(type -> {
+        return Bridger.instance()
+                .configurationHandler()
+                .getConfigurationFile()
+                .getEnabledFireWorkModels()
+                .keySet().
+                stream()
+                .filter(type -> {
                     boolean b = !userCosmetics.getFireWorkUnlocked().contains(type.name());
+                    return b;
+                }).
+                collect(Collectors.toList());
+    }
+
+    public List<ItemStack> fetchLockedMaterials(){
+        return Bridger.instance()
+                .configurationHandler()
+                .getConfigurationFile()
+                .getEnabledMaterials()
+                .keySet().
+                stream()
+                .filter(type -> {
+                    boolean b = !userCosmetics.getMaterialUnlocked().contains(type.getType().name());
                     return b;
                 }).
                 collect(Collectors.toList());

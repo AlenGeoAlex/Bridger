@@ -10,6 +10,9 @@ public class UIConfiguration extends AbstractFileSettings {
     private UIConfig fireWorkShopConfig;
     private UIItem fireWorkShopItem;
 
+    private UIConfig materialShopConfig;
+    private UIItem materialShopItem;
+
     public UIConfiguration(ConfigurationHandler handler) {
         super(handler);
     }
@@ -18,6 +21,9 @@ public class UIConfiguration extends AbstractFileSettings {
     public void loadFile() {
         this.fireWorkShopConfig = UIConfig.buildFrom(getSectionOf("shop.fireworks"));
         this.fireWorkShopItem = UIItem.buildFrom(getSectionOf("shop.fireworks.buttons.item-button"));
+
+        this.materialShopConfig = UIConfig.buildFrom(getSectionOf("shop.materials"));
+        this.materialShopItem = UIItem.buildFrom(getSectionOf("shop.materials.buttons.item-button"));
     }
 
     @Override
@@ -31,5 +37,13 @@ public class UIConfiguration extends AbstractFileSettings {
 
     public UIItem getFireWorkShopItem() {
         return fireWorkShopItem;
+    }
+
+    public UIConfig getMaterialShopConfig() {
+        return materialShopConfig;
+    }
+
+    public UIItem getMaterialShopItem() {
+        return materialShopItem;
     }
 }

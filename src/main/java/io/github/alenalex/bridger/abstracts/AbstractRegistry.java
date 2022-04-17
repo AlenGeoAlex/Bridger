@@ -113,6 +113,14 @@ public abstract class AbstractRegistry<K, V> {
         registry.remove(key);
     }
 
+    public Pair<K, V> pop(K key){
+        if(registry.containsKey(key)){
+            Pair<K, V> kvPair = new Pair<>(key, of(key));
+            registry.remove(key);
+            return kvPair;
+        }else return null;
+    }
+
     public void removeByValue(V value) {
         registry.entrySet().removeIf(entry -> entry.getValue().equals(value));
     }

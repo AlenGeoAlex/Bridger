@@ -157,13 +157,9 @@ public abstract class AbstractFileSettings {
         return FlatFileUtils.serializeLocation(location);
     }
 
-    public ItemStack deserializeItemStack(@NotNull String path){
+    public Optional<ItemStack> deserializeItemStack(@NotNull String path){
         String itemStackString = file.getString(path);
-
-        ItemStack stack = FlatFileUtils.deserializeItemStack(itemStackString);
-        if(stack == null)
-            return DEFAULT_ITEM_STACK;
-        else return stack;
+        return Optional.ofNullable(FlatFileUtils.deserializeItemStack(itemStackString));
     }
 
     public FlatFile file(){
