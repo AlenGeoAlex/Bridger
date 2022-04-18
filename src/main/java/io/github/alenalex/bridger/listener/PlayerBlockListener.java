@@ -10,6 +10,7 @@ import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 
 import java.util.Optional;
@@ -63,5 +64,30 @@ public class PlayerBlockListener implements Listener {
             default:
                 return;
         };
+    }
+
+    @EventHandler
+    public void onBlockBreakEvent(BlockBreakEvent event){
+        if(event.isCancelled())
+            return;
+
+        final Player player = event.getPlayer();
+        final UserData userData = plugin.gameHandler().userManager().of(player.getUniqueId());
+
+        if(userData == null)
+            return;
+
+        if(userData.userMatchCache().getStatus() == UserMatchCache.Status.LOBBY){
+            if(player.getGameMode() == GameMode.CREATIVE
+                    || player.hasPermission(Permissions.Admin.ADMIN_BUILD)
+                    || plugin.gameHandler().userManager().isPlayerAllowedToBuild(player)
+            )
+                return;
+
+            if(!plugin.configurationHandler().getConfigurationFile().isDoAllowBreakingBlocksOnLobby())
+                event.setCancelled(true);
+        }else {
+            event.setCancelled(true);
+        }
     }
 }
