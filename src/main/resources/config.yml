@@ -7,6 +7,12 @@ storage:
   username: ${DB_USER}
   password: ${DB_PASS}
 
+broadcast-new-best-time-all-players: true
+
+allow-block-interaction-on-lobby:
+  place-block: false
+  break-block: true
+
 cosmetics:
   firework:
     enabled: true

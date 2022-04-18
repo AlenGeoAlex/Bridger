@@ -15,7 +15,12 @@ public enum ConfigurationPaths {
     COSMETICS_ALLOWED_FIREWORK_MODELS("cosmetics.firework.allowed-firework-models"),
 
     COSMETICS_DEFAULT_MATERIAL("cosmetics.material.default"),
-    COSMETICS_MATERIALS_ENABLED("cosmetics.material.allowed-materials")
+    COSMETICS_MATERIALS_ENABLED("cosmetics.material.allowed-materials"),
+
+    BROADCAST_NEW_RECORD("broadcast-new-best-time-all-players"),
+
+    ALLOW_BREAKING_BLOCK_ON_LOBBY("allow-block-interaction-on-lobby.place-block"),
+    ALLOW_PLACING_BLOCK_ON_LOBBY("allow-block-interaction-on-lobby.break-block"),
     ;
 
     private String path;

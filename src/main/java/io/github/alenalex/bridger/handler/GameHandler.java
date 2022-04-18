@@ -9,6 +9,7 @@ import io.github.alenalex.bridger.utils.adventure.internal.MessagePlaceholder;
 import io.github.alenalex.bridger.variables.LangConfigurationPaths;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -90,7 +91,93 @@ public class GameHandler {
                 userData.userSettings().getLanguage().asComponent(LangConfigurationPaths.TELEPORTED_TO_ISLAND,
                 MessagePlaceholder.of("%island-name%", island.getIslandName())
                 ));
-        return Optional.ofNullable(island);
+        return Optional.of(island);
+    }
+
+    public void playerFirstBlock(@NotNull UserData userData){
+        userData.userMatchCache().setPlayerAsPlaying();
+        userData.userMatchCache().setStartTime(System.currentTimeMillis());
+
+    }
+
+    private void playerRestartGame(@NotNull Player player){
+        if(!activeBridges.containsKey(player.getUniqueId()))
+            return;
+
+        final UserData userData = userManager.of(player.getUniqueId());
+        if(userData == null) {
+            plugin.getLogger().severe("Failed to get the data for user @"+getClass().getSimpleName()+"#playerRestartGame(Player)");
+            return;
+        }
+
+        final Island island = islandManager.of(activeBridges.get(player.getUniqueId()));
+        island.teleportToSpawn(player);
+        UserManager.setIslandItemsOnPlayer(player);
+        island.setResetting();
+        userData.userMatchCache().resetPlacedBlocks();
+        island.setIdle();
+        userData.userMatchCache().setPlayerAsIdle();
+    }
+
+    public void playerCompleteGame(@NotNull Player player){
+        if(!activeBridges.containsKey(player.getUniqueId()))
+            return;
+
+        final UserData userData = userManager.of(player.getUniqueId());
+        if(userData == null) {
+            plugin.getLogger().severe("Failed to get the data for user @"+getClass().getSimpleName()+"#playerRestartGame(Player)");
+            return;
+        }
+
+        final Island island = islandManager.of(activeBridges.get(player.getUniqueId()));
+        userData.userStats().addAsCompletedGame();
+        userData.userMatchCache().setCurrentTime(System.currentTimeMillis() - userData.userMatchCache().getStartTime());
+
+        if(userData.userMatchCache().getCurrentTime() < userData.userStats().getBestTime()){
+            final String oldBestTime = userData.userStats().getBestTimeAsString();
+            userData.userStats().setBestTime(userData.userMatchCache().getCurrentTime());
+            final String newBestTime = userData.userStats().getBestTimeAsString();
+            userData.userSettings().getLanguage().asComponent(LangConfigurationPaths.NEW_BEST_TIME_TO_PLAYER,
+                    MessagePlaceholder.of("%time%",userData.userStats().getBestTime())
+            );
+
+            if(plugin.configurationHandler().getConfigurationFile().isBroadcastNewBestTimeToAllPlayersEnabled()){
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+
+                        for(UserData serverPlayer : userManager.getValueCollection()){
+                            if(serverPlayer.getPlayerUID().equals(userData.getPlayerUID()))
+                                continue;
+
+                            plugin.messagingUtils().sendTo(player,
+                                    serverPlayer.userSettings().getLanguage().asComponent(LangConfigurationPaths.NEW_BEST_TIME_TO_BROADCAST,
+                                            MessagePlaceholder.of("%old-best%", oldBestTime),
+                                            MessagePlaceholder.of("%new-best%", newBestTime),
+                                            MessagePlaceholder.of("%name%", player.getName())
+                                    )
+                            );
+                        }
+                    }
+                }.runTaskAsynchronously(plugin);
+            }
+        }
+        playerRestartGame(player);
+    }
+
+    public void playerFailedGame(@NotNull Player player){
+        if(!activeBridges.containsKey(player.getUniqueId()))
+            return;
+
+        final UserData userData = userManager.of(player.getUniqueId());
+        if(userData == null) {
+            plugin.getLogger().severe("Failed to get the data for user @"+getClass().getSimpleName()+"#playerRestartGame(Player)");
+            return;
+        }
+
+        final Island island = islandManager.of(activeBridges.get(player.getUniqueId()));
+        userData.userStats().addGame();
+        playerRestartGame(player);;
     }
 
     public void playerQuitGame(Player player){
@@ -102,11 +189,13 @@ public class GameHandler {
             plugin.getLogger().severe("Failed to get the data for user @"+getClass().getSimpleName()+"#playerQuitGame(Player)");
             return;
         }
+        UserManager.handleLobbyTransport(player);
 
-        player.teleport(plugin.configurationHandler().getConfigurationFile().getSpawnLocation());
         plugin.messagingUtils().sendTo(player,
                 userData.userSettings().getLanguage().asComponent(LangConfigurationPaths.PLAYER_QUIT_MATCH)
                 );
+        final Island island = islandManager.of(activeBridges.get(player.getUniqueId()));
+        removePlayerFromIsland(userData, island);
     }
 
     public void kickPlayerFromIsland(@NotNull Player player){
@@ -118,9 +207,21 @@ public class GameHandler {
             plugin.getLogger().severe("Failed to get the data for user @"+getClass().getSimpleName()+"#kickPlayerFromIsland(Player)");
             return;
         }
+        UserManager.handleLobbyTransport(player);
 
+        final Island island = islandManager.of(activeBridges.get(player.getUniqueId()));
+        removePlayerFromIsland(userData, island);
         //TODO
 
     }
+
+    private void removePlayerFromIsland(@NotNull UserData userData, @NotNull Island island){
+        island.setResetting();
+        userData.userMatchCache().resetPlacedBlocks();
+        userData.userMatchCache().setPlayerAsLobby();
+        activeBridges.remove(userData.getPlayerUID());
+        island.setIdle();
+    }
+
 
 }

@@ -48,5 +48,7 @@ public class ConnectionListener implements Listener {
 
         plugin.dataProvider().getDatabaseProvider().saveUserAsync(userData);
         plugin.gameHandler().userManager().remove(playerUUID);
+        plugin.gameHandler().userManager().removeBuildPermsToPlayer(playerUUID);
+        plugin.setupSessionManager().onPlayerQuit(playerUUID);
     }
 }

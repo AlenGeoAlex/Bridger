@@ -6,6 +6,11 @@ teleporting-to-island: "<gray>[<red>✔<gray>] <green>You have been assigned to 
 player-quit-game: "<gray>You have quit the match!"
 unable-to-process-a-selected-firework: "<red>The firework you selected doesn't seem to be valid as of now, as a precaution, we have removed it from your settings!."
 kicked-island-disable: "<red>Sorry, You have been sent back to lobby. The island was disabled by an admin"
+player-started-bridging: "<green>You have started your bridging!"
+cannot-place-blocks-while-spectating: "<gray>[<red>✘<gray>] <red>You are not allowed to place blocks while spectating!"
+new-best-time:
+  to-player: "<gold>You achieved a new best time of <aqua>%time%!"
+  as-broadcast: "<green>%name% has got a new record of beating his previous best time of <red>%old-best% <green>with <gold>%new-best%";
 shop-purchase:
   bought-successfully: "<gray>[<green>✔<gray>] <green>You have successfully purchased %item-name% for %item-price%."
   not-enough-cash: "<gray>[<red>✘<gray>] <red>You don't have enough cash to purchase %item-name%."

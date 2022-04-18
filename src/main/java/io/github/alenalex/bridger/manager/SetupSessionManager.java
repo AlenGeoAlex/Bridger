@@ -77,6 +77,14 @@ public class SetupSessionManager extends AbstractRegistry<UUID, SetupSession> {
             ,MessagePlaceholder.of("%name%", island.getIslandName())
         );
         remove(player.getUniqueId());
+        sessionRemoveConfirmList.remove(player.getUniqueId());
+    }
+
+    public void onPlayerQuit(@NotNull UUID player){
+        if(isKeyRegistered(player))
+            remove(player);
+
+        sessionRemoveConfirmList.remove(player);
     }
 
 }

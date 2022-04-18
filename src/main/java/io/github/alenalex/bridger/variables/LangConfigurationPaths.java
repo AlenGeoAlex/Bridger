@@ -10,6 +10,12 @@ public enum LangConfigurationPaths {
 
     SHOP_SUCCESSFULLY_PURCHASED("shop-purchase.bought-successfully"),
     SHOP_PURCHASE_FAIL_NO_CASH("shop-purchase.not-enough-cash"),
+
+    NEW_BEST_TIME_TO_PLAYER("new-best-time.to-player"),
+    NEW_BEST_TIME_TO_BROADCAST("new-best-time.as-broadcast"),
+
+    PLAYER_STARTED_BRIDGING("player-started-bridging"),
+    CANNOT_PLACE_BLOCKS_WHILE_SPECTATING("")
     ;
     private final String path;
 

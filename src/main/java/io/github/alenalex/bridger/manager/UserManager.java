@@ -6,15 +6,20 @@ import io.github.alenalex.bridger.models.player.UserData;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class UserManager extends AbstractRegistry<UUID, UserData> {
 
+    private final List<UUID> allowBuildOnLobbies;
     public UserManager(Bridger plugin) {
         super(plugin);
+        this.allowBuildOnLobbies = new ArrayList<>();
     }
 
-    public static void setLobbyItemsOnPlayer(@NotNull Player player){
+    public static void handleLobbyTransport(@NotNull Player player){
+        player.teleport(Bridger.instance().configurationHandler().getConfigurationFile().getSpawnLocation());
 
     }
 
@@ -24,6 +29,22 @@ public class UserManager extends AbstractRegistry<UUID, UserData> {
 
     public static void setBlocksOnPlayer(@NotNull Player player){
 
+    }
+
+    public boolean isPlayerAllowedToBuild(@NotNull Player player){
+        return allowBuildOnLobbies.contains(player.getUniqueId());
+    }
+
+    public void addBuildPermsToPlayer(@NotNull Player player){
+        this.allowBuildOnLobbies.add(player.getUniqueId());
+    }
+
+    public void removeBuildPermsToPlayer(@NotNull Player player){
+        this.removeBuildPermsToPlayer(player.getUniqueId());
+    }
+
+    public void removeBuildPermsToPlayer(@NotNull UUID playerUID){
+        this.allowBuildOnLobbies.remove(playerUID);
     }
 
 

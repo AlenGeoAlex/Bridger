@@ -7,10 +7,8 @@ import io.github.alenalex.bridger.models.player.UserData;
 import io.github.alenalex.bridger.variables.LangConfigurationPaths;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.hamcrest.core.Is;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -104,7 +102,7 @@ public class IslandManager extends AbstractRegistry<String, Island> {
             }
 
             player.teleport(plugin.configurationHandler().getConfigurationFile().getSpawnLocation());
-            UserManager.setLobbyItemsOnPlayer(player);
+            UserManager.handleLobbyTransport(player);
         }
         island.getSpectators().clear();
     }

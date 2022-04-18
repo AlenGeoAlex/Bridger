@@ -8,6 +8,7 @@ import io.github.alenalex.bridger.handler.GameHandler;
 import io.github.alenalex.bridger.handler.UIHandler;
 import io.github.alenalex.bridger.handler.WorkloadHandler;
 import io.github.alenalex.bridger.listener.ConnectionListener;
+import io.github.alenalex.bridger.listener.PlayerBlockListener;
 import io.github.alenalex.bridger.manager.CommandManager;
 import io.github.alenalex.bridger.manager.HookManager;
 import io.github.alenalex.bridger.manager.LocaleManager;
@@ -122,6 +123,7 @@ public final class Bridger extends JavaPlugin {
         }
         //Register all the plugin listener
         getServer().getPluginManager().registerEvents(new ConnectionListener(this), this);
+        getServer().getPluginManager().registerEvents(new PlayerBlockListener(this), this);
 
         this.pluginHookManager.registerHooks();
 

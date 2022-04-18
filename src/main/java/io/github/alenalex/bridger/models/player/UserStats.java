@@ -80,6 +80,10 @@ public final class UserStats {
         addWin();
     }
 
+    public String getBestTimeAsString(){
+        return String.valueOf(bestTime);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

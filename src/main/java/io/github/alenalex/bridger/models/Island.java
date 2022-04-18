@@ -1,6 +1,7 @@
 package io.github.alenalex.bridger.models;
 
 import de.leonhard.storage.sections.FlatFileSection;
+import io.github.alenalex.bridger.Bridger;
 import io.github.alenalex.bridger.variables.IslandStatus;
 import io.github.alenalex.bridger.variables.Materials;
 import net.minecraft.server.v1_8_R3.BlockPosition;
@@ -154,6 +155,9 @@ public final class Island {
                 Bukkit.getLogger().info("The island " + islandName + " has been prepared for resetting.");
                 getPossibleBlocksToRemove().thenAccept(blocks -> {
                     blocks.forEachRemaining(block -> {
+                        if(block.hasMetadata(Island.PLACED_BLOCK))
+                            block.removeMetadata(Island.PLACED_BLOCK, Bridger.instance());
+
                         net.minecraft.server.v1_8_R3.World nmsWorld = ((CraftWorld) getIslandWorld()).getHandle();
                         net.minecraft.server.v1_8_R3.Chunk nmsChunk = nmsWorld.getChunkAt(block.getX() >> 4, block.getZ() >> 4);
                         BlockPosition bp = new BlockPosition(block.getX(), block.getY(), block.getZ());

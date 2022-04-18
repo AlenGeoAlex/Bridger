@@ -25,9 +25,13 @@ public class ConfigurationFile extends AbstractFileSettings {
 
     private boolean isFireworkEnabled;
 
-    private final HashMap<FireworkEffect.Type, Integer> enabledFireworkModels;
+    private final Map<FireworkEffect.Type, Integer> enabledFireworkModels;
     private ItemStack defaultMaterial;
-    private final HashMap<ItemStack, Integer> enabledMaterials;
+    private final Map<ItemStack, Integer> enabledMaterials;
+
+    private boolean broadcastNewBestTimeToAllPlayersEnabled;
+    private boolean doAllowPlacingBlocksOnLobby;
+    private boolean doAllowBreakingBlocksOnLobby;
 
     public ConfigurationFile(ConfigurationHandler handler) {
         super(handler);
@@ -69,6 +73,10 @@ public class ConfigurationFile extends AbstractFileSettings {
 
             enabledMaterials.put(stack, this.file.getInt(ConfigurationPaths.COSMETICS_MATERIALS_ENABLED.getPath() +"."+s));
         }
+
+        this.broadcastNewBestTimeToAllPlayersEnabled = this.file.getBoolean(ConfigurationPaths.BROADCAST_NEW_RECORD.getPath());
+        this.doAllowBreakingBlocksOnLobby = this.file.getBoolean(ConfigurationPaths.ALLOW_BREAKING_BLOCK_ON_LOBBY.getPath());
+        this.doAllowPlacingBlocksOnLobby = this.file.getBoolean(ConfigurationPaths.ALLOW_PLACING_BLOCK_ON_LOBBY.getPath());
     }
 
     @Override
@@ -100,5 +108,17 @@ public class ConfigurationFile extends AbstractFileSettings {
 
     public Map<ItemStack, Integer> getEnabledMaterials() {
         return enabledMaterials;
+    }
+
+    public boolean isBroadcastNewBestTimeToAllPlayersEnabled() {
+        return broadcastNewBestTimeToAllPlayersEnabled;
+    }
+
+    public boolean isDoAllowPlacingBlocksOnLobby() {
+        return doAllowPlacingBlocksOnLobby;
+    }
+
+    public boolean isDoAllowBreakingBlocksOnLobby() {
+        return doAllowBreakingBlocksOnLobby;
     }
 }
