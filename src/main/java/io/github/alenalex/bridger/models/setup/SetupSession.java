@@ -21,6 +21,8 @@ public class SetupSession {
     private int minBlocksRequired = 0;
     private int minSecRequired = 0;
     private String permissionRequired = null;
+    private double joinCost = 0.0;
+    private double rewardCost = 0.0;
 
     public SetupSession(UUID playerUID, String islandName) {
         this.playerUID = playerUID;
@@ -102,6 +104,22 @@ public class SetupSession {
         return this;
     }
 
+    public double getJoinCost() {
+        return joinCost;
+    }
+
+    public double getRewardCost() {
+        return rewardCost;
+    }
+
+    public void setJoinCost(double joinCost) {
+        this.joinCost = joinCost;
+    }
+
+    public void setRewardCost(double rewardCost) {
+        this.rewardCost = rewardCost;
+    }
+
     public ValidityStatus isValid(){
         if(spawnPoint == null)
             return ValidityStatus.INVALID_SPAWN_LOCATION;
@@ -125,7 +143,7 @@ public class SetupSession {
         if(minSecRequired <= 0)
             minSecRequired = -1;
 
-        return new Island(islandName, permissionRequired, spawnPoint, endPoint, pos1, pos2, minBlocksRequired, minSecRequired);
+        return new Island(islandName, permissionRequired, spawnPoint, endPoint, pos1, pos2, minBlocksRequired, minSecRequired, joinCost, rewardCost);
     }
 
     public static SetupSession asSession(@NotNull Player player, @NotNull Island island){
@@ -141,7 +159,6 @@ public class SetupSession {
 
     public Map<String, Object> asSerializedSession(){
         final Map<String, Object> map = new HashMap<>();
-        map.put("name", islandName);
         map.put("enabled", false);
         map.put("min-req", new HashMap<String, Object>()
                 {{
@@ -154,6 +171,8 @@ public class SetupSession {
         map.put("end", FlatFileUtils.serializeLocation(endPoint));
         map.put("pos1", FlatFileUtils.serializeLocation(pos1));
         map.put("pos2", FlatFileUtils.serializeLocation(pos2));
+        map.put("join-cost", joinCost);
+        map.put("reward-coins", rewardCost);
         return map;
     }
 

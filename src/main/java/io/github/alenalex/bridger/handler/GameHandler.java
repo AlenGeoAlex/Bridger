@@ -97,7 +97,6 @@ public class GameHandler {
     public void playerFirstBlock(@NotNull UserData userData){
         userData.userMatchCache().setPlayerAsPlaying();
         userData.userMatchCache().setStartTime(System.currentTimeMillis());
-
     }
 
     private void playerRestartGame(@NotNull Player player){
@@ -162,6 +161,9 @@ public class GameHandler {
                 }.runTaskAsynchronously(plugin);
             }
         }
+        if(island.getRewards() > 0){
+            plugin.pluginHookManager().getEconomyProvider().deposit(player, island.getRewards());
+        }
         playerRestartGame(player);
     }
 
@@ -195,7 +197,25 @@ public class GameHandler {
                 userData.userSettings().getLanguage().asComponent(LangConfigurationPaths.PLAYER_QUIT_MATCH)
                 );
         final Island island = islandManager.of(activeBridges.get(player.getUniqueId()));
+        islandManager.removeSpectators(island);
         removePlayerFromIsland(userData, island);
+    }
+
+    public void playerQuitServer(Player player){
+        if(!activeBridges.containsKey(player.getUniqueId()))
+            return;
+
+        final UserData userData = userManager.of(player.getUniqueId());
+        if(userData == null) {
+            plugin.getLogger().severe("Failed to get the data for user @"+getClass().getSimpleName()+"#playerQuitServer(Player)");
+            return;
+        }
+        final Island island = islandManager.of(activeBridges.get(player.getUniqueId()));
+        islandManager.removeSpectators(island);
+        island.setResetting();
+        userData.userMatchCache().forceResetPlacedBlocks();
+        island.setIdle();
+        activeBridges.remove(player.getUniqueId());
     }
 
     public void kickPlayerFromIsland(@NotNull Player player){

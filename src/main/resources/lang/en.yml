@@ -8,6 +8,11 @@ unable-to-process-a-selected-firework: "<red>The firework you selected doesn't s
 kicked-island-disable: "<red>Sorry, You have been sent back to lobby. The island was disabled by an admin"
 player-started-bridging: "<green>You have started your bridging!"
 cannot-place-blocks-while-spectating: "<gray>[<red>✘<gray>] <red>You are not allowed to place blocks while spectating!"
+cannot-spectate-while-in-game: "<gray>[<red>✘<gray>] <red>You cannot spectate other players while you are still in game!"
+no-island-found: "<gray>[<red>✘<gray>] <red>No island found!"
+spectating-on: "<green>You are now spectating %spec_player%'s island!"
+cannot-spectating-not-players: "<red>The player is not in an active bridge currently!"
+command-blocked: "<gray>[<red>✘<gray>] <red>You cannot use this command while being active on the island!"
 new-best-time:
   to-player: "<gold>You achieved a new best time of <aqua>%time%!"
   as-broadcast: "<green>%name% has got a new record of beating his previous best time of <red>%old-best% <green>with <gold>%new-best%";

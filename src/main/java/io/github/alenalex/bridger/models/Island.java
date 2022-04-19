@@ -1,7 +1,9 @@
 package io.github.alenalex.bridger.models;
 
+import de.leonhard.storage.internal.serialize.LightningSerializable;
 import de.leonhard.storage.sections.FlatFileSection;
 import io.github.alenalex.bridger.Bridger;
+import io.github.alenalex.bridger.utils.FlatFileUtils;
 import io.github.alenalex.bridger.variables.IslandStatus;
 import io.github.alenalex.bridger.variables.Materials;
 import net.minecraft.server.v1_8_R3.BlockPosition;
@@ -39,9 +41,12 @@ public final class Island {
     private boolean enabled;
     private IslandStatus status;
 
+    private double joinCost;
+    private double rewards;
+
     private final List<UUID> spectators;
 
-    public Island(@NotNull String islandName, String permission,@NotNull Location spawnLocation,@NotNull Location endLocation,@NotNull Location pos1,@NotNull Location pos2, int minTimeRequired, int minBlocksRequired) {
+    public Island(@NotNull String islandName, String permission,@NotNull Location spawnLocation,@NotNull Location endLocation,@NotNull Location pos1,@NotNull Location pos2, int minTimeRequired, int minBlocksRequired, double joinCost, double rewards) {
         this.islandName = islandName;
         this.permission = permission;
         this.spawnLocation = spawnLocation;
@@ -50,6 +55,8 @@ public final class Island {
         this.pos2 = pos2;
         this.minTimeRequired = minTimeRequired;
         this.minBlocksRequired = minBlocksRequired;
+        this.joinCost = joinCost;
+        this.rewards = rewards;
 
         this.enabled = true;
         this.status = IslandStatus.IDLE;
@@ -147,6 +154,14 @@ public final class Island {
         return spectators;
     }
 
+    public void addSpectator(@NotNull UUID uuid){
+        spectators.add(uuid);
+    }
+
+    public void kickSpectator(@NotNull UUID uuid){
+        spectators.remove(uuid);
+    }
+
     public CompletableFuture<Boolean> resetIsland() {
         return CompletableFuture.supplyAsync(new Supplier<Boolean>() {
             @Override
@@ -213,8 +228,21 @@ public final class Island {
         });
     }
 
-    public static Island deserialize(FlatFileSection section){
-        return null;
+    public boolean canPlayerJoinTheIsland(@NotNull Player player){
+        return isEnabled()
+                && hasPermission(player)
+                && isIslandIdle()
+                && Bridger.instance().pluginHookManager().getEconomyProvider().hasBalance(player, joinCost);
     }
+
+    public double getJoinCost() {
+        return joinCost;
+    }
+
+    public double getRewards() {
+        return rewards;
+    }
+
+
 
 }

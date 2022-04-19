@@ -12,10 +12,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Firework;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Supplier;
 
 public class ConfigurationFile extends AbstractFileSettings {
@@ -33,10 +30,13 @@ public class ConfigurationFile extends AbstractFileSettings {
     private boolean doAllowPlacingBlocksOnLobby;
     private boolean doAllowBreakingBlocksOnLobby;
 
+    private final List<String> commandToBlock;
+
     public ConfigurationFile(ConfigurationHandler handler) {
         super(handler);
         this.enabledFireworkModels = new HashMap<>();
         this.enabledMaterials = new HashMap<>();
+        this.commandToBlock = new ArrayList<>();
     }
 
     @Override
@@ -120,5 +120,9 @@ public class ConfigurationFile extends AbstractFileSettings {
 
     public boolean isDoAllowBreakingBlocksOnLobby() {
         return doAllowBreakingBlocksOnLobby;
+    }
+
+    public List<String> getCommandToBlock() {
+        return commandToBlock;
     }
 }

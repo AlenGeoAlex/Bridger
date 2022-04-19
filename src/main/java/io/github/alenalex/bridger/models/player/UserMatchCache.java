@@ -67,6 +67,22 @@ public class UserMatchCache {
         placedBlocks.clear();
     }
 
+    public void forceResetPlacedBlocks(){
+        if(placedBlocks.isEmpty())
+            return;
+
+        for(Block block: placedBlocks){
+            Workload workload = () -> {
+                block.setType(Material.AIR);
+                if(block.hasMetadata(Island.PLACED_BLOCK))
+                    block.removeMetadata(Island.PLACED_BLOCK, Bridger.instance());
+            };
+            Bridger.instance().workloadHandler().getSyncThread().submit(workload);
+        }
+        userData.userStats().addBlock(placedBlocks.size());
+        placedBlocks.clear();
+    }
+
     public String getSpectatingIsland() {
         return spectatingIsland;
     }

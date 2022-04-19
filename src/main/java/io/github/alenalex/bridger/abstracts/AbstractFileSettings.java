@@ -133,24 +133,7 @@ public abstract class AbstractFileSettings {
      * @return
      */
     public Optional<Location> deserializeLocation(@NotNull String path){
-        final FlatFileSection section = getSectionOf(path);
-
-        final String worldName = section.getString("world-name");
-        if(StringUtils.isBlank(worldName))
-            return Optional.empty();
-        final World world = handler.plugin().getServer().getWorld(worldName);
-
-        if(section.contains("x") && section.contains("y") || section.contains("z"))
-            return Optional.empty();
-
-        final int blockX = section.getInt("x");
-        final int blockY = section.getInt("y");
-        final int blockZ = section.getInt("z");
-
-        final float yaw = section.getFloat("yaw");
-        final float pitch = section.getFloat("pitch");
-
-        return Optional.of(new Location(world, blockX, blockY, blockZ, yaw, pitch));
+        return FlatFileUtils.deserializeLocation(getSectionOf(path));
     }
 
     public Map<String, Object> serializeLocation(@NotNull Location location){

@@ -38,6 +38,8 @@ public class SessionCommand extends AbstractCommand {
             put("perm [perm.node]", "Sets the perm node of the island that a player required to join");
             put("min-blocks [min.blocks]", "Sets the minimum no of blocks a player required to place in order to complete the practice");
             put("min-time [min.time]", "Sets the minimum time a player required to complete the practice");
+            put("setjoincost [cost]", "Sets the cost needed to join the island" );
+            put("setreward [cost]", "Sets the amount of coins if a player wins a round!");
         }};
     }
 
@@ -233,6 +235,52 @@ public class SessionCommand extends AbstractCommand {
             );
             return;
         }
+    }
+
+    @SubCommand("setjoincost")
+    @Async
+    public void onSetJoinCostCommand(@NotNull Player player, Double cost){
+        if(cost == null){
+            manager.plugin().messagingUtils().sendTo(player, PluginResponses.Commands.Sessions.NOT_PROVIDED_VALID_VALUE);
+            return;
+        }
+
+        final SetupSession setupSession = manager.plugin().setupSessionManager().of(player.getUniqueId());
+
+        if(setupSession == null){
+            manager.plugin().messagingUtils().sendTo(player, PluginResponses.Commands.Sessions.DOES_NOT_HAVE_AN_ACTIVE_SESSION);
+            return;
+        }
+
+        setupSession.setJoinCost(cost);
+        manager.plugin().messagingUtils().sendTo(player,
+                PluginResponses.Commands.Sessions.SUCCESSFULLY_SET_VALUE
+                , MessagePlaceholder.of("%key%", "join cost")
+                , MessagePlaceholder.of("%value%", cost)
+        );
+    }
+
+    @SubCommand("setreward")
+    @Async
+    public void onSetReward(@NotNull Player player, Double cost){
+        if(cost == null){
+            manager.plugin().messagingUtils().sendTo(player, PluginResponses.Commands.Sessions.NOT_PROVIDED_VALID_VALUE);
+            return;
+        }
+
+        final SetupSession setupSession = manager.plugin().setupSessionManager().of(player.getUniqueId());
+
+        if(setupSession == null){
+            manager.plugin().messagingUtils().sendTo(player, PluginResponses.Commands.Sessions.DOES_NOT_HAVE_AN_ACTIVE_SESSION);
+            return;
+        }
+
+        setupSession.setRewardCost(cost);
+        manager.plugin().messagingUtils().sendTo(player,
+                PluginResponses.Commands.Sessions.SUCCESSFULLY_SET_VALUE
+                , MessagePlaceholder.of("%key%", "reward coins")
+                , MessagePlaceholder.of("%value%", cost)
+        );
     }
 
 

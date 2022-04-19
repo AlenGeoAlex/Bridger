@@ -5,8 +5,10 @@ import de.leonhard.storage.sections.FlatFileSection;
 import io.github.alenalex.bridger.Bridger;
 import org.apache.commons.lang3.EnumUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,6 +18,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class FlatFileUtils {
 
@@ -88,5 +91,24 @@ public class FlatFileUtils {
         }else {
             return EnumUtils.isValidEnum(Material.class, itemStackString) ? new ItemStack(Material.valueOf(itemStackString)) : null;
         }
+    }
+
+    public static Optional<Location> deserializeLocation(@NotNull FlatFileSection section){
+        final String worldName = section.getString("world-name");
+        if(StringUtils.isBlank(worldName))
+            return Optional.empty();
+        final World world = Bukkit.getWorld(worldName);
+
+        if(!section.contains("x") && !section.contains("y") || !section.contains("z"))
+            return Optional.empty();
+
+        final int blockX = section.getInt("x");
+        final int blockY = section.getInt("y");
+        final int blockZ = section.getInt("z");
+
+        final float yaw = section.getFloat("yaw");
+        final float pitch = section.getFloat("pitch");
+
+        return Optional.of(new Location(world, blockX, blockY, blockZ, yaw, pitch));
     }
 }

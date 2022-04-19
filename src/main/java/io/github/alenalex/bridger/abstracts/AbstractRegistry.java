@@ -24,7 +24,7 @@ public abstract class AbstractRegistry<K, V> {
 
     public void register(K key, V value) {
         if(isKeyRegistered(key)) {
-            throw new IllegalRegistryOperation("Key " + key + " is already registered!. use registerOverride() instead.");
+            throw new IllegalRegistryOperation("Key " + key +"#"+key.getClass().getSimpleName()+ " is already registered with value#"+value.getClass().getSimpleName()+"!. use registerOverride() instead.");
         }
         registry.put(key, value);
     }

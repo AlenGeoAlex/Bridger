@@ -15,7 +15,13 @@ public enum LangConfigurationPaths {
     NEW_BEST_TIME_TO_BROADCAST("new-best-time.as-broadcast"),
 
     PLAYER_STARTED_BRIDGING("player-started-bridging"),
-    CANNOT_PLACE_BLOCKS_WHILE_SPECTATING("")
+    CANNOT_PLACE_BLOCKS_WHILE_SPECTATING("cannot-place-blocks-while-spectating"),
+    BLOCKED_COMMAND("command-blocked"),
+
+    CANNOT_SPECTATE_WHILE_IN_GAME("cannot-spectate-while-in-game"),
+    NO_ISLAND_FOUND("no-island-found"),
+    SPECTATING_ON("spectating-on"),
+    CANNOT_SPECTATE_NON_PLAYERS("cannot-spectating-not-players");
     ;
     private final String path;
 

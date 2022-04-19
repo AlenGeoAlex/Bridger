@@ -13,6 +13,9 @@ allow-block-interaction-on-lobby:
   place-block: false
   break-block: true
 
+blocked-commands:
+  - "spawn"
+
 cosmetics:
   firework:
     enabled: true

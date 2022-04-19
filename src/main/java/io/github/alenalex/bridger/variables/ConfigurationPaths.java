@@ -21,6 +21,8 @@ public enum ConfigurationPaths {
 
     ALLOW_BREAKING_BLOCK_ON_LOBBY("allow-block-interaction-on-lobby.place-block"),
     ALLOW_PLACING_BLOCK_ON_LOBBY("allow-block-interaction-on-lobby.break-block"),
+
+    COMMAND_TO_BLOCK("blocked-commands"),
     ;
 
     private String path;
