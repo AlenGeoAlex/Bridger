@@ -1,7 +1,51 @@
+island-selector:
+  title: "<red>Select Island</red>"
+  rows: 6
+  fillers:
+    "[LEGACY]:STAINED_GLASS_PANE:3":
+      - 45
+      - 46
+      - 48
+      - 50
+      - 52
+      - 53
+  buttons:
+    island-button:
+      item: "WOOL"
+      name: "<red>%name%</red>"
+      lore:
+        - "<reset>"
+        - "<gray>Click to join this island!"
+        - "<reset>"
+        - "<gray>Join cost: %cost% coins"
+    spec-button:
+      item: "COMPASS"
+      slot: 49
+      name: "<aqua>Spectate</aqua>"
+      lore:
+        - "<reset>"
+        - "<gray>Click to open spectate menu!"
+    next-button:
+      item: "HOPPER"
+      slot: 51
+      name: "<yellow>Next page</yellow>"
+      lore:
+        - "<reset>"
+        - "<gray>Click to go to next page!"
+        - "<white>You are currently on <green>%page%<gray>/<red>%total%"
+    pre-button:
+      item: "HOPPER"
+      slot: 47
+      name: "<yellow>Previous page</yellow>"
+      lore:
+        - "<reset>"
+        - "<gray>Click to go to previous page!"
+        - "<white>You are currently on <green>%page%<gray>/<red>%total%"
+
 shop:
   fireworks:
     title: "<aqua>Unlock Fireworks</aqua>"
-    rows:
+    rows: 1
     fillers:
     buttons:
       item-button:
@@ -14,7 +58,7 @@ shop:
           - "<gray>Cost: %cost% coins"
   materials:
     title: "<aqua>Unlock Materials</aqua>"
-    rows:
+    rows: 5
     fillers:
     buttons:
       item-button:

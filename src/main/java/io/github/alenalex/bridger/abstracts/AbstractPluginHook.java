@@ -13,6 +13,10 @@ public abstract class AbstractPluginHook {
         onEnable();
     }
 
+    public boolean isHookedPluginOnline(){
+        return manager.getPlugin().getServer().getPluginManager().isPluginEnabled(pluginName);
+    }
+
     public abstract void onEnable();
 
     public abstract void onDisable();

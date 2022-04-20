@@ -27,7 +27,7 @@ public abstract class AbstractDynamicGUI<T extends BaseGui> implements IGui {
                     @Override
                     public void run() {
                         if(t == null) {
-                            handler.plugin().getLogger().warning("Failed to open GUI for " + player.getName() + "!. The plugin returned the gui as null");
+                            handler.plugin().getLogger().warning("Failed to open GUI#"+getClass().getSimpleName()+" for " + player.getName() + "!. The plugin returned the gui as null, If there is no errors associated with this, its safe to avoid this as, this is intentional!");
                             return;
                         }
 

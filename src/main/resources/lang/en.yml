@@ -12,10 +12,14 @@ cannot-spectate-while-in-game: "<gray>[<red>✘<gray>] <red>You cannot spectate 
 no-island-found: "<gray>[<red>✘<gray>] <red>No island found!"
 spectating-on: "<green>You are now spectating %spec_player%'s island!"
 cannot-spectating-not-players: "<red>The player is not in an active bridge currently!"
+the-island-is-occupied-gui: "<red>Seems like someone occupied the island! Updating UI with latest islands."
 command-blocked: "<gray>[<red>✘<gray>] <red>You cannot use this command while being active on the island!"
+activity_blocked: "<gray>[<red>✘<gray>] <red>This activity is unavailable now!"
 new-best-time:
   to-player: "<gold>You achieved a new best time of <aqua>%time%!"
   as-broadcast: "<green>%name% has got a new record of beating his previous best time of <red>%old-best% <green>with <gold>%new-best%";
 shop-purchase:
   bought-successfully: "<gray>[<green>✔<gray>] <green>You have successfully purchased %item-name% for %item-price%."
   not-enough-cash: "<gray>[<red>✘<gray>] <red>You don't have enough cash to purchase %item-name%."
+command:
+  did-not-provide-an-island-name: "<red>You haven't provided a valid island name!"

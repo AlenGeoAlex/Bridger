@@ -1,6 +1,7 @@
 package io.github.alenalex.bridger.gui.config;
 
 import de.leonhard.storage.sections.FlatFileSection;
+import dev.triumphteam.gui.guis.GuiItem;
 import io.github.alenalex.bridger.Bridger;
 import io.github.alenalex.bridger.exceptions.IllegalUIAccess;
 import io.github.alenalex.bridger.utils.FlatFileUtils;

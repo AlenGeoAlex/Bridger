@@ -1,6 +1,7 @@
 package io.github.alenalex.bridger.handler;
 
 import io.github.alenalex.bridger.Bridger;
+import io.github.alenalex.bridger.gui.dynamic.IslandSelector;
 import io.github.alenalex.bridger.gui.dynamic.shop.FireworkShop;
 import io.github.alenalex.bridger.gui.dynamic.shop.MaterialsShop;
 import io.github.alenalex.bridger.gui.statics.CosmeticShop;
@@ -14,11 +15,14 @@ public class UIHandler implements IHandler {
     private final CosmeticShop cosmeticShop;
     private final MaterialsShop materialsShop;
 
+    private final IslandSelector islandSelector;
+
     public UIHandler(Bridger plugin) {
         this.plugin = plugin;
         this.cosmeticShop = new CosmeticShop(this);
         this.fireworkShop = new FireworkShop(this);
         this.materialsShop = new MaterialsShop(this);
+        this.islandSelector = new IslandSelector(this);
     }
 
     @Override
@@ -56,5 +60,9 @@ public class UIHandler implements IHandler {
 
     public MaterialsShop getMaterialsShop() {
         return materialsShop;
+    }
+
+    public IslandSelector getIslandSelector() {
+        return islandSelector;
     }
 }

@@ -13,6 +13,9 @@ public class UIConfiguration extends AbstractFileSettings {
     private UIConfig materialShopConfig;
     private UIItem materialShopItem;
 
+    private UIConfig islandSelectorConfig;
+    private UIItem islandSelectorItem, islandSelectorSpectateItem, islandSelectorNextPage, islandSelectorPreviousPage;
+
     public UIConfiguration(ConfigurationHandler handler) {
         super(handler);
     }
@@ -24,6 +27,12 @@ public class UIConfiguration extends AbstractFileSettings {
 
         this.materialShopConfig = UIConfig.buildFrom(getSectionOf("shop.materials"));
         this.materialShopItem = UIItem.buildFrom(getSectionOf("shop.materials.buttons.item-button"));
+
+        this.islandSelectorConfig = UIConfig.buildFrom(getSectionOf("island-selector"));
+        this.islandSelectorItem = UIItem.buildFrom(getSectionOf("island-selector.buttons.island-button"));
+        this.islandSelectorSpectateItem = UIItem.buildFrom(getSectionOf("island-selector.buttons.spec-button"));
+        this.islandSelectorNextPage = UIItem.buildFrom(getSectionOf("island-selector.buttons.next-button"));
+        this.islandSelectorPreviousPage = UIItem.buildFrom(getSectionOf("island-selector.buttons.pre-button"));
     }
 
     @Override
@@ -45,5 +54,25 @@ public class UIConfiguration extends AbstractFileSettings {
 
     public UIItem getMaterialShopItem() {
         return materialShopItem;
+    }
+
+    public UIConfig getIslandSelectorConfig() {
+        return islandSelectorConfig;
+    }
+
+    public UIItem getIslandSelectorItem() {
+        return islandSelectorItem;
+    }
+
+    public UIItem getIslandSelectorSpectateItem() {
+        return islandSelectorSpectateItem;
+    }
+
+    public UIItem getIslandSelectorNextPage() {
+        return islandSelectorNextPage;
+    }
+
+    public UIItem getIslandSelectorPreviousPage() {
+        return islandSelectorPreviousPage;
     }
 }

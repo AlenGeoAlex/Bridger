@@ -21,7 +21,12 @@ public enum LangConfigurationPaths {
     CANNOT_SPECTATE_WHILE_IN_GAME("cannot-spectate-while-in-game"),
     NO_ISLAND_FOUND("no-island-found"),
     SPECTATING_ON("spectating-on"),
-    CANNOT_SPECTATE_NON_PLAYERS("cannot-spectating-not-players");
+    CANNOT_SPECTATE_NON_PLAYERS("cannot-spectating-not-players"),
+
+    ISLAND_OCCUPIED_GUI("the-island-is-occupied-gui"),
+    ACTIVITY_BLOCKED("activity_blocked"),
+
+    NOT_PROVIDED_VALID_ISLAND_NAME("command.did-not-provide-an-island-name"),
     ;
     private final String path;
 

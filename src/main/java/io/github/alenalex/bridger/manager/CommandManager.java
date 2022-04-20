@@ -3,6 +3,7 @@ package io.github.alenalex.bridger.manager;
 import dev.triumphteam.cmd.bukkit.BukkitCommandManager;
 import io.github.alenalex.bridger.Bridger;
 import io.github.alenalex.bridger.commands.Test;
+import io.github.alenalex.bridger.commands.island.IslandCommand;
 import io.github.alenalex.bridger.commands.setup.SessionCommand;
 import org.bukkit.command.CommandSender;
 
@@ -27,7 +28,8 @@ public class CommandManager {
     public void registerCommands(){
         commandManager.registerCommand(
                 new Test(this),
-                new SessionCommand(this)
+                new SessionCommand(this),
+                new IslandCommand(this)
         );
 
     }

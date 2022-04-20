@@ -73,6 +73,11 @@ public class IslandManager extends AbstractRegistry<String, Island> {
         return getValueStream().collect(Collectors.toList());
     }
 
+    public List<Island> getAllFreeIslands(@NotNull Player player){
+        return getValueStream()
+                .filter(island -> island.canPlayerJoinTheIsland(player))
+                .collect(Collectors.toList());
+    }
 
     public Optional<Island> getAnyFreeIsland(@NotNull Player player){
         return getValueStream()

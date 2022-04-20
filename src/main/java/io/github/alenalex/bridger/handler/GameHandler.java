@@ -10,6 +10,7 @@ import io.github.alenalex.bridger.variables.LangConfigurationPaths;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.hamcrest.core.Is;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -68,21 +69,38 @@ public class GameHandler {
                 .map(Bukkit::getPlayer);
     }
 
+    public Optional<Island> toIsland(@NotNull Player player, @NotNull UserData userData, String islandName){
+        Island island = islandManager.getFreeIslandByName(player, islandName).orElse(null);
+
+        if(island == null){
+            plugin.messagingUtils().sendTo(player, userData.userSettings().getLanguage().asComponent(LangConfigurationPaths.NO_FREE_ISLANDS));
+            return Optional.empty();
+        }
+
+        island.setOccupied();
+
+        activeBridges.put(player.getUniqueId(), island.getIslandName());
+        island.teleportToSpawn(player);
+        plugin.messagingUtils().sendTo(player,
+                userData.userSettings().getLanguage().asComponent(LangConfigurationPaths.TELEPORTED_TO_ISLAND,
+                        MessagePlaceholder.of("%island-name%", island.getIslandName())
+                ));
+        return Optional.of(island);
+    }
+
     public Optional<Island> toIsland(@NotNull Player player){
         final UserData userData = userManager.of(player.getUniqueId());
         if(userData == null) {
             plugin.getLogger().severe("Failed to get the data for user @"+getClass().getSimpleName()+"#toIsland(Player)");
             return Optional.empty();
         }
-        Island island = null;
-        Optional<Island> islandOptional = islandManager.getAnyFreeIsland(player);
+        Island island = islandManager.getAnyFreeIsland(player).orElse(null);
 
-        if(!islandOptional.isPresent()){
+        if(island == null){
             plugin.messagingUtils().sendTo(player, userData.userSettings().getLanguage().asComponent(LangConfigurationPaths.NO_FREE_ISLANDS));
             return Optional.empty();
         }
 
-        island = islandOptional.get();
         island.setOccupied();
 
         activeBridges.put(player.getUniqueId(), island.getIslandName());
@@ -92,6 +110,17 @@ public class GameHandler {
                 MessagePlaceholder.of("%island-name%", island.getIslandName())
                 ));
         return Optional.of(island);
+    }
+
+    public void toIsland(@NotNull Player player, @NotNull UserData userData, @NotNull Island island){
+        island.setOccupied();
+
+        activeBridges.put(player.getUniqueId(), island.getIslandName());
+        island.teleportToSpawn(player);
+        plugin.messagingUtils().sendTo(player,
+                userData.userSettings().getLanguage().asComponent(LangConfigurationPaths.TELEPORTED_TO_ISLAND,
+                        MessagePlaceholder.of("%island-name%", island.getIslandName())
+                ));
     }
 
     public void playerFirstBlock(@NotNull UserData userData){
