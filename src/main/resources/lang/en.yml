@@ -26,6 +26,7 @@ teleported-back-void-detection: "<red>Sorry! but you can't go below this level!"
 cannot-place-block-here: "<red>Sorry, but you cannot place block here!"
 reached-end-without-placing-blocks: "<red>SUS! You reached to the end-location without placing blocks!"
 island-is-resetting-your-blocks: "<red>Hold up! The island is still resetting the blocks you placed!"
+player-leave-game: "<green>You have left the game!"
 cheat-protection:
   failed-min-time: "<red>You completed practice so fast, This won't be counted!"
   failed-min-blocks: "<red>You completed practice without placing the minimum blocks to be placed, This won't be counted!"

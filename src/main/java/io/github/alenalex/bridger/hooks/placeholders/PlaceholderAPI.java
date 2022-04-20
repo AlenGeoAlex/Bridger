@@ -26,7 +26,7 @@ public class PlaceholderAPI extends AbstractPluginHook  {
 
     @Override
     public void onDisable() {
-        if(placeholderManager!= null && placeholderManager.isRegistered())
+        if(placeholderManager != null && placeholderManager.isRegistered())
             placeholderManager.unregister();
     }
 }

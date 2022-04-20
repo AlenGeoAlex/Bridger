@@ -2,17 +2,14 @@ package io.github.alenalex.bridger.commands.island;
 
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.annotation.Async;
-import dev.triumphteam.cmd.core.annotation.Command;
 import dev.triumphteam.cmd.core.annotation.Default;
 import dev.triumphteam.cmd.core.annotation.SubCommand;
 import io.github.alenalex.bridger.abstracts.AbstractCommand;
 import io.github.alenalex.bridger.manager.CommandManager;
 import io.github.alenalex.bridger.models.Island;
 import io.github.alenalex.bridger.models.player.UserData;
-import io.github.alenalex.bridger.utils.adventure.MessageFormatter;
 import io.github.alenalex.bridger.variables.LangConfigurationPaths;
 import io.github.alenalex.bridger.variables.Permissions;
-import io.github.alenalex.bridger.variables.PluginResponses;
 import org.apache.commons.lang3.StringUtils;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -30,6 +27,7 @@ public class IslandCommand extends AbstractCommand {
         put("help", "Shows this help menu.");
         put("join [name]", "Joins an island with the provided name if its available!");
         put("gui", "Opens up Island Gui");
+        put("leave", "Leaves your island.");
     }};
 
     public IslandCommand(CommandManager manager) {
@@ -90,5 +88,24 @@ public class IslandCommand extends AbstractCommand {
     @Permission(Permissions.Commands.Island.GUI)
     public void onGuiCommand(Player player){
         manager.plugin().uiHandler().getIslandSelector().openFor(player);
+    }
+
+    @SubCommand(value = "leave", alias = {"exit", "quit"})
+    @Async
+    public void onLeaveCommand(Player player){
+        final UserData userData = manager.plugin().gameHandler().userManager().of(player.getUniqueId());
+        if(userData == null) {
+            return;
+        }
+
+        if(manager.plugin().gameHandler().isPlayerPlaying(player))
+            return;
+
+        Island island = manager.plugin().gameHandler().getIslandOfPlayer(player).orElse(null);
+        if(island == null){
+            return;
+        }
+
+        manager.plugin().gameHandler().playerQuitGame(player, userData);
     }
 }

@@ -1,6 +1,7 @@
 package io.github.alenalex.bridger.listener;
 
 import io.github.alenalex.bridger.Bridger;
+import io.github.alenalex.bridger.manager.UserManager;
 import io.github.alenalex.bridger.models.Island;
 import io.github.alenalex.bridger.models.player.UserData;
 import org.bukkit.entity.Player;
@@ -31,7 +32,7 @@ public class PlayerDeathListener implements Listener {
 
         switch (userData.userMatchCache().getStatus()) {
             case LOBBY:{
-                player.teleport(plugin.configurationHandler().getConfigurationFile().getSpawnLocation());
+                UserManager.handleLobbyTransport(player);
                 break;
             }
             case SPECTATING:{

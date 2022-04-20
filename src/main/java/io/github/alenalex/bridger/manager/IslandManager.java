@@ -160,7 +160,6 @@ public class IslandManager extends AbstractRegistry<String, Island> {
             serverPlayer.showPlayer(player);
         }
 
-        player.teleport(plugin.configurationHandler().getConfigurationFile().getSpawnLocation());
         UserManager.handleLobbyTransport(player);
     }
 

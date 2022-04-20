@@ -7,6 +7,7 @@ public enum LangConfigurationPaths {
     PLAYER_QUIT_MATCH("player-quit-game"),
     UNABLE_TO_PROCESS_SELECTED_FIREWORK("unable-to-process-selected-firework"),
     KICK_ISLAND_DISABLED("kicked-island-disable"),
+    PLAYER_LEAVE_GAME("player-leave-game"),
 
     SHOP_SUCCESSFULLY_PURCHASED("shop-purchase.bought-successfully"),
     SHOP_PURCHASE_FAIL_NO_CASH("shop-purchase.not-enough-cash"),

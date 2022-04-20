@@ -1,6 +1,7 @@
 package io.github.alenalex.bridger.listener;
 
 import io.github.alenalex.bridger.Bridger;
+import io.github.alenalex.bridger.manager.UserManager;
 import io.github.alenalex.bridger.models.Island;
 import io.github.alenalex.bridger.models.player.UserData;
 import io.github.alenalex.bridger.utils.adventure.MessageFormatter;
@@ -42,7 +43,8 @@ public class PlayerMovementListener implements Listener {
 
             case LOBBY: {
                 if (to.getBlockY() <= plugin.configurationHandler().getConfigurationFile().getVoidDetectionHeight()) {
-                    player.teleport(plugin.configurationHandler().getConfigurationFile().getSpawnLocation());
+                    UserManager.handleLobbyTransport(player);
+
                     plugin.messagingUtils().sendTo(player, userData.userSettings().getLanguage().asComponent(LangConfigurationPaths.TELEPORTED_VOID_DETECTION));
                     return;
                 }

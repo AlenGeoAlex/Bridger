@@ -210,15 +210,10 @@ public class GameHandler {
         playerRestartGame(player);;
     }
 
-    public void playerQuitGame(Player player){
+    public void playerQuitGame(Player player, UserData userData){
         if(!activeBridges.containsKey(player.getUniqueId()))
             return;
 
-        final UserData userData = userManager.of(player.getUniqueId());
-        if(userData == null) {
-            plugin.getLogger().severe("Failed to get the data for user @"+getClass().getSimpleName()+"#playerQuitGame(Player)");
-            return;
-        }
         UserManager.handleLobbyTransport(player);
 
         plugin.messagingUtils().sendTo(player,
@@ -227,6 +222,7 @@ public class GameHandler {
         final Island island = islandManager.of(activeBridges.get(player.getUniqueId()));
         islandManager.removeSpectators(island);
         removePlayerFromIsland(userData, island);
+        plugin.messagingUtils().sendTo(player, userData.userSettings().getLanguage().asComponent(LangConfigurationPaths.PLAYER_LEAVE_GAME));
     }
 
     public void playerQuitServer(Player player){
