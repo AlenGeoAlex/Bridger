@@ -76,7 +76,7 @@ public class UIConfig {
                 return;
             }
 
-            fillers.add(new UIFiller(stack, section.getSerializableList("fillers." + key, Integer.class)));
+            fillers.add(new UIFiller(stack, section.getIntegerList("fillers." + key)));
         });
 
         return new UIConfig(title, rows, fillers);

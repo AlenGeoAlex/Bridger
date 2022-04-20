@@ -5,12 +5,10 @@ import io.github.alenalex.bridger.models.Island;
 import io.github.alenalex.bridger.models.player.UserData;
 import io.github.alenalex.bridger.models.setup.SetupSession;
 import org.apache.commons.io.FileUtils;
-import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
 public class PluginStats {
 
