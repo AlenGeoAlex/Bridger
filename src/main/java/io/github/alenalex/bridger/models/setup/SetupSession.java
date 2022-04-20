@@ -1,5 +1,6 @@
 package io.github.alenalex.bridger.models.setup;
 
+import io.github.alenalex.bridger.Bridger;
 import io.github.alenalex.bridger.models.Island;
 import io.github.alenalex.bridger.utils.FlatFileUtils;
 import org.bukkit.Bukkit;
@@ -182,5 +183,9 @@ public class SetupSession {
         INVALID_END_LOCATION,
         INVALID_POSITION_1,
         INVALID_POSITION_2,
+    }
+
+    public String asJson(){
+        return Bridger.gsonInstance().toJson(this);
     }
 }

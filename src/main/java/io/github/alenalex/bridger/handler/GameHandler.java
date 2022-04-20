@@ -272,5 +272,7 @@ public class GameHandler {
         island.setIdle();
     }
 
-
+    public String asJson(){
+        return Bridger.gsonInstance().toJson(activeBridges);
+    }
 }

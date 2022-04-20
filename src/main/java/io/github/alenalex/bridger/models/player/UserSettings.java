@@ -156,4 +156,8 @@ public final class UserSettings {
                 ", setBackEnabled=" + setBackEnabled +
                 '}';
     }
+
+    public String asJson(){
+        return Bridger.gsonInstance().toJson(this);
+    }
 }

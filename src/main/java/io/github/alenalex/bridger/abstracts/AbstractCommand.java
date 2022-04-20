@@ -19,6 +19,9 @@ public abstract class AbstractCommand extends BaseCommand {
     public abstract Map<String, String> getCommandDescriptionMap();
 
     public void sendHelpMessage(Player player){
+        if(getCommandDescriptionMap() == null || getCommandDescriptionMap().isEmpty())
+            return;
+
         manager.plugin().messagingUtils().sendTo(player, PluginResponses.Commands.CommandHelpLayout.HEADER);
         getCommandDescriptionMap().forEach((command, desc) -> {
             manager.plugin().messagingUtils().sendTo(player, PluginResponses.Commands.CommandHelpLayout.HELP_COMMAND,

@@ -3,7 +3,6 @@ package io.github.alenalex.bridger.models.player;
 import io.github.alenalex.bridger.Bridger;
 import io.github.alenalex.bridger.variables.Fireworks;
 import io.github.alenalex.bridger.variables.LangConfigurationPaths;
-import io.github.alenalex.bridger.variables.Materials;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
@@ -141,5 +140,14 @@ public final class UserData {
     @NotNull
     public UserMatchCache userMatchCache(){
         return userMatchCache;
+    }
+
+    @Override
+    public String toString() {
+        return playerUID.toString();
+    }
+
+    public String asJson(){
+        return Bridger.gsonInstance().toJson(this);
     }
 }

@@ -1,5 +1,7 @@
 package io.github.alenalex.bridger.models.player;
 
+import de.leonhard.storage.Json;
+import io.github.alenalex.bridger.Bridger;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NonBlocking;
 import org.jetbrains.annotations.NotNull;
@@ -113,7 +115,9 @@ public class UserCosmetics {
         return particleUnlocked;
     }
 
-
+    public String asJson(){
+        return Bridger.gsonInstance().toJson(this);
+    }
 
 
 }

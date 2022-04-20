@@ -1,9 +1,7 @@
 package io.github.alenalex.bridger.models;
 
-import de.leonhard.storage.internal.serialize.LightningSerializable;
-import de.leonhard.storage.sections.FlatFileSection;
+
 import io.github.alenalex.bridger.Bridger;
-import io.github.alenalex.bridger.utils.FlatFileUtils;
 import io.github.alenalex.bridger.variables.IslandStatus;
 import io.github.alenalex.bridger.variables.Materials;
 import net.minecraft.server.v1_8_R3.BlockPosition;
@@ -39,7 +37,7 @@ public final class Island {
     private final int minBlocksRequired;
 
     private boolean enabled;
-    private IslandStatus status;
+    private transient IslandStatus status;
 
     private double joinCost;
     private double rewards;
@@ -243,6 +241,12 @@ public final class Island {
         return rewards;
     }
 
+    @Override
+    public String toString() {
+        return islandName;
+    }
 
-
+    public String asJson(){
+        return Bridger.gsonInstance().toJson(this);
+    }
 }

@@ -10,14 +10,15 @@ public abstract class AbstractPluginHook {
     public AbstractPluginHook(HookManager manager, String pluginName) {
         this.manager = manager;
         this.pluginName = pluginName;
-        onEnable();
+        final boolean status = onEnable();
+        manager.getAllHooks().put(pluginName, status);
     }
 
     public boolean isHookedPluginOnline(){
         return manager.getPlugin().getServer().getPluginManager().isPluginEnabled(pluginName);
     }
 
-    public abstract void onEnable();
+    public abstract boolean onEnable();
 
     public abstract void onDisable();
 

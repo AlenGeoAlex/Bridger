@@ -13,6 +13,11 @@ public class Permissions {
             public static final String GUI = "bridger.command.island.gui";
             public static final String BY_NAME = "bridger.command.island.byname";
         }
+
+        public static class Debug{
+            public static final String CREATE = "bridger.command.debug.create";
+            public static final String CLEAR = "bridger.command.debug.clear";
+        }
     }
 
     public static class Admin{

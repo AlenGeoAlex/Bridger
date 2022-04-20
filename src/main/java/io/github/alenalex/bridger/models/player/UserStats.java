@@ -1,6 +1,7 @@
 package io.github.alenalex.bridger.models.player;
 
 import com.google.common.base.Objects;
+import io.github.alenalex.bridger.Bridger;
 
 public final class UserStats {
 
@@ -105,5 +106,9 @@ public final class UserStats {
                 ", gamesPlayed=" + gamesPlayed +
                 ", bestTime=" + bestTime +
                 '}';
+    }
+
+    public String asJson(){
+        return Bridger.gsonInstance().toJson(this);
     }
 }

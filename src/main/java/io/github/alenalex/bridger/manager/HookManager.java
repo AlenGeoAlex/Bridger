@@ -3,15 +3,24 @@ package io.github.alenalex.bridger.manager;
 import io.github.alenalex.bridger.Bridger;
 import io.github.alenalex.bridger.exceptions.IllegalHookAccess;
 import io.github.alenalex.bridger.hooks.VaultEconomyProvider;
+import io.github.alenalex.bridger.hooks.placeholders.PlaceholderAPI;
 import io.github.alenalex.bridger.interfaces.IEconomyProvider;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class HookManager {
 
     private final Bridger plugin;
     private IEconomyProvider economyProvider;
+    private PlaceholderAPI placeholderAPI;
+
+    private final Map<String, Boolean> allHooks;
 
     public HookManager(Bridger plugin) {
         this.plugin = plugin;
+        this.allHooks = new HashMap<>();
     }
 
     public boolean validateMinHookRequirements() {
@@ -27,7 +36,8 @@ public class HookManager {
     }
 
     public void registerHooks(){
-        economyProvider = new VaultEconomyProvider(this);
+        this.economyProvider = new VaultEconomyProvider(this);
+        this.placeholderAPI = new PlaceholderAPI(this);
     }
 
     public Bridger getPlugin() {
@@ -41,5 +51,7 @@ public class HookManager {
         return economyProvider;
     }
 
-
+    public Map<String, Boolean> getAllHooks() {
+        return allHooks;
+    }
 }

@@ -1,5 +1,6 @@
 package io.github.alenalex.bridger;
 
+import com.google.gson.Gson;
 import io.github.alenalex.bridger.database.DataProvider;
 import io.github.alenalex.bridger.exceptions.FailedLocaleLoading;
 import io.github.alenalex.bridger.exceptions.IllegalInitializationException;
@@ -21,15 +22,19 @@ import java.util.Random;
 
 public final class Bridger extends JavaPlugin {
 
-    private static final Random random;
+    private static final Random RANDOM;
+    private static final Gson GSON;
 
     static {
-        random = new Random(System.currentTimeMillis());
+        RANDOM = new Random(System.currentTimeMillis());
+        GSON = new Gson();
     }
 
     public static Random randomInstance() {
-        return random;
+        return RANDOM;
     }
+
+    public static Gson gsonInstance() { return GSON; }
 
     private static Bridger instance = null;
 

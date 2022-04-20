@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserMatchCache {
-    private final UserData userData;
+    private transient final UserData userData;
     private final List<Block> placedBlocks;
     private long startTime;
     private long currentTime;
@@ -131,5 +131,9 @@ public class UserMatchCache {
 
     public Status getStatus() {
         return status;
+    }
+
+    public String asJson(){
+        return Bridger.gsonInstance().toJson(this);
     }
 }

@@ -18,14 +18,15 @@ public class VaultEconomyProvider extends AbstractPluginHook implements IEconomy
     }
 
     @Override
-    public void onEnable() {
+    public boolean onEnable() {
         final RegisteredServiceProvider<Economy> registeredServiceProvider = manager.getPlugin().getServer().getServicesManager().getRegistration(Economy.class);
         if(registeredServiceProvider == null) {
-            return;
+            return false;
         }
 
         economy = registeredServiceProvider.getProvider();
         manager.getPlugin().getLogger().info("Hooked into Vault!");
+        return true;
     }
 
     @Override
