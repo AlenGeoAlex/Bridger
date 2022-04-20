@@ -23,6 +23,9 @@ public class Permissions {
     public static class Admin{
         public static final String ADMIN = "bridger.admin";
         public static final String ADMIN_BUILD = "bridger.admin.build";
+        public static final String ADMIN_CRAFTING = "bridger.admin.crafting";
+        public static final String ADMIN_DROP_ITEM = "bridger.admin.dropitem";
+        public static final String ADMIN_PICKUP_ITEM = "bridger.admin.pickupitem";
     }
 
     public static class Spectator{

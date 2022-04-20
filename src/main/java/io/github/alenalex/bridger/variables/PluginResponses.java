@@ -17,9 +17,9 @@ public final class PluginResponses {
     public static class Commands{
 
         public static class CommandHelpLayout {
-            public static final String HEADER = "<green>--------<aqua>Bridger<green>--------";
-            public static final String HELP_COMMAND = "<red>%command% <white>  - <aqua>%description%";
-            public static final String FOOTER = "<green>-------------------------------------";
+            public static final String HEADER = "<gray>----------------<aqua>Bridger<gray>---------------";
+            public static final String HELP_COMMAND = "<red>%command%<white> - <yellow>%description%";
+            public static final String FOOTER = "<gray>-------------------------------------";
         }
 
         public static class Sessions{

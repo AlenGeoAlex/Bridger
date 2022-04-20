@@ -117,6 +117,7 @@ public class PlayerMovementListener implements Listener {
 
                     plugin.gameHandler().playerCompleteGame(player, timeTook);
                 }
+                break;
             }
             default:
         }
