@@ -32,11 +32,20 @@ public class ConfigurationFile extends AbstractFileSettings {
 
     private final List<String> commandToBlock;
 
+    private int voidDetectionHeight;
+    private boolean voidDetectionOnLobbyEnabled;
+    private boolean voidDetectionWhileSpectatingEnabled;
+
+    private final List<Material> placementBlockedMaterial;
+
+    private boolean cheatDetectionMinBlocks, cheatDetectionMinTime, cheatDetectionIdleCompletion;
+
     public ConfigurationFile(ConfigurationHandler handler) {
         super(handler);
         this.enabledFireworkModels = new HashMap<>();
         this.enabledMaterials = new HashMap<>();
         this.commandToBlock = new ArrayList<>();
+        this.placementBlockedMaterial = new ArrayList<>();
     }
 
     @Override
@@ -77,6 +86,23 @@ public class ConfigurationFile extends AbstractFileSettings {
         this.broadcastNewBestTimeToAllPlayersEnabled = this.file.getBoolean(ConfigurationPaths.BROADCAST_NEW_RECORD.getPath());
         this.doAllowBreakingBlocksOnLobby = this.file.getBoolean(ConfigurationPaths.ALLOW_BREAKING_BLOCK_ON_LOBBY.getPath());
         this.doAllowPlacingBlocksOnLobby = this.file.getBoolean(ConfigurationPaths.ALLOW_PLACING_BLOCK_ON_LOBBY.getPath());
+
+        this.voidDetectionHeight = this.file.getInt(ConfigurationPaths.VOID_DETECTION_HEIGHT.getPath());
+        this.voidDetectionOnLobbyEnabled = this.file.getBoolean(ConfigurationPaths.DETECT_VOID_FALL_ON_LOBBY.getPath());
+        this.voidDetectionWhileSpectatingEnabled = this.file.getBoolean(ConfigurationPaths.DETECT_VOID_FALL_WHILE_SPECTATOR.getPath());
+
+        for(String s : this.file.getStringList(ConfigurationPaths.PLACEMENT_BLOCKED_MATERIALS.getPath())){
+            if(!EnumUtils.isValidEnum(Material.class, s)){
+                handler.plugin().getLogger().warning("An unknown material has been found in "+ConfigurationPaths.PLACEMENT_BLOCKED_MATERIALS.getPath()+".. Skipping!");
+                continue;
+            }
+
+            this.placementBlockedMaterial.add(Material.getMaterial(s));
+        }
+
+        this.cheatDetectionMinBlocks = this.file.getBoolean(ConfigurationPaths.CHEAT_PROTECTION_MIN_BLOCK.getPath());
+        this.cheatDetectionMinTime = this.file.getBoolean(ConfigurationPaths.CHEAT_PROTECTION_MIN_TIME.getPath());
+        this.cheatDetectionIdleCompletion = this.file.getBoolean(ConfigurationPaths.CHEAT_PROTECTION_REACHED_IN_IDLE.getPath());
     }
 
     @Override
@@ -124,5 +150,33 @@ public class ConfigurationFile extends AbstractFileSettings {
 
     public List<String> getCommandToBlock() {
         return commandToBlock;
+    }
+
+    public int getVoidDetectionHeight() {
+        return voidDetectionHeight;
+    }
+
+    public boolean isVoidDetectionOnLobbyEnabled() {
+        return voidDetectionOnLobbyEnabled;
+    }
+
+    public boolean isVoidDetectionWhileSpectatingEnabled() {
+        return voidDetectionWhileSpectatingEnabled;
+    }
+
+    public List<Material> getPlacementBlockedMaterial() {
+        return placementBlockedMaterial;
+    }
+
+    public boolean isCheatDetectionMinBlocks() {
+        return cheatDetectionMinBlocks;
+    }
+
+    public boolean isCheatDetectionMinTime() {
+        return cheatDetectionMinTime;
+    }
+
+    public boolean isCheatDetectionIdleCompletion() {
+        return cheatDetectionIdleCompletion;
     }
 }

@@ -13,9 +13,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.hamcrest.core.Is;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class GameHandler {
 
@@ -147,7 +146,7 @@ public class GameHandler {
         userData.userMatchCache().setPlayerAsIdle();
     }
 
-    public void playerCompleteGame(@NotNull Player player){
+    public void playerCompleteGame(@NotNull Player player, long completeTime){
         if(!activeBridges.containsKey(player.getUniqueId()))
             return;
 
@@ -159,7 +158,7 @@ public class GameHandler {
 
         final Island island = islandManager.of(activeBridges.get(player.getUniqueId()));
         userData.userStats().addAsCompletedGame();
-        userData.userMatchCache().setCurrentTime(System.currentTimeMillis() - userData.userMatchCache().getStartTime());
+        userData.userMatchCache().setCurrentTime(completeTime - userData.userMatchCache().getStartTime());
 
         if(userData.userMatchCache().getCurrentTime() < userData.userStats().getBestTime()){
             final String oldBestTime = userData.userStats().getBestTimeAsString();
@@ -270,6 +269,16 @@ public class GameHandler {
         userData.userMatchCache().setPlayerAsLobby();
         activeBridges.remove(userData.getPlayerUID());
         island.setIdle();
+    }
+
+    public List<String> getActivePlayerNames(){
+        return activeBridges
+                .keySet()
+                .stream()
+                .map(uuid -> Bukkit.getPlayer(uuid))
+                .filter(Objects::nonNull)
+                .map(player -> player.getName())
+                .collect(Collectors.toList());
     }
 
     public String asJson(){

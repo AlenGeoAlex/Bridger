@@ -136,4 +136,8 @@ public class UserMatchCache {
     public String asJson(){
         return Bridger.gsonInstance().toJson(this);
     }
+
+    public int getBlocksPlaced(){
+        return placedBlocks.size();
+    }
 }

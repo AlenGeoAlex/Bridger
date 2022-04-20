@@ -12,11 +12,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
-@Command("bridgerdebug")
 public class DebugCommand extends AbstractCommand {
 
     public DebugCommand(CommandManager manager) {
-        super(manager);
+        super(manager, "bridgerdebug");
     }
 
     @Override

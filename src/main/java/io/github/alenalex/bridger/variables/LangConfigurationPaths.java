@@ -25,8 +25,17 @@ public enum LangConfigurationPaths {
 
     ISLAND_OCCUPIED_GUI("the-island-is-occupied-gui"),
     ACTIVITY_BLOCKED("activity_blocked"),
+    ISLAND_STILL_RESETTING_BLOCKS_PLACED("island-is-resetting-your-blocks"),
 
     NOT_PROVIDED_VALID_ISLAND_NAME("command.did-not-provide-an-island-name"),
+    TELEPORTED_VOID_DETECTION("teleported-back-void-detection"),
+    CANNOT_PLACE_BLOCK_HERE("cannot-place-block-here"),
+
+    REACHED_TO_END_ON_IDLE("reached-end-without-placing-blocks"),
+
+    CHEAT_PROTECTION_MIN_TIME("cheat-protection.failed-min-time"),
+    CHEAT_PROTECTION_MIN_BLOCK("cheat-protection."),
+    CHEAT_PROTECTION_REACHED_IN_IDLE("cheat-protection."),
     ;
     private final String path;
 

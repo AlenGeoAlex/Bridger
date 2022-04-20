@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 public class SetupSession {
 
@@ -154,7 +155,7 @@ public class SetupSession {
                 .setSpawnPoint(island.getSpawnLocation())
                 .setEndPoint(island.getEndLocation())
                 .setMinBlocksRequired(island.getMinBlocksRequired())
-                .setMinSecRequired(island.getMinTimeRequired())
+                .setMinSecRequired(Math.toIntExact(TimeUnit.MILLISECONDS.toSeconds(island.getMinTimeRequired())))
                 .setPermissionRequired(island.getPermission());
     }
 

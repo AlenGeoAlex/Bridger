@@ -23,6 +23,16 @@ public enum ConfigurationPaths {
     ALLOW_PLACING_BLOCK_ON_LOBBY("allow-block-interaction-on-lobby.break-block"),
 
     COMMAND_TO_BLOCK("blocked-commands"),
+
+    VOID_DETECTION_HEIGHT("void-detection.detection-height"),
+    DETECT_VOID_FALL_ON_LOBBY("void-detection.detect-on.lobby"),
+    DETECT_VOID_FALL_WHILE_SPECTATOR("void-detection.detect-on.spectating"),
+
+    PLACEMENT_BLOCKED_MATERIALS("deny-block-placement-on"),
+
+    CHEAT_PROTECTION_MIN_TIME("cheat-protection.kick-if-failed-min-time"),
+    CHEAT_PROTECTION_MIN_BLOCK("cheat-protection.kick-if-failed-min-blocks-req"),
+    CHEAT_PROTECTION_REACHED_IN_IDLE("cheat-protection.kick-if-reached-to-end-without-starting"),
     ;
 
     private String path;

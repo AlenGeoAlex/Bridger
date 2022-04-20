@@ -30,15 +30,15 @@ public class PluginStats {
             @Override
             public void run() {
                 if(!FOLDER.exists())
-                    FOLDER.exists();
+                    FOLDER.mkdirs();
 
-                final File debugFile = new File(fileName, FOLDER.getAbsolutePath());
+                final File debugFile = new File(FOLDER.getAbsolutePath(), fileName);
                 if(debugFile.exists())
                     debugFile.delete();
 
                 try {
-                    FileUtils.write(debugFile, "version: "+instance.getDescription().getVersion()+"\n");
-                    FileUtils.write(debugFile, "hooks: "+Bridger.gsonInstance().toJson(instance.pluginHookManager().getAllHooks())+"\n");
+                    FileUtils.write(debugFile, Bridger.gsonInstance().toJson(instance.getDescription().getVersion())+"\n");
+                    FileUtils.write(debugFile, "hooks: \n"+Bridger.gsonInstance().toJson(instance.pluginHookManager().getAllHooks())+"\n");
                     FileUtils.write(debugFile, "players:\n");
                     for(UserData data : instance.gameHandler().userManager().getValueCollection()){
                         FileUtils.write(debugFile, data.asJson()+"\n");

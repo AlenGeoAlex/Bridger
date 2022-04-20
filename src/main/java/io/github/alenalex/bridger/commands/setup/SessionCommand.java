@@ -18,7 +18,6 @@ import java.util.HashMap;
 
 import java.util.Map;
 
-@Command(value = "session")
 public class SessionCommand extends AbstractCommand {
 
     private static final HashMap<String, String> COMMAND_DESCRIPTION = new HashMap<String, String>(){{
@@ -37,7 +36,7 @@ public class SessionCommand extends AbstractCommand {
     }};
 
     public SessionCommand(CommandManager manager) {
-        super(manager);
+        super(manager, "session");
     }
 
     @Override
@@ -192,7 +191,7 @@ public class SessionCommand extends AbstractCommand {
 
     @SubCommand("perm")
     @Async
-    @Suggestion("bridger.join.")
+    @Suggestion("joinPerm")
     @Permission(Permissions.Commands.Sessions.DEFAULT)
     public void onSetPerm(@NotNull Player player, String perm){
         if(StringUtils.isBlank(perm)) {

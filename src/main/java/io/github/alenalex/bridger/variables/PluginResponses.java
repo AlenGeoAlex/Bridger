@@ -26,11 +26,15 @@ public final class PluginResponses {
             public static final String NO_SESSION_NAME_PROVIDED = "<red>You have not provided a valid session name!";
             public static final String DOES_NOT_HAVE_AN_ACTIVE_SESSION = "<red>There isn't an active session on your behalf!";
             public static final String SUCCESSFULLY_SET_LOCATION = "<green>You have successfully set <gold>%key%<green>Y to your current location";
-            public static final String SUCCESSFULLY_SET_VALUE = "<green>You have successfully set <gold>%key%<green>Y to <gold>%value%";
+            public static final String SUCCESSFULLY_SET_VALUE = "<green>You have successfully set <gold>%key%<green> to <gold>%value%";
             public static final String NOT_PROVIDED_VALID_VALUE = "<red>The value provided is invalid!";
             public static final String FAILED_VALIDITY = "<red>Failed to validate the island! <gold>Reason : <red>%reason%";
         }
 
+    }
+
+    public static class Others{
+        public static final String UNKNOWN_CAUSE = "<red>Sorry! An unknown error occurred!";
     }
 
 }

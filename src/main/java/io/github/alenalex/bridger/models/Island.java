@@ -33,7 +33,7 @@ public final class Island {
     private final Location endLocation;
     private final Location pos1;
     private final Location pos2;
-    private final int minTimeRequired;
+    private final long minTimeRequired;
     private final int minBlocksRequired;
 
     private boolean enabled;
@@ -51,7 +51,24 @@ public final class Island {
         this.endLocation = endLocation;
         this.pos1 = pos1;
         this.pos2 = pos2;
-        this.minTimeRequired = minTimeRequired;
+        this.minTimeRequired = TimeUnit.SECONDS.toMillis(minTimeRequired);
+        this.minBlocksRequired = minBlocksRequired;
+        this.joinCost = joinCost;
+        this.rewards = rewards;
+
+        this.enabled = true;
+        this.status = IslandStatus.IDLE;
+        this.spectators = new ArrayList<>();
+    }
+
+    public Island(@NotNull String islandName, String permission,@NotNull Location spawnLocation,@NotNull Location endLocation,@NotNull Location pos1,@NotNull Location pos2, long minTimeRequired, int minBlocksRequired, double joinCost, double rewards) {
+        this.islandName = islandName;
+        this.permission = permission;
+        this.spawnLocation = spawnLocation;
+        this.endLocation = endLocation;
+        this.pos1 = pos1;
+        this.pos2 = pos2;
+        this.minTimeRequired = TimeUnit.SECONDS.toMillis(minTimeRequired);
         this.minBlocksRequired = minBlocksRequired;
         this.joinCost = joinCost;
         this.rewards = rewards;
@@ -85,7 +102,7 @@ public final class Island {
         return pos2;
     }
 
-    public int getMinTimeRequired() {
+    public long getMinTimeRequired() {
         return minTimeRequired;
     }
 

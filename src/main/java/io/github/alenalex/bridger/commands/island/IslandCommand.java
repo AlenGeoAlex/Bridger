@@ -17,12 +17,12 @@ import org.apache.commons.lang3.StringUtils;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 import java.util.function.Consumer;
 
-@Command(value = "island", alias = {"is","isl","bridge"})
+
 public class IslandCommand extends AbstractCommand {
 
     private static final HashMap<String, String> COMMAND_DESCRIPTION = new HashMap<String, String>(){{
@@ -33,7 +33,7 @@ public class IslandCommand extends AbstractCommand {
     }};
 
     public IslandCommand(CommandManager manager) {
-        super(manager);
+        super(manager, "island", Arrays.asList("is","isl","bridge"));
     }
 
     @Override

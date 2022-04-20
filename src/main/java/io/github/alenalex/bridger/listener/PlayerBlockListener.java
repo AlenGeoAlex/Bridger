@@ -36,31 +36,60 @@ public class PlayerBlockListener implements Listener {
 
         switch (userData.userMatchCache().getStatus()){
             //Start the game
-            case IDLE:
+            case IDLE: {
+                Island island = plugin.gameHandler().getIslandOfPlayer(player).orElse(null);
+                if (island == null) return;
+
+                if (island.isIslandResetting()) {
+                    event.setCancelled(true);
+                    plugin.messagingUtils().sendTo(player, userData.userSettings().getLanguage().asComponent(LangConfigurationPaths.ISLAND_STILL_RESETTING_BLOCKS_PLACED));
+                    return;
+                }
+
                 plugin.gameHandler().playerFirstBlock(userData);
-                plugin.messagingUtils().sendTo(player,userData.userSettings().getLanguage().asComponent(LangConfigurationPaths.PLAYER_STARTED_BRIDGING));
+                plugin.messagingUtils().sendTo(player, userData.userSettings().getLanguage().asComponent(LangConfigurationPaths.PLAYER_STARTED_BRIDGING));
                 break;
+            }
                 //Deny if player doesn't have appropriate perms
-            case LOBBY:
-                if(player.getGameMode() == GameMode.CREATIVE
+            case LOBBY: {
+                if (player.getGameMode() == GameMode.CREATIVE
                         || player.hasPermission(Permissions.Admin.ADMIN_BUILD)
                         || plugin.gameHandler().userManager().isPlayerAllowedToBuild(player)
                 )
                     return;
 
-                if(!plugin.configurationHandler().getConfigurationFile().isDoAllowPlacingBlocksOnLobby())
+                if (!plugin.configurationHandler().getConfigurationFile().isDoAllowPlacingBlocksOnLobby())
                     event.setCancelled(true);
                 break;
+            }
                 //Nothing special, just add those blocks to the cache
-            case PLAYING:
+            case PLAYING: {
+                if (plugin.configurationHandler().getConfigurationFile().getPlacementBlockedMaterial().contains(event.getBlockAgainst().getType())) {
+                    event.setCancelled(true);
+                    plugin.messagingUtils().sendTo(player, userData.userSettings().getLanguage().asComponent(LangConfigurationPaths.CANNOT_PLACE_BLOCK_HERE));
+                    return;
+                }
+
+                final Island island = plugin.gameHandler().getIslandOfPlayer(player).orElse(null);
+                if (island == null)
+                    return;
+
+                if (event.getBlockPlaced().getLocation().equals(island.getEndLocation())) {
+                    event.setCancelled(true);
+                    plugin.messagingUtils().sendTo(player, userData.userSettings().getLanguage().asComponent(LangConfigurationPaths.CANNOT_PLACE_BLOCK_HERE));
+                    return;
+                }
+
                 userData.userMatchCache().addBlockToCache(event.getBlockPlaced());
                 break;
-            case SPECTATING:
-                if(!player.hasPermission(Permissions.Spectator.BLOCK_PLACE)) {
+            }
+            case SPECTATING: {
+                if (!player.hasPermission(Permissions.Spectator.BLOCK_PLACE)) {
                     event.setCancelled(true);
-                     plugin.messagingUtils().sendTo(player, userData.userSettings().getLanguage().asComponent(LangConfigurationPaths.CANNOT_PLACE_BLOCKS_WHILE_SPECTATING));
+                    plugin.messagingUtils().sendTo(player, userData.userSettings().getLanguage().asComponent(LangConfigurationPaths.CANNOT_PLACE_BLOCKS_WHILE_SPECTATING));
                 }
                 break;
+            }
             default:
                 return;
         };

@@ -5,17 +5,18 @@ import io.github.alenalex.bridger.manager.HookManager;
 
 public class PlaceholderAPI extends AbstractPluginHook  {
 
-    private final PlaceholderManager placeholderManager;
+    private PlaceholderManager placeholderManager = null;
 
 
     public PlaceholderAPI(HookManager manager) {
         super(manager, "PlaceholderAPI");
-        this.placeholderManager = new PlaceholderManager(manager.getPlugin());
+
     }
 
     @Override
     public boolean onEnable() {
         if(isHookedPluginOnline()) {
+            placeholderManager = new PlaceholderManager(manager.getPlugin());
             this.placeholderManager.register();
             return true;
         }

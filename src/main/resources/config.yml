@@ -13,8 +13,22 @@ allow-block-interaction-on-lobby:
   place-block: false
   break-block: true
 
+deny-block-placement-on:
+  - "BARRIER"
+
+void-detection:
+  detection-height: 10
+  detect-on:
+    lobby: true
+    spectating: true
+
 blocked-commands:
   - "spawn"
+
+cheat-protection:
+  kick-if-failed-min-blocks-req: true
+  kick-if-failed-min-time: false
+  kick-if-reached-to-end-without-starting: true
 
 cosmetics:
   firework:
