@@ -23,22 +23,6 @@ public class PlayerDamageListener implements Listener {
         if(!(event.getEntity() instanceof org.bukkit.entity.Player))
             return;
 
-        final Player player = (Player) event.getEntity();
-
-        final UserData userData = plugin.gameHandler().userManager().of(player.getUniqueId());
-
-        if(userData == null)
-            return;
-
-        switch (userData.userMatchCache().getStatus()){
-
-            case IDLE:
-            case PLAYING:
-            case SPECTATING:
-                event.setCancelled(true);
-            break;
-
-            default:
-        }
+        event.setCancelled(true);
     }
 }

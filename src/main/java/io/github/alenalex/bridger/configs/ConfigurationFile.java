@@ -1,6 +1,7 @@
 package io.github.alenalex.bridger.configs;
 
 import io.github.alenalex.bridger.abstracts.AbstractFileSettings;
+import io.github.alenalex.bridger.gui.config.HotBarConfig;
 import io.github.alenalex.bridger.handler.ConfigurationHandler;
 import io.github.alenalex.bridger.utils.FlatFileUtils;
 import io.github.alenalex.bridger.variables.ConfigurationPaths;
@@ -40,12 +41,16 @@ public class ConfigurationFile extends AbstractFileSettings {
 
     private boolean cheatDetectionMinBlocks, cheatDetectionMinTime, cheatDetectionIdleCompletion;
 
+    private HotBarConfig lobbySettings, lobbyShop, lobbyJoin, lobbySelector;
+    private List<HotBarConfig> lobbyOther;
+
     public ConfigurationFile(ConfigurationHandler handler) {
         super(handler);
         this.enabledFireworkModels = new HashMap<>();
         this.enabledMaterials = new HashMap<>();
         this.commandToBlock = new ArrayList<>();
         this.placementBlockedMaterial = new ArrayList<>();
+        this.lobbyOther = new ArrayList<>();
     }
 
     @Override
@@ -103,6 +108,16 @@ public class ConfigurationFile extends AbstractFileSettings {
         this.cheatDetectionMinBlocks = this.file.getBoolean(ConfigurationPaths.CHEAT_PROTECTION_MIN_BLOCK.getPath());
         this.cheatDetectionMinTime = this.file.getBoolean(ConfigurationPaths.CHEAT_PROTECTION_MIN_TIME.getPath());
         this.cheatDetectionIdleCompletion = this.file.getBoolean(ConfigurationPaths.CHEAT_PROTECTION_REACHED_IN_IDLE.getPath());
+
+        this.lobbyJoin = HotBarConfig.of(getSectionOf(ConfigurationPaths.LOBBY_JOIN.getPath()));
+        this.lobbySettings = HotBarConfig.of(getSectionOf(ConfigurationPaths.LOBBY_SETTINGS.getPath()));
+        this.lobbyShop = HotBarConfig.of(getSectionOf(ConfigurationPaths.LOBBY_SHOP.getPath()));
+        this.lobbySelector = HotBarConfig.of(getSectionOf(ConfigurationPaths.LOBBY_SELECTOR.getPath()));
+
+        for(String s : this.file.keySet(ConfigurationPaths.LOBBY_OTHERS.getPath())){
+            final HotBarConfig config = HotBarConfig.of(getSectionOf(ConfigurationPaths.LOBBY_OTHERS.getPath()+"."+s));
+            this.lobbyOther.add(config);
+        }
     }
 
     @Override
@@ -178,5 +193,25 @@ public class ConfigurationFile extends AbstractFileSettings {
 
     public boolean isCheatDetectionIdleCompletion() {
         return cheatDetectionIdleCompletion;
+    }
+
+    public HotBarConfig getLobbySettings() {
+        return lobbySettings;
+    }
+
+    public HotBarConfig getLobbyShop() {
+        return lobbyShop;
+    }
+
+    public HotBarConfig getLobbyJoin() {
+        return lobbyJoin;
+    }
+
+    public HotBarConfig getLobbySelector() {
+        return lobbySelector;
+    }
+
+    public List<HotBarConfig> getLobbyOther() {
+        return lobbyOther;
     }
 }

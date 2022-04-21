@@ -30,6 +30,34 @@ cheat-protection:
   kick-if-failed-min-time: false
   kick-if-reached-to-end-without-starting: true
 
+lobby-items:
+  shop:
+    enabled: true
+    item: "[BASE64]:eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYjIxNjQ2MzU5MzM0OTZhZmNkNWQ3OTNhZThiNTNjYWI4NjI0N2YwN2U4NjI0YzQ3YTNhZTM4MzkxNTUzMDk3NSJ9fX0="
+    slot: 0
+    name: "<aqua>Shop"
+    lore:
+      - "<gray>Click to open the shop"
+  settings:
+    enabled: true
+    item:
+    slot:
+    name:
+    lore: []
+  join:
+    enabled: true
+    item:
+    slot:
+    name:
+    lore: []
+  island-selector:
+    enabled: true
+    item:
+    slot:
+    name:
+    lore: []
+  others: []
+
 cosmetics:
   firework:
     enabled: true

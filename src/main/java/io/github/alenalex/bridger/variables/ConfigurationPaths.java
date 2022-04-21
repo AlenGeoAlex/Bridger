@@ -33,6 +33,12 @@ public enum ConfigurationPaths {
     CHEAT_PROTECTION_MIN_TIME("cheat-protection.kick-if-failed-min-time"),
     CHEAT_PROTECTION_MIN_BLOCK("cheat-protection.kick-if-failed-min-blocks-req"),
     CHEAT_PROTECTION_REACHED_IN_IDLE("cheat-protection.kick-if-reached-to-end-without-starting"),
+
+    LOBBY_SETTINGS("lobby-items.settings"),
+    LOBBY_SHOP("lobby-items.shop"),
+    LOBBY_SELECTOR("lobby-items.island-selector"),
+    LOBBY_JOIN("lobby-items.join"),
+    LOBBY_OTHERS("lobby-items.others"),
     ;
 
     private String path;
