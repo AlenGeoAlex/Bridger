@@ -13,7 +13,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 
-public class PlayerMovementListener implements Listener {
+public final class PlayerMovementListener implements Listener {
 
     private final Bridger plugin;
 

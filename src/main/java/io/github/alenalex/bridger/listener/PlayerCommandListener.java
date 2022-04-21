@@ -8,7 +8,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
-public class PlayerCommandListener implements Listener {
+public final class PlayerCommandListener implements Listener {
 
     private final Bridger plugin;
 

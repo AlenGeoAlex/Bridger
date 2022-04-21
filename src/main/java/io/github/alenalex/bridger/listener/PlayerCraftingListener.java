@@ -8,7 +8,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.CraftItemEvent;
 
-public class PlayerCraftingListener implements Listener {
+public final class PlayerCraftingListener implements Listener {
 
     private final Bridger plugin;
 

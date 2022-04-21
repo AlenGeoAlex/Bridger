@@ -8,7 +8,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 
 
-public class PlayerDamageListener implements Listener {
+public final class PlayerDamageListener implements Listener {
 
     private final Bridger plugin;
 

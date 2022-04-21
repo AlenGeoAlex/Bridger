@@ -11,7 +11,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.UUID;
 
-public class ConnectionListener implements Listener {
+public final class ConnectionListener implements Listener {
 
     private final Bridger plugin;
 

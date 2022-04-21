@@ -14,6 +14,7 @@ import io.github.alenalex.bridger.manager.HookManager;
 import io.github.alenalex.bridger.manager.LocaleManager;
 import io.github.alenalex.bridger.manager.SetupSessionManager;
 import io.github.alenalex.bridger.utils.adventure.MessagingUtils;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Random;
@@ -132,6 +133,7 @@ public final class Bridger extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerDeathListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerCraftingListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerDamageListener(this), this);
+        getServer().getPluginManager().registerEvents(new PlayerMiscListener(this), this);
         //Not needed to listen to command event, if the list is empty!
         if(!configurationHandler().getConfigurationFile().getCommandToBlock().isEmpty()){
             getServer().getPluginManager().registerEvents(new PlayerCommandListener(this), this);

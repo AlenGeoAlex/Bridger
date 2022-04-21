@@ -15,7 +15,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 
 import java.util.Optional;
 
-public class PlayerBlockListener implements Listener {
+public final class PlayerBlockListener implements Listener {
 
     private final Bridger plugin;
 
