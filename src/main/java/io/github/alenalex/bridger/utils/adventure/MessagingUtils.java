@@ -90,6 +90,10 @@ public final class MessagingUtils {
         audiences.player(player).sendActionBar(MessageFormatter.transform(message));
     }
 
+    public void sendActionBar(@NotNull Player player, Component component){
+        audiences.player(player).sendActionBar(component);
+    }
+
     public void sendActionBar(@NotNull List<Player> players, String message){
         players.forEach((p) -> sendActionBar(p,message));
     }

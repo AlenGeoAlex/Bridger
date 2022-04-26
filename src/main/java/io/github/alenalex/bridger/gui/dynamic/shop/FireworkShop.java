@@ -31,72 +31,77 @@ public class FireworkShop extends AbstractDynamicGUI<Gui> {
         return CompletableFuture.supplyAsync(new Supplier<Gui>() {
             @Override
             public Gui get() {
-                final UserData data = handler.plugin().gameHandler().userManager().getOrDefault(player.getUniqueId(), null);
-                if (data == null) {
-                    handler.plugin().getLogger().warning("User data is null for player " + player.getName()+", at prepGui()");
-                    return null;
-                }
+                try {
+                    final UserData data = handler.plugin().gameHandler().userManager().getOrDefault(player.getUniqueId(), null);
+                    if (data == null) {
+                        handler.plugin().getLogger().warning("User data is null for player " + player.getName()+", at prepGui()");
+                        return null;
+                    }
 
-                if(!(data.userMatchCache().getStatus() == UserMatchCache.Status.LOBBY)){
-                    handler.plugin().messagingUtils().sendTo(
-                            player,
-                            data.userSettings().getLanguage().asComponent(LangConfigurationPaths.ACTIVITY_BLOCKED)
-                    );
-                    return null;
-                }
+                    if(!(data.userMatchCache().getStatus() == UserMatchCache.Status.LOBBY)){
+                        handler.plugin().messagingUtils().sendTo(
+                                player,
+                                data.userSettings().getLanguage().asComponent(LangConfigurationPaths.ACTIVITY_BLOCKED)
+                        );
+                        return null;
+                    }
 
-                final Gui gui = Gui.
-                        gui().
-                        disableAllInteractions().
-                        title(getConfiguration().getFireWorkShopConfig().titleAsComponent()).
-                        create();
+                    final Gui gui = Gui.
+                            gui().
+                            disableAllInteractions().
+                            title(getConfiguration().getFireWorkShopConfig().titleAsComponent()).
+                            create();
 
-                applyFiller(gui, getConfiguration().getFireWorkShopConfig());
+                    applyFiller(gui, getConfiguration().getFireWorkShopConfig());
 
-                final UIItem itemConfig = getConfiguration().getFireWorkShopItem();
-                for(FireworkEffect.Type type : data.fetchLockedFireworks()){
-                    final String name = WordUtils.capitalize(type.name().toLowerCase()).replace("_"," ");
-                    final int amount = handler.plugin().configurationHandler().getConfigurationFile().getEnabledFireWorkModels().get(type);
+                    final UIItem itemConfig = getConfiguration().getFireWorkShopItem();
+                    for(FireworkEffect.Type type : data.fetchLockedFireworks()){
+                        final String name = WordUtils.capitalize(type.name().toLowerCase()).replace("_"," ");
+                        final int amount = handler.plugin().configurationHandler().getConfigurationFile().getEnabledFireWorkModels().get(type);
 
-                    final GuiItem button = ItemBuilder.from(itemConfig.itemStack())
-                            .name(itemConfig.nameAsComponent(
-                                    MessagePlaceholder.of("%name%", name)
-                            ))
-                            .lore(
-                                    itemConfig.loreAsComponent(
-                                            MessagePlaceholder.of("%name%", name),
-                                            MessagePlaceholder.of("%cost%", amount)
-                                    )
-                            ).asGuiItem(new GuiAction<InventoryClickEvent>() {
-                                @Override
-                                public void execute(InventoryClickEvent event) {
+                        final GuiItem button = ItemBuilder.from(itemConfig.itemStack())
+                                .name(itemConfig.nameAsComponent(
+                                        MessagePlaceholder.of("%name%", name)
+                                ))
+                                .lore(
+                                        itemConfig.loreAsComponent(
+                                                MessagePlaceholder.of("%name%", name),
+                                                MessagePlaceholder.of("%cost%", amount)
+                                        )
+                                ).asGuiItem(new GuiAction<InventoryClickEvent>() {
+                                    @Override
+                                    public void execute(InventoryClickEvent event) {
 
-                                    if(!handler.plugin().pluginHookManager().getEconomyProvider().hasBalance((Player) event.getWhoClicked(), amount)){
+                                        if(!handler.plugin().pluginHookManager().getEconomyProvider().hasBalance((Player) event.getWhoClicked(), amount)){
+                                            handler.plugin().messagingUtils().sendTo(
+                                                    player,
+                                                    data.userSettings().getLanguage().asComponent(LangConfigurationPaths.SHOP_PURCHASE_FAIL_NO_CASH,
+                                                            MessagePlaceholder.of(" %item-name%", name)
+                                                    )
+                                            );
+                                            return;
+                                        }
+
+                                        handler.plugin().pluginHookManager().getEconomyProvider().withdraw((Player) event.getWhoClicked(), amount);
+                                        data.userCosmetics().unlockFirework(type.name());
                                         handler.plugin().messagingUtils().sendTo(
                                                 player,
-                                                data.userSettings().getLanguage().asComponent(LangConfigurationPaths.SHOP_PURCHASE_FAIL_NO_CASH,
-                                                        MessagePlaceholder.of(" %item-name%", name)
+                                                data.userSettings().getLanguage().asComponent(LangConfigurationPaths.SHOP_SUCCESSFULLY_PURCHASED,
+                                                        MessagePlaceholder.of(" %item-name%", name),
+                                                        MessagePlaceholder.of("%item-price%", amount)
                                                 )
                                         );
-                                        return;
                                     }
+                                });
 
-                                    handler.plugin().pluginHookManager().getEconomyProvider().withdraw((Player) event.getWhoClicked(), amount);
-                                    data.userCosmetics().unlockFirework(type.name());
-                                    handler.plugin().messagingUtils().sendTo(
-                                            player,
-                                            data.userSettings().getLanguage().asComponent(LangConfigurationPaths.SHOP_SUCCESSFULLY_PURCHASED,
-                                                    MessagePlaceholder.of(" %item-name%", name),
-                                                    MessagePlaceholder.of("%item-price%", amount)
-                                                    )
-                                    );
-                                }
-                            });
+                        gui.addItem(button);
+                    }
 
-                    gui.addItem(button);
+                    return gui;
+                }catch (Exception e){
+                    e.printStackTrace();
+                    return null;
                 }
-
-                return gui;
             }
         });
     }

@@ -9,6 +9,9 @@ storage:
 
 broadcast-new-best-time-all-players: true
 
+##Action bar is run on a separate thread!
+update-action-bar-on-every-ms: 500
+
 allow-block-interaction-on-lobby:
   place-block: false
   break-block: true

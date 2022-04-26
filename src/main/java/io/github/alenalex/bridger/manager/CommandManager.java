@@ -8,6 +8,7 @@ import io.github.alenalex.bridger.Bridger;
 import io.github.alenalex.bridger.commands.Test;
 import io.github.alenalex.bridger.commands.admin.DebugCommand;
 import io.github.alenalex.bridger.commands.island.IslandCommand;
+import io.github.alenalex.bridger.commands.island.LeaveCommand;
 import io.github.alenalex.bridger.commands.setup.SessionCommand;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
@@ -52,7 +53,8 @@ public class CommandManager {
                 new Test(this),
                 new SessionCommand(this),
                 new IslandCommand(this),
-                new DebugCommand(this)
+                new DebugCommand(this),
+                new LeaveCommand(this)
         );
 
     }

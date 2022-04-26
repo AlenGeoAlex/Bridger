@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class UIConfig {
 
@@ -76,7 +77,12 @@ public class UIConfig {
                 return;
             }
 
-            fillers.add(new UIFiller(stack, section.getIntegerList("fillers." + key)));
+            fillers.add(new UIFiller(stack,
+                    section.
+                    getStringList("fillers." + key)
+                    .stream()
+                    .map(Integer::parseInt)
+                    .collect(Collectors.toList())));
         });
 
         return new UIConfig(title, rows, fillers);

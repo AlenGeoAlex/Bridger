@@ -47,6 +47,7 @@ public final class PlayerBlockListener implements Listener {
                 }
 
                 plugin.gameHandler().playerFirstBlock(userData);
+                userData.userMatchCache().addBlockToCache(event.getBlockPlaced());
                 plugin.messagingUtils().sendTo(player, userData.userSettings().getLanguage().asComponent(LangConfigurationPaths.PLAYER_STARTED_BRIDGING));
                 break;
             }

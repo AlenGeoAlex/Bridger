@@ -45,6 +45,8 @@ public class IslandCommand extends AbstractCommand {
             return;
         }
 
+
+
         manager.plugin().gameHandler().toIsland(player).ifPresent(new Consumer<Island>() {
             @Override
             public void accept(Island island) {
@@ -98,14 +100,13 @@ public class IslandCommand extends AbstractCommand {
             return;
         }
 
-        if(manager.plugin().gameHandler().isPlayerPlaying(player))
+        if(!manager.plugin().gameHandler().isPlayerPlaying(player))
             return;
 
         Island island = manager.plugin().gameHandler().getIslandOfPlayer(player).orElse(null);
         if(island == null){
             return;
         }
-
         manager.plugin().gameHandler().playerQuitGame(player, userData);
     }
 }

@@ -9,32 +9,37 @@ import io.github.alenalex.bridger.utils.adventure.MessageFormatter;
 import io.github.alenalex.bridger.utils.adventure.internal.MessagePlaceholder;
 import io.github.alenalex.bridger.variables.LangConfigurationPaths;
 import net.kyori.adventure.text.Component;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.List;
 
 public class MessageConfiguration {
 
-    private final Bridger plugin;
-    private final FlatFile file;
+    private @NotNull final Bridger plugin;
+    private @NotNull final FlatFile file;
 
-    public MessageConfiguration(Bridger plugin, FlatFile file) {
+    public MessageConfiguration(Bridger plugin, @NotNull FlatFile file) {
         this.plugin = plugin;
         this.file = file;
         this.file.setReloadSettings(ReloadSettings.AUTOMATICALLY);
     }
 
-    public MessageConfiguration(Bridger plugin, File file) {
+    public MessageConfiguration(Bridger plugin, @NotNull File file) {
         this.plugin = plugin;
         this.file = new Yaml(file);
         this.file.setReloadSettings(ReloadSettings.AUTOMATICALLY);
     }
 
+    @NotNull
     public FlatFile getFile() {
         return file;
     }
 
     public String asString(String path) {
+        if(!this.file.contains(path))
+            return "<red>This language node ["+path+"] doesn't exist! Please contact an administrator";
+
         return file.getString(path);
     }
 

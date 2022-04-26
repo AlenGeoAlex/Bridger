@@ -21,32 +21,35 @@ public class UserManager extends AbstractRegistry<UUID, UserData> {
     }
 
     public static void handleLobbyTransport(@NotNull Player player){
-        player.teleport(Bridger.instance().configurationHandler().getConfigurationFile().getSpawnLocation());
+        Bridger.instance().getServer().getScheduler().runTask(Bridger.instance(), () -> {
+            player.teleport(Bridger.instance().configurationHandler().getConfigurationFile().getSpawnLocation());
 
-        player.setHealth(20);
-        player.setGameMode(GameMode.ADVENTURE);
-        player.setFlying(false);
-        player.setFoodLevel(20);
+            player.setHealth(20);
+            player.setGameMode(GameMode.ADVENTURE);
+            player.setFlying(false);
+            player.setFoodLevel(20);
 
-        if(Bridger.instance().configurationHandler().getConfigurationFile().getLobbyJoin() != null){
-            Bridger.instance().configurationHandler().getConfigurationFile().getLobbyJoin().applyOn(player);
-        }
+            if(Bridger.instance().configurationHandler().getConfigurationFile().getLobbyJoin() != null){
+                Bridger.instance().configurationHandler().getConfigurationFile().getLobbyJoin().applyOn(player);
+            }
 
-        if(Bridger.instance().configurationHandler().getConfigurationFile().getLobbySettings() != null){
-            Bridger.instance().configurationHandler().getConfigurationFile().getLobbySettings().applyOn(player);
-        }
+            if(Bridger.instance().configurationHandler().getConfigurationFile().getLobbySettings() != null){
+                Bridger.instance().configurationHandler().getConfigurationFile().getLobbySettings().applyOn(player);
+            }
 
-        if(Bridger.instance().configurationHandler().getConfigurationFile().getLobbySelector() != null){
-            Bridger.instance().configurationHandler().getConfigurationFile().getLobbySelector().applyOn(player);
-        }
+            if(Bridger.instance().configurationHandler().getConfigurationFile().getLobbySelector() != null){
+                Bridger.instance().configurationHandler().getConfigurationFile().getLobbySelector().applyOn(player);
+            }
 
-        if(Bridger.instance().configurationHandler().getConfigurationFile().getLobbyShop() != null){
-            Bridger.instance().configurationHandler().getConfigurationFile().getLobbyShop().applyOn(player);
-        }
+            if(Bridger.instance().configurationHandler().getConfigurationFile().getLobbyShop() != null){
+                Bridger.instance().configurationHandler().getConfigurationFile().getLobbyShop().applyOn(player);
+            }
 
-        for(HotBarConfig config : Bridger.instance().configurationHandler().getConfigurationFile().getLobbyOther()){
-            config.applyOn(player);
-        }
+            for(HotBarConfig config : Bridger.instance().configurationHandler().getConfigurationFile().getLobbyOther()){
+                config.applyOn(player);
+            }
+        });
+
     }
 
     public static void setIslandItemsOnPlayer(@NotNull Player player){

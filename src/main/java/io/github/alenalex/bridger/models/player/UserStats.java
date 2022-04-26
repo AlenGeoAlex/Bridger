@@ -2,6 +2,8 @@ package io.github.alenalex.bridger.models.player;
 
 import com.google.common.base.Objects;
 import io.github.alenalex.bridger.Bridger;
+import io.github.alenalex.bridger.utils.StringUtils;
+import org.apache.commons.lang3.time.DurationFormatUtils;
 
 public final class UserStats {
 
@@ -82,7 +84,7 @@ public final class UserStats {
     }
 
     public String getBestTimeAsString(){
-        return String.valueOf(bestTime);
+        return StringUtils.convertLongToReadableDate(bestTime);
     }
 
     @Override

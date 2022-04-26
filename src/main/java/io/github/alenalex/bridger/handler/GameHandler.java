@@ -10,10 +10,10 @@ import io.github.alenalex.bridger.variables.LangConfigurationPaths;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.hamcrest.core.Is;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 public class GameHandler {
@@ -22,13 +22,13 @@ public class GameHandler {
     private final IslandManager islandManager;
     private final UserManager userManager;
 
-    private final HashMap<UUID, String> activeBridges;
+    private final ConcurrentHashMap<UUID, String> activeBridges;
 
     public GameHandler(Bridger plugin) {
         this.plugin = plugin;
         this.islandManager = new IslandManager(plugin);
         this.userManager = new UserManager(plugin);
-        this.activeBridges = new HashMap<>();
+        this.activeBridges = new ConcurrentHashMap<>();
     }
 
     public IslandManager islandManager(){
@@ -69,6 +69,12 @@ public class GameHandler {
     }
 
     public Optional<Island> toIsland(@NotNull Player player, @NotNull UserData userData, String islandName){
+
+        if(activeBridges.containsKey(player.getUniqueId())){
+            plugin.messagingUtils().sendTo(player, userData.userSettings().getLanguage().asComponent(LangConfigurationPaths.ALREADY_HAVE_ISLAND));
+            return Optional.empty();
+        }
+
         Island island = islandManager.getFreeIslandByName(player, islandName).orElse(null);
 
         if(island == null){
@@ -79,6 +85,7 @@ public class GameHandler {
         island.setOccupied();
 
         activeBridges.put(player.getUniqueId(), island.getIslandName());
+        userData.userMatchCache().setPlayerAsIdle();
         island.teleportToSpawn(player);
         plugin.messagingUtils().sendTo(player,
                 userData.userSettings().getLanguage().asComponent(LangConfigurationPaths.TELEPORTED_TO_ISLAND,
@@ -93,6 +100,12 @@ public class GameHandler {
             plugin.getLogger().severe("Failed to get the data for user @"+getClass().getSimpleName()+"#toIsland(Player)");
             return Optional.empty();
         }
+
+        if(activeBridges.containsKey(player.getUniqueId())){
+            plugin.messagingUtils().sendTo(player, userData.userSettings().getLanguage().asComponent(LangConfigurationPaths.ALREADY_HAVE_ISLAND));
+            return Optional.empty();
+        }
+
         Island island = islandManager.getAnyFreeIsland(player).orElse(null);
 
         if(island == null){
@@ -103,6 +116,7 @@ public class GameHandler {
         island.setOccupied();
 
         activeBridges.put(player.getUniqueId(), island.getIslandName());
+        userData.userMatchCache().setPlayerAsIdle();
         island.teleportToSpawn(player);
         plugin.messagingUtils().sendTo(player,
                 userData.userSettings().getLanguage().asComponent(LangConfigurationPaths.TELEPORTED_TO_ISLAND,
@@ -112,9 +126,15 @@ public class GameHandler {
     }
 
     public void toIsland(@NotNull Player player, @NotNull UserData userData, @NotNull Island island){
+        if(activeBridges.containsKey(player.getUniqueId())){
+            plugin.messagingUtils().sendTo(player, userData.userSettings().getLanguage().asComponent(LangConfigurationPaths.ALREADY_HAVE_ISLAND));
+            return;
+        }
+
         island.setOccupied();
 
         activeBridges.put(player.getUniqueId(), island.getIslandName());
+        userData.userMatchCache().setPlayerAsIdle();
         island.teleportToSpawn(player);
         plugin.messagingUtils().sendTo(player,
                 userData.userSettings().getLanguage().asComponent(LangConfigurationPaths.TELEPORTED_TO_ISLAND,
@@ -124,7 +144,6 @@ public class GameHandler {
 
     public void playerFirstBlock(@NotNull UserData userData){
         userData.userMatchCache().setPlayerAsPlaying();
-        userData.userMatchCache().setStartTime(System.currentTimeMillis());
     }
 
     private void playerRestartGame(@NotNull Player player){
@@ -192,6 +211,11 @@ public class GameHandler {
         if(island.getRewards() > 0){
             plugin.pluginHookManager().getEconomyProvider().deposit(player, island.getRewards());
         }
+        plugin.messagingUtils().sendTo(player,
+                userData.userSettings().getLanguage().asComponent(LangConfigurationPaths.COMPLETED_GAME,
+                        MessagePlaceholder.of("%time%", userData.userMatchCache().getCurrentTimeAsString())
+                        )
+                );
         playerRestartGame(player);
     }
 
@@ -216,9 +240,6 @@ public class GameHandler {
 
         UserManager.handleLobbyTransport(player);
 
-        plugin.messagingUtils().sendTo(player,
-                userData.userSettings().getLanguage().asComponent(LangConfigurationPaths.PLAYER_QUIT_MATCH)
-                );
         final Island island = islandManager.of(activeBridges.get(player.getUniqueId()));
         islandManager.removeSpectators(island);
         removePlayerFromIsland(userData, island);
@@ -234,6 +255,7 @@ public class GameHandler {
             plugin.getLogger().severe("Failed to get the data for user @"+getClass().getSimpleName()+"#playerQuitServer(Player)");
             return;
         }
+
         final Island island = islandManager.of(activeBridges.get(player.getUniqueId()));
         islandManager.removeSpectators(island);
         island.setResetting();
@@ -279,5 +301,9 @@ public class GameHandler {
 
     public String asJson(){
         return Bridger.gsonInstance().toJson(activeBridges);
+    }
+
+    public ConcurrentHashMap<UUID, String> getActiveBridges() {
+        return activeBridges;
     }
 }

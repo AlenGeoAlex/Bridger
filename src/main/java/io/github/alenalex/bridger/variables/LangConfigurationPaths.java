@@ -8,6 +8,7 @@ public enum LangConfigurationPaths {
     UNABLE_TO_PROCESS_SELECTED_FIREWORK("unable-to-process-selected-firework"),
     KICK_ISLAND_DISABLED("kicked-island-disable"),
     PLAYER_LEAVE_GAME("player-leave-game"),
+    ALREADY_HAVE_ISLAND("already-have-island"),
 
     SHOP_SUCCESSFULLY_PURCHASED("shop-purchase.bought-successfully"),
     SHOP_PURCHASE_FAIL_NO_CASH("shop-purchase.not-enough-cash"),
@@ -37,6 +38,9 @@ public enum LangConfigurationPaths {
     CHEAT_PROTECTION_MIN_TIME("cheat-protection.failed-min-time"),
     CHEAT_PROTECTION_MIN_BLOCK("cheat-protection."),
     CHEAT_PROTECTION_REACHED_IN_IDLE("cheat-protection."),
+
+    COMPLETED_GAME("completed-game"),
+    ACTION_BAR("action-bar-countdown"),
     ;
     private final String path;
 

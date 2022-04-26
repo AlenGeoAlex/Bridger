@@ -40,7 +40,7 @@ public interface IGui {
                     .lore(Component.empty())
                     .asGuiItem();
 
-            for(Integer slots : filler.slots()){
+            for(int slots : filler.slots()){
                 gui.setItem(slots, item);
             }
         }

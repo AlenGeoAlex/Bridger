@@ -129,8 +129,8 @@ public class CosmeticShop extends AbstractStaticGUI<Gui> {
 
                 gui.setItem(12, fireWorkShopButton);
                 gui.setItem(22, closeButton);
-                gui.setItem(23, particleShop);
-                gui.setItem(24, materialShop);
+                gui.setItem(13, particleShop);
+                gui.setItem(14, materialShop);
             return true;
         }catch (Exception e){
             e.printStackTrace();

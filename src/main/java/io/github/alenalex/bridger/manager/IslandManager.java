@@ -31,19 +31,19 @@ public class IslandManager extends AbstractRegistry<String, Island> {
         if(islandConfig == null)
             return;
 
-        for(String islandName : islandConfig.keySet()) {
+        for(String islandName : islandConfig.singleLayerKeySet()) {
             final boolean enabled = islandConfig.getBoolean(islandName + ".enabled");
-            final Location pos1 = FlatFileUtils.deserializeLocation(islandConfig.getSection("pos1")).orElse(null);
-            final Location pos2 = FlatFileUtils.deserializeLocation(islandConfig.getSection("pos2")).orElse(null);
-            final Location spawn = FlatFileUtils.deserializeLocation(islandConfig.getSection("spawn")).orElse(null);
-            final Location end = FlatFileUtils.deserializeLocation(islandConfig.getSection("end")).orElse(null);
+            final Location pos1 = FlatFileUtils.deserializeLocation(islandConfig.getSection(islandName + ".pos1")).orElse(null);
+            final Location pos2 = FlatFileUtils.deserializeLocation(islandConfig.getSection(islandName + ".pos2")).orElse(null);
+            final Location spawn = FlatFileUtils.deserializeLocation(islandConfig.getSection(islandName + ".spawn")).orElse(null);
+            final Location end = FlatFileUtils.deserializeLocation(islandConfig.getSection(islandName + ".end")).orElse(null);
 
             if (pos1 != null && pos2 != null && spawn != null && end != null) {
-                final String perm = islandConfig.contains(islandName + ".perm") ? islandConfig.getString("") : null;
+                final String perm = islandConfig.contains(islandName + ".perm") ? islandConfig.getString(islandName + ".perm") : null;
                 final int minBlocks = islandConfig.getInt(islandName + ".min-req.blocks");
                 final int minSec = islandConfig.getInt(islandName + ".min-req.sec");
-                final double joinCost = islandConfig.getDouble("join-cost");
-                final double reward = islandConfig.getDouble("reward-coins");
+                final double joinCost = islandConfig.getDouble(islandName + ".join-cost");
+                final double reward = islandConfig.getDouble(islandName + ".reward-coins");
 
                 final Island island =
                         new Island(

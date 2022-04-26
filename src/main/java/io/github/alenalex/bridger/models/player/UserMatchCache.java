@@ -2,11 +2,11 @@ package io.github.alenalex.bridger.models.player;
 
 import io.github.alenalex.bridger.Bridger;
 import io.github.alenalex.bridger.models.Island;
-import io.github.alenalex.bridger.variables.Materials;
+import io.github.alenalex.bridger.utils.StringUtils;
 import io.github.alenalex.bridger.workload.core.Workload;
+import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.jetbrains.annotations.NotNull;
 
@@ -18,6 +18,7 @@ public class UserMatchCache {
     private final List<Block> placedBlocks;
     private long startTime;
     private long currentTime;
+
 
     private String spectatingIsland;
 
@@ -53,15 +54,18 @@ public class UserMatchCache {
             return;
 
         for(Block block: placedBlocks){
-            Workload workload = () -> {
-                block.setType(Material.AIR);
-                if(block.hasMetadata(Island.PLACED_BLOCK))
-                    block.removeMetadata(Island.PLACED_BLOCK, Bridger.instance());
-                if(userData.userSettings().hasParticle()){
+            try {
+                Workload workload = () -> {
+                    block.setType(Material.AIR);
+                    if(block.hasMetadata(Island.PLACED_BLOCK))
+                        block.removeMetadata(Island.PLACED_BLOCK, Bridger.instance());
+                    if(userData.userSettings().hasParticle()){
 
-                }
-            };
-            Bridger.instance().workloadHandler().getSyncThread().submit(workload);
+                    }
+                };
+                Bridger.instance().workloadHandler().getSyncThread().submit(workload);
+            }catch (Exception ignored){}
+
         }
         userData.userStats().addBlock(placedBlocks.size());
         placedBlocks.clear();
@@ -114,7 +118,7 @@ public class UserMatchCache {
     }
 
     public String getCurrentTimeAsString(){
-        return String.valueOf(currentTime);
+        return StringUtils.convertLongToReadableDate(currentTime);
     }
 
     public void setPlayerAsIdle(){
@@ -122,7 +126,9 @@ public class UserMatchCache {
     }
 
     public void setPlayerAsPlaying(){
+        setStartTime(System.currentTimeMillis());
         status = Status.PLAYING;
+
     }
 
     public void setPlayerAsLobby(){
@@ -140,4 +146,6 @@ public class UserMatchCache {
     public int getBlocksPlaced(){
         return placedBlocks.size();
     }
+
+
 }

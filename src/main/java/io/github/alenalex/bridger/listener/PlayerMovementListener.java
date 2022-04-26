@@ -4,6 +4,7 @@ import io.github.alenalex.bridger.Bridger;
 import io.github.alenalex.bridger.manager.UserManager;
 import io.github.alenalex.bridger.models.Island;
 import io.github.alenalex.bridger.models.player.UserData;
+import io.github.alenalex.bridger.utils.LocationUtils;
 import io.github.alenalex.bridger.utils.adventure.MessageFormatter;
 import io.github.alenalex.bridger.variables.LangConfigurationPaths;
 import io.github.alenalex.bridger.variables.PluginResponses;
@@ -39,6 +40,7 @@ public final class PlayerMovementListener implements Listener {
         if(userData == null)
             return;
 
+
         switch (userData.userMatchCache().getStatus()){
 
             case LOBBY: {
@@ -72,7 +74,9 @@ public final class PlayerMovementListener implements Listener {
                 break;
             }
             case IDLE: {
-                Island island = plugin.gameHandler().islandManager().of(userData.userMatchCache().getSpectatingIsland());
+                Island island = plugin.gameHandler().getIslandOfPlayer(player).orElse(null);
+                if(island == null)
+                    return;
 
                 if (to.getBlockY() <= plugin.configurationHandler().getConfigurationFile().getVoidDetectionHeight()) {
                     island.teleportToSpawn(player);
@@ -87,14 +91,18 @@ public final class PlayerMovementListener implements Listener {
                 break;
             }
             case PLAYING: {
-                Island island = plugin.gameHandler().islandManager().of(userData.userMatchCache().getSpectatingIsland());
+                Island island = plugin.gameHandler().getIslandOfPlayer(player).orElse(null);
+                if(island == null)
+                    return;
 
                 if (to.getBlockY() <= plugin.configurationHandler().getConfigurationFile().getVoidDetectionHeight()) {
                     plugin.gameHandler().playerFailedGame(player);
                     return;
                 }
 
-                if(to.equals(island.getEndLocation())) {
+
+
+                if(LocationUtils.isSameLocation(to, island.getEndLocation())) {
                     if(!(userData.userMatchCache().getBlocksPlaced() >= island.getMinBlocksRequired())){
                         if(plugin.configurationHandler().getConfigurationFile().isCheatDetectionMinBlocks()) {
                             player.kickPlayer(MessageFormatter.colorizeLegacy("&c&lCheat detection: &cYou didn't satisfy the islands condition!"));

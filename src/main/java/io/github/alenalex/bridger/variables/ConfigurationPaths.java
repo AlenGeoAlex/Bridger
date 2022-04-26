@@ -9,6 +9,8 @@ public enum ConfigurationPaths {
     STORAGE_PASSWORD("password"),
     STORAGE_SSL("ssl"),
 
+    ACTION_BAR_UPDATE_RATE("update-action-bar-on-every-ms"),
+
     SPAWN_LOCATION("spawn-location"),
 
     COSMETICS_FIRE_WORK_ENABLED("cosmetics.firework.enabled"),

@@ -42,7 +42,9 @@ public class ConfigurationFile extends AbstractFileSettings {
     private boolean cheatDetectionMinBlocks, cheatDetectionMinTime, cheatDetectionIdleCompletion;
 
     private HotBarConfig lobbySettings, lobbyShop, lobbyJoin, lobbySelector;
-    private List<HotBarConfig> lobbyOther;
+    private final List<HotBarConfig> lobbyOther;
+
+    private int actionBarUpdateTime;
 
     public ConfigurationFile(ConfigurationHandler handler) {
         super(handler);
@@ -118,12 +120,18 @@ public class ConfigurationFile extends AbstractFileSettings {
             final HotBarConfig config = HotBarConfig.of(getSectionOf(ConfigurationPaths.LOBBY_OTHERS.getPath()+"."+s));
             this.lobbyOther.add(config);
         }
+
+        this.actionBarUpdateTime = this.file.getInt(ConfigurationPaths.ACTION_BAR_UPDATE_RATE.getPath());
+        this.actionBarUpdateTime = this.actionBarUpdateTime <= 50 ? 100 : this.actionBarUpdateTime;
     }
 
     @Override
     public void prepareReload() {
         this.enabledMaterials.clear();
         this.enabledFireworkModels.clear();
+        this.commandToBlock.clear();
+        this.placementBlockedMaterial.clear();
+        this.lobbyOther.clear();
         this.loadFile();
     }
 
@@ -213,5 +221,9 @@ public class ConfigurationFile extends AbstractFileSettings {
 
     public List<HotBarConfig> getLobbyOther() {
         return lobbyOther;
+    }
+
+    public int getActionBarUpdateTime() {
+        return actionBarUpdateTime;
     }
 }
