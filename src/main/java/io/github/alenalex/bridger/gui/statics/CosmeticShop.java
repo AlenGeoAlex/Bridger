@@ -86,7 +86,7 @@ public class CosmeticShop extends AbstractStaticGUI<Gui> {
                     });
 
             final GuiItem particleShop = ItemBuilder
-                    .from(Material.FIREWORK)
+                    .from(Material.REDSTONE)
                     .name(MessageFormatter.convertToComponent("<aqua>Particles"))
                     .lore(
                             MessageFormatter.convertToComponent("<gray>Click to open particles shop"),
@@ -108,7 +108,7 @@ public class CosmeticShop extends AbstractStaticGUI<Gui> {
                     });
 
             final GuiItem materialShop = ItemBuilder
-                    .from(Material.FIREWORK)
+                    .from(Material.BED_BLOCK)
                     .name(MessageFormatter.convertToComponent("<aqua>Materials"))
                     .lore(
                             MessageFormatter.convertToComponent("<gray>Click to open material shop"),

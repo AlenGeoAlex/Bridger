@@ -4,6 +4,9 @@ cannot-spectate-while-in-game: "<gray>[<red>✘<gray>] <red>You cannot spectate 
 cannot-spectating-not-players: "<red>The player is not in an active bridge currently!"
 command:
   did-not-provide-an-island-name: "<red>You haven't provided a valid island name!"
+  no-permission: "<red>You don't have permission to use this command!"
+  wrong-usage: "<red>Wrong usage! refer help for more information!"
+  not-exists: "<red>The command doesn't exist!"
 command-blocked: "<gray>[<red>✘<gray>] <red>You cannot use this command while being active on the island!"
 kick-message:
   failed-to-load-data: "<red>Failed to load data your user data from the database. Please contact an administrator."

@@ -9,6 +9,9 @@ public enum LangConfigurationPaths {
     KICK_ISLAND_DISABLED("kicked-island-disable"),
     PLAYER_LEAVE_GAME("player-leave-game"),
     ALREADY_HAVE_ISLAND("already-have-island"),
+    COMMAND_NO_PERMS("command.no-permission"),
+    COMMAND_WRONG_USAGE("command.wrong-usage"),
+    COMMAND_NOT_EXISTS("command.not-exists"),
 
     SHOP_SUCCESSFULLY_PURCHASED("shop-purchase.bought-successfully"),
     SHOP_PURCHASE_FAIL_NO_CASH("shop-purchase.not-enough-cash"),
