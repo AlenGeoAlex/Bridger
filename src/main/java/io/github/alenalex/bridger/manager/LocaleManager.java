@@ -57,4 +57,14 @@ public class LocaleManager extends AbstractRegistry<String, MessageConfiguration
     public Bridger getPlugin() {
         return plugin;
     }
+
+    public boolean reloadLocaleManager() {
+        initLocaleManager();
+        try {
+            loadLocales();
+            return true;
+        }catch (Exception e){
+            return false;
+        }
+    }
 }

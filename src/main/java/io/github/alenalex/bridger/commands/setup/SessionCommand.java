@@ -6,6 +6,7 @@ import io.github.alenalex.bridger.abstracts.AbstractCommand;
 import io.github.alenalex.bridger.manager.CommandManager;
 import io.github.alenalex.bridger.models.setup.SetupSession;
 import io.github.alenalex.bridger.utils.adventure.internal.MessagePlaceholder;
+import io.github.alenalex.bridger.variables.CommandCompletions;
 import io.github.alenalex.bridger.variables.Permissions;
 import io.github.alenalex.bridger.variables.PluginResponses;
 import org.apache.commons.lang3.StringUtils;
@@ -191,7 +192,7 @@ public class SessionCommand extends AbstractCommand {
 
     @SubCommand("perm")
     @Async
-    @Suggestion("joinPerm")
+    @Suggestion(CommandCompletions.Keys.JOIN_PERMS)
     @Permission(Permissions.Commands.Sessions.DEFAULT)
     public void onSetPerm(@NotNull Player player, String perm){
         if(StringUtils.isBlank(perm)) {

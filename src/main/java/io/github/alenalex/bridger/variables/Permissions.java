@@ -18,6 +18,10 @@ public class Permissions {
             public static final String CREATE = "bridger.command.debug.create";
             public static final String CLEAR = "bridger.command.debug.clear";
         }
+
+        public static class Admin{
+            public static final String RELOAD = "bridger.command.admin.reload";
+        }
     }
 
     public static class Admin{

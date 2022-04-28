@@ -31,6 +31,9 @@ public final class PluginResponses {
             public static final String FAILED_VALIDITY = "<red>Failed to validate the island! <gold>Reason : <red>%reason%";
         }
 
+        public static class Admin{
+            public static final String RELOAD_COMPLETE = "<green>Reloaded the plugin successfully!";
+        }
     }
 
     public static class Others{

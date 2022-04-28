@@ -5,10 +5,8 @@ import io.github.alenalex.bridger.Bridger;
 import io.github.alenalex.bridger.configs.MessageConfiguration;
 import io.github.alenalex.bridger.variables.Fireworks;
 import io.github.alenalex.bridger.variables.Materials;
-import org.apache.commons.lang3.EnumUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.bukkit.FireworkEffect;
-import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -56,7 +54,7 @@ public final class UserSettings {
     }
 
     public MessageConfiguration getLanguage() {
-        return Bridger.instance().localManager().getOrDefault(language);
+        return Bridger.instance().localeManager().getOrDefault(language);
     }
 
     public String getMaterialAsString() {

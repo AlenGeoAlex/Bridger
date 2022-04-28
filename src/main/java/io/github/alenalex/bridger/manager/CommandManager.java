@@ -14,6 +14,7 @@ import io.github.alenalex.bridger.commands.island.IslandCommand;
 import io.github.alenalex.bridger.commands.island.LeaveCommand;
 import io.github.alenalex.bridger.commands.setup.SessionCommand;
 import io.github.alenalex.bridger.models.player.UserData;
+import io.github.alenalex.bridger.variables.CommandCompletions;
 import io.github.alenalex.bridger.variables.LangConfigurationPaths;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -22,6 +23,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class CommandManager {
 
@@ -51,19 +54,50 @@ public class CommandManager {
     }
 
     public void registerCompletions(){
-        commandManager.registerSuggestion(SuggestionKey.of("joinPerm"), new SuggestionResolver<CommandSender>() {
+        commandManager.registerSuggestion(SuggestionKey.of(CommandCompletions.Keys.JOIN_PERMS), new SuggestionResolver<CommandSender>() {
             @Override
             public @NotNull List<String> resolve(@NotNull CommandSender sender, @NotNull SuggestionContext context) {
-                return Collections.singletonList("bridger.join.");
+                return CommandCompletions.Parameters.ISLAND_SESSION_PERMISSION;
             }
         });
 
-        commandManager.registerSuggestion(SuggestionKey.of("activePlayers"), new SuggestionResolver<CommandSender>() {
+        commandManager.registerSuggestion(SuggestionKey.of(CommandCompletions.Keys.ACTIVE_PLAYERS), new SuggestionResolver<CommandSender>() {
             @Override
             public @NotNull List<String> resolve(@NotNull CommandSender sender, @NotNull SuggestionContext context) {
                 return plugin.gameHandler().getActivePlayerNames();
             }
         });
+
+        commandManager.registerSuggestion(SuggestionKey.of(CommandCompletions.Keys.CONFIG_RELOAD), new SuggestionResolver<CommandSender>() {
+            @Override
+            public @NotNull List<String> resolve(@NotNull CommandSender sender, @NotNull SuggestionContext context) {
+                return CommandCompletions.Parameters.CONFIG_RELOAD;
+            }
+        });
+
+        commandManager.registerSuggestion(SuggestionKey.of(CommandCompletions.Keys.ALL_PLAYERS), new SuggestionResolver<CommandSender>() {
+            @Override
+            public @NotNull List<String> resolve(@NotNull CommandSender sender, @NotNull SuggestionContext context) {
+                return plugin.gameHandler()
+                        .userManager()
+                        .getValueCollection()
+                        .stream()
+                        .map(UserData::getPlayer)
+                        .filter(Optional::isPresent)
+                        .map(player -> player.get().getName())
+                        .collect(Collectors.toList());
+            }
+        });
+
+        commandManager.registerSuggestion(SuggestionKey.of(CommandCompletions.Keys.ENABLED_LOCALE), new SuggestionResolver<CommandSender>() {
+            @Override
+            public @NotNull List<String> resolve(@NotNull CommandSender sender, @NotNull SuggestionContext context) {
+                return plugin
+                        .localeManager()
+                        .getModifiableKeyList();
+            }
+        });
+
 
     }
 

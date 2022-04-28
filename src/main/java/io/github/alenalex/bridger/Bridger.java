@@ -110,7 +110,13 @@ public final class Bridger extends JavaPlugin {
 
         this.gameHandler.islandManager().loadAllIslands();
 
-        this.localeManager.initLocaleManager();
+        if(!this.localeManager.initLocaleManager()){
+            getLogger().severe("Unable to create a base locale file! This is necessary for the plugin to work!");
+            getLogger().severe("The plugin will be disabled!");
+            getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
+
         try {
             this.localeManager.loadLocales();
         } catch (FailedLocaleLoading e) {
@@ -168,6 +174,17 @@ public final class Bridger extends JavaPlugin {
             this.trackableTask.stopThread();
     }
 
+    public void prepareReloadTask(){
+        this.configurationHandler.reloadHandler();
+        if(!this.localeManager.reloadLocaleManager()){
+            getLogger().severe("Failed to load locales!");
+            getLogger().severe("The plugin will be disabled!");
+            getServer().getPluginManager().disablePlugin(this);
+        }
+        this.trackableTask.stopThread();
+        this.trackableTask.startThread();
+    }
+
     public ConfigurationHandler configurationHandler() {
         return configurationHandler;
     }
@@ -184,7 +201,7 @@ public final class Bridger extends JavaPlugin {
         return dataProvider;
     }
 
-    public LocaleManager localManager() {
+    public LocaleManager localeManager() {
         return localeManager;
     }
 
@@ -202,5 +219,9 @@ public final class Bridger extends JavaPlugin {
 
     public SetupSessionManager setupSessionManager(){
         return setupSessionManager;
+    }
+
+    public TrackableTask trackableTask(){
+        return trackableTask;
     }
 }

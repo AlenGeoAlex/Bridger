@@ -27,7 +27,7 @@ public final class ConnectionListener implements Listener {
         plugin.dataProvider().getDatabaseProvider().loadOrRegisterUser(playerUUID).thenAccept(user -> {
            if(user == null){
                plugin.getLogger().warning("Failed to load user " + playerUUID.toString());
-               player.kickPlayer(plugin.localManager().onDefault().asLegacyColorizedString(LangConfigurationPaths.KICK_MESSAGE_FAILED_TO_LOAD_DATA.getPath()));
+               player.kickPlayer(plugin.localeManager().onDefault().asLegacyColorizedString(LangConfigurationPaths.KICK_MESSAGE_FAILED_TO_LOAD_DATA.getPath()));
                return;
            }
 
