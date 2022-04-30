@@ -14,8 +14,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
-public class BridgerAdmin extends AbstractCommand {
-    public BridgerAdmin(CommandManager manager) {
+public class BridgerAdminCommand extends AbstractCommand {
+    public BridgerAdminCommand(CommandManager manager) {
         super(manager, "bridgeradmin");
     }
 

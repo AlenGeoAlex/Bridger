@@ -9,6 +9,7 @@ import dev.triumphteam.cmd.core.suggestion.SuggestionKey;
 import dev.triumphteam.cmd.core.suggestion.SuggestionResolver;
 import io.github.alenalex.bridger.Bridger;
 import io.github.alenalex.bridger.commands.Test;
+import io.github.alenalex.bridger.commands.admin.BridgerAdminCommand;
 import io.github.alenalex.bridger.commands.admin.DebugCommand;
 import io.github.alenalex.bridger.commands.island.IslandCommand;
 import io.github.alenalex.bridger.commands.island.LeaveCommand;
@@ -20,8 +21,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -107,7 +106,8 @@ public class CommandManager {
                 new SessionCommand(this),
                 new IslandCommand(this),
                 new DebugCommand(this),
-                new LeaveCommand(this)
+                new LeaveCommand(this),
+                new BridgerAdminCommand(this)
         );
 
     }
