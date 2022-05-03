@@ -1,9 +1,9 @@
 package io.github.alenalex.bridger.listener;
 
 import io.github.alenalex.bridger.Bridger;
-import io.github.alenalex.bridger.models.Island;
-import io.github.alenalex.bridger.models.player.UserData;
-import io.github.alenalex.bridger.models.player.UserMatchCache;
+import io.github.alenalex.bridger.models.BridgerIsland;
+import io.github.alenalex.bridger.models.player.BridgerUserData;
+import io.github.alenalex.bridger.models.player.BridgerUserMatchCache;
 import io.github.alenalex.bridger.variables.LangConfigurationPaths;
 import io.github.alenalex.bridger.variables.Permissions;
 import org.bukkit.GameMode;
@@ -12,8 +12,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-
-import java.util.Optional;
 
 public final class PlayerBlockListener implements Listener {
 
@@ -29,26 +27,26 @@ public final class PlayerBlockListener implements Listener {
             return;
 
         final Player player = event.getPlayer();
-        final UserData userData = plugin.gameHandler().userManager().of(player.getUniqueId());
+        final BridgerUserData bridgerUserData = plugin.gameHandler().userManager().of(player.getUniqueId());
 
-        if(userData == null)
+        if(bridgerUserData == null)
             return;
 
-        switch (userData.userMatchCache().getStatus()){
+        switch (bridgerUserData.userMatchCache().getStatus()){
             //Start the game
             case IDLE: {
-                Island island = plugin.gameHandler().getIslandOfPlayer(player).orElse(null);
-                if (island == null) return;
+                BridgerIsland bridgerIsland = plugin.gameHandler().getIslandOfPlayer(player).orElse(null);
+                if (bridgerIsland == null) return;
 
-                if (island.isIslandResetting()) {
+                if (bridgerIsland.isIslandResetting()) {
                     event.setCancelled(true);
-                    plugin.messagingUtils().sendTo(player, userData.userSettings().getLanguage().asComponent(LangConfigurationPaths.ISLAND_STILL_RESETTING_BLOCKS_PLACED));
+                    plugin.messagingUtils().sendTo(player, bridgerUserData.userSettings().getLanguage().asComponent(LangConfigurationPaths.ISLAND_STILL_RESETTING_BLOCKS_PLACED));
                     return;
                 }
 
-                plugin.gameHandler().playerFirstBlock(userData);
-                userData.userMatchCache().addBlockToCache(event.getBlockPlaced());
-                plugin.messagingUtils().sendTo(player, userData.userSettings().getLanguage().asComponent(LangConfigurationPaths.PLAYER_STARTED_BRIDGING));
+                plugin.gameHandler().playerFirstBlock(bridgerUserData);
+                bridgerUserData.userMatchCache().addBlockToCache(event.getBlockPlaced());
+                plugin.messagingUtils().sendTo(player, bridgerUserData.userSettings().getLanguage().asComponent(LangConfigurationPaths.PLAYER_STARTED_BRIDGING));
                 break;
             }
                 //Deny if player doesn't have appropriate perms
@@ -67,27 +65,27 @@ public final class PlayerBlockListener implements Listener {
             case PLAYING: {
                 if (plugin.configurationHandler().getConfigurationFile().getPlacementBlockedMaterial().contains(event.getBlockAgainst().getType())) {
                     event.setCancelled(true);
-                    plugin.messagingUtils().sendTo(player, userData.userSettings().getLanguage().asComponent(LangConfigurationPaths.CANNOT_PLACE_BLOCK_HERE));
+                    plugin.messagingUtils().sendTo(player, bridgerUserData.userSettings().getLanguage().asComponent(LangConfigurationPaths.CANNOT_PLACE_BLOCK_HERE));
                     return;
                 }
 
-                final Island island = plugin.gameHandler().getIslandOfPlayer(player).orElse(null);
-                if (island == null)
+                final BridgerIsland bridgerIsland = plugin.gameHandler().getIslandOfPlayer(player).orElse(null);
+                if (bridgerIsland == null)
                     return;
 
-                if (event.getBlockPlaced().getLocation().equals(island.getEndLocation())) {
+                if (event.getBlockPlaced().getLocation().equals(bridgerIsland.getEndLocation())) {
                     event.setCancelled(true);
-                    plugin.messagingUtils().sendTo(player, userData.userSettings().getLanguage().asComponent(LangConfigurationPaths.CANNOT_PLACE_BLOCK_HERE));
+                    plugin.messagingUtils().sendTo(player, bridgerUserData.userSettings().getLanguage().asComponent(LangConfigurationPaths.CANNOT_PLACE_BLOCK_HERE));
                     return;
                 }
 
-                userData.userMatchCache().addBlockToCache(event.getBlockPlaced());
+                bridgerUserData.userMatchCache().addBlockToCache(event.getBlockPlaced());
                 break;
             }
             case SPECTATING: {
                 if (!player.hasPermission(Permissions.Spectator.BLOCK_PLACE)) {
                     event.setCancelled(true);
-                    plugin.messagingUtils().sendTo(player, userData.userSettings().getLanguage().asComponent(LangConfigurationPaths.CANNOT_PLACE_BLOCKS_WHILE_SPECTATING));
+                    plugin.messagingUtils().sendTo(player, bridgerUserData.userSettings().getLanguage().asComponent(LangConfigurationPaths.CANNOT_PLACE_BLOCKS_WHILE_SPECTATING));
                 }
                 break;
             }
@@ -102,12 +100,12 @@ public final class PlayerBlockListener implements Listener {
             return;
 
         final Player player = event.getPlayer();
-        final UserData userData = plugin.gameHandler().userManager().of(player.getUniqueId());
+        final BridgerUserData bridgerUserData = plugin.gameHandler().userManager().of(player.getUniqueId());
 
-        if(userData == null)
+        if(bridgerUserData == null)
             return;
 
-        if(userData.userMatchCache().getStatus() == UserMatchCache.Status.LOBBY){
+        if(bridgerUserData.userMatchCache().getStatus() == BridgerUserMatchCache.Status.LOBBY){
             if(player.getGameMode() == GameMode.CREATIVE
                     || player.hasPermission(Permissions.Admin.ADMIN_BUILD)
                     || plugin.gameHandler().userManager().isPlayerAllowedToBuild(player)

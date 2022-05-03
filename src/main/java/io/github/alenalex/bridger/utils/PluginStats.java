@@ -1,8 +1,8 @@
 package io.github.alenalex.bridger.utils;
 
 import io.github.alenalex.bridger.Bridger;
-import io.github.alenalex.bridger.models.Island;
-import io.github.alenalex.bridger.models.player.UserData;
+import io.github.alenalex.bridger.models.BridgerIsland;
+import io.github.alenalex.bridger.models.player.BridgerUserData;
 import io.github.alenalex.bridger.models.setup.SetupSession;
 import org.apache.commons.io.FileUtils;
 import org.jetbrains.annotations.NotNull;
@@ -40,12 +40,12 @@ public class PluginStats {
                     FileUtils.write(debugFile, Bridger.gsonInstance().toJson(instance.getDescription().getVersion())+"\n");
                     FileUtils.write(debugFile, "hooks: \n"+Bridger.gsonInstance().toJson(instance.pluginHookManager().getAllHooks())+"\n");
                     FileUtils.write(debugFile, "players:\n");
-                    for(UserData data : instance.gameHandler().userManager().getValueCollection()){
+                    for(BridgerUserData data : instance.gameHandler().userManager().getValueCollection()){
                         FileUtils.write(debugFile, data.asJson()+"\n");
                     }
                     FileUtils.write(debugFile, "islands:\n");
-                    for(Island island : instance.gameHandler().islandManager().getValueCollection()){
-                        FileUtils.write(debugFile, island.asJson()+"\n");
+                    for(BridgerIsland bridgerIsland : instance.gameHandler().islandManager().getValueCollection()){
+                        FileUtils.write(debugFile, bridgerIsland.asJson()+"\n");
                     }
                     FileUtils.write(debugFile, "sessions:\n");
                     for(SetupSession setupSession : instance.setupSessionManager().getValueCollection()){

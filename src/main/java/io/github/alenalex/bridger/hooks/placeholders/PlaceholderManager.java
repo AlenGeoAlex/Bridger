@@ -1,7 +1,7 @@
 package io.github.alenalex.bridger.hooks.placeholders;
 
 import io.github.alenalex.bridger.Bridger;
-import io.github.alenalex.bridger.models.player.UserData;
+import io.github.alenalex.bridger.models.player.BridgerUserData;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -38,28 +38,28 @@ public class PlaceholderManager extends PlaceholderExpansion {
     @Override
     public @Nullable String onPlaceholderRequest(Player player, @NotNull String params) {
         if(params.equals("player-wins")){
-            UserData data = plugin.gameHandler().userManager().of(player.getUniqueId());
+            BridgerUserData data = plugin.gameHandler().userManager().of(player.getUniqueId());
             if(data != null){
                 return String.valueOf(data.userStats().getWins());
             }else return null;
         }
 
         if(params.equals("player-games-played")){
-            UserData data = plugin.gameHandler().userManager().of(player.getUniqueId());
+            BridgerUserData data = plugin.gameHandler().userManager().of(player.getUniqueId());
             if(data != null){
                 return String.valueOf(data.userStats().getGamesPlayed());
             }else return null;
         }
 
         if(params.equals("player-blocks-placed")){
-            UserData data = plugin.gameHandler().userManager().of(player.getUniqueId());
+            BridgerUserData data = plugin.gameHandler().userManager().of(player.getUniqueId());
             if(data != null){
                 return String.valueOf(data.userStats().getBlocksPlaced());
             }else return null;
         }
 
         if(params.equals("player-best-time")){
-            UserData data = plugin.gameHandler().userManager().of(player.getUniqueId());
+            BridgerUserData data = plugin.gameHandler().userManager().of(player.getUniqueId());
             if(data != null){
                 return data.userStats().getBestTimeAsString();
             }else return null;

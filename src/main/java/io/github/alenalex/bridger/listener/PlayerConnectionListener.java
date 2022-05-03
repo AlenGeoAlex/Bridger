@@ -1,7 +1,7 @@
 package io.github.alenalex.bridger.listener;
 
 import io.github.alenalex.bridger.Bridger;
-import io.github.alenalex.bridger.models.player.UserData;
+import io.github.alenalex.bridger.models.player.BridgerUserData;
 import io.github.alenalex.bridger.variables.LangConfigurationPaths;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -42,11 +42,11 @@ public final class PlayerConnectionListener implements Listener {
     public void onPlayerDisconnect(PlayerQuitEvent event){
 
         final UUID playerUUID = event.getPlayer().getUniqueId();
-        final UserData userData = plugin.gameHandler().userManager().of(playerUUID);
+        final BridgerUserData bridgerUserData = plugin.gameHandler().userManager().of(playerUUID);
 
         event.setQuitMessage(plugin.configurationHandler().getConfigurationFile().getServerLeaveMessage());
 
-        if(userData == null){
+        if(bridgerUserData == null){
             plugin.getLogger().warning("Failed to save user " + event.getPlayer().getName()+". The data returned null from registry.");
             return;
         }
@@ -54,7 +54,7 @@ public final class PlayerConnectionListener implements Listener {
         plugin.gameHandler().onPlayerQuit(event.getPlayer());
         plugin.setupSessionManager().onPlayerQuit(playerUUID);
 
-        plugin.dataProvider().getDatabaseProvider().saveUserAsync(userData);
+        plugin.dataProvider().getDatabaseProvider().saveUserAsync(bridgerUserData);
 
         plugin.gameHandler().userManager().remove(playerUUID);
         plugin.gameHandler().userManager().removeBuildPermsToPlayer(playerUUID);

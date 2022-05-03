@@ -15,7 +15,7 @@ import io.github.alenalex.bridger.commands.island.IslandCommand;
 import io.github.alenalex.bridger.commands.player.LeaveCommand;
 import io.github.alenalex.bridger.commands.player.ScoreboardCommand;
 import io.github.alenalex.bridger.commands.setup.SessionCommand;
-import io.github.alenalex.bridger.models.player.UserData;
+import io.github.alenalex.bridger.models.player.BridgerUserData;
 import io.github.alenalex.bridger.variables.CommandCompletions;
 import io.github.alenalex.bridger.variables.LangConfigurationPaths;
 import org.bukkit.command.CommandSender;
@@ -42,7 +42,7 @@ public class CommandManager {
             public void resolve(@NotNull CommandSender sender, @NotNull MessageContext context) {
                 if(sender instanceof Player){
                     final Player player = ((Player) sender).getPlayer();
-                    final UserData data = plugin.gameHandler().userManager().of(player.getUniqueId());
+                    final BridgerUserData data = plugin.gameHandler().userManager().of(player.getUniqueId());
                     if(data == null)
                         return;
 
@@ -82,7 +82,7 @@ public class CommandManager {
                         .userManager()
                         .getValueCollection()
                         .stream()
-                        .map(UserData::getOptionalPlayer)
+                        .map(BridgerUserData::getOptionalPlayer)
                         .filter(Optional::isPresent)
                         .map(player -> player.get().getName())
                         .collect(Collectors.toList());

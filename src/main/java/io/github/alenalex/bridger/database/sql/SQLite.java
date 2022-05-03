@@ -3,10 +3,10 @@ package io.github.alenalex.bridger.database.sql;
 import io.github.alenalex.bridger.Bridger;
 import io.github.alenalex.bridger.abstracts.AbstractSQL;
 import io.github.alenalex.bridger.interfaces.IDatabaseProvider;
-import io.github.alenalex.bridger.models.player.UserCosmetics;
-import io.github.alenalex.bridger.models.player.UserData;
-import io.github.alenalex.bridger.models.player.UserSettings;
-import io.github.alenalex.bridger.models.player.UserStats;
+import io.github.alenalex.bridger.models.player.BridgerUserCosmetics;
+import io.github.alenalex.bridger.models.player.BridgerUserData;
+import io.github.alenalex.bridger.models.player.BridgerUserSettings;
+import io.github.alenalex.bridger.models.player.BridgerUserStats;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -79,10 +79,10 @@ public class SQLite extends AbstractSQL implements IDatabaseProvider {
     }
 
     @Override @Nullable
-    public CompletableFuture<UserData> loadOrRegisterUser(@NotNull UUID uuid) {
-        return CompletableFuture.supplyAsync(new Supplier<UserData>() {
+    public CompletableFuture<BridgerUserData> loadOrRegisterUser(@NotNull UUID uuid) {
+        return CompletableFuture.supplyAsync(new Supplier<BridgerUserData>() {
             @Override
-            public UserData get() {
+            public BridgerUserData get() {
 
                 if(!isConnected()) return null;
 
@@ -95,11 +95,11 @@ public class SQLite extends AbstractSQL implements IDatabaseProvider {
                             //Load user settings
                             final ResultSet settingsSet = userSettings.executeQuery();
 
-                            UserSettings settings = null;
+                            BridgerUserSettings settings = null;
                             if (settingsSet != null) {
 
                                 if (settingsSet.next()) {
-                                    settings = new UserSettings(
+                                    settings = new BridgerUserSettings(
                                             settingsSet.getString("language"),
                                             settingsSet.getString("particle"),
                                             settingsSet.getString("material"),
@@ -112,7 +112,7 @@ public class SQLite extends AbstractSQL implements IDatabaseProvider {
 
                             if (settings == null) {
 
-                                settings = UserSettings.DEFAULT;
+                                settings = BridgerUserSettings.DEFAULT;
                                 //This should mean that the user has never played before. So registering him to database
                                 final PreparedStatement insertSettings = connection.prepareStatement("INSERT INTO bridger_us_settings (uid, language, particle, material, firework ,scoreboard) VALUES (?, ?, ?, ?, ?, ?)");
                                 insertSettings.setString(1, uuid.toString());
@@ -130,10 +130,10 @@ public class SQLite extends AbstractSQL implements IDatabaseProvider {
                             //Load user data
                             userData.setString(1, uuid.toString());
                             final ResultSet dataSet = userData.executeQuery();
-                            UserStats stats = null;
+                            BridgerUserStats stats = null;
                             if (dataSet != null) {
                                 if (dataSet.next()) {
-                                    stats = new UserStats(
+                                    stats = new BridgerUserStats(
                                             dataSet.getInt("wins"),
                                             dataSet.getInt("blocks_placed"),
                                             dataSet.getInt("games_played"),
@@ -153,20 +153,20 @@ public class SQLite extends AbstractSQL implements IDatabaseProvider {
                                 insertData.executeUpdate();
 
                                 insertData.close();
-                                stats = UserStats.DEFAULT;
+                                stats = BridgerUserStats.DEFAULT;
                             }
                             userData.close();
 
                             //Load user cosmetics
-                            UserCosmetics cosmetics = null;
+                            BridgerUserCosmetics cosmetics = null;
                             userCos.setString(1, uuid.toString());
                             final ResultSet cosmeticsSet = userCos.executeQuery();
                             if (cosmeticsSet != null) {
                                 if (cosmeticsSet.next()) {
-                                    cosmetics = new UserCosmetics(
-                                            UserCosmetics.deserialize(cosmeticsSet.getString("fireworks")),
-                                            UserCosmetics.deserialize(cosmeticsSet.getString("particles")),
-                                            UserCosmetics.deserialize(cosmeticsSet.getString("materials"))
+                                    cosmetics = new BridgerUserCosmetics(
+                                            BridgerUserCosmetics.deserialize(cosmeticsSet.getString("fireworks")),
+                                            BridgerUserCosmetics.deserialize(cosmeticsSet.getString("particles")),
+                                            BridgerUserCosmetics.deserialize(cosmeticsSet.getString("materials"))
                                     );
                                 }
                                 cosmeticsSet.close();
@@ -176,17 +176,17 @@ public class SQLite extends AbstractSQL implements IDatabaseProvider {
                             if (cosmetics == null) {
                                 final PreparedStatement insertCosmetics = connection.prepareStatement("INSERT INTO bridger_user_cosmetics (uid, fireworks, particles, materials) VALUES (?, ?, ?, ?)");
                                 insertCosmetics.setString(1, uuid.toString());
-                                insertCosmetics.setString(2, UserCosmetics.serialize(UserCosmetics.DEFAULT.getFireWorkUnlocked()));
-                                insertCosmetics.setString(3, UserCosmetics.serialize(UserCosmetics.DEFAULT.getParticleUnlocked()));
-                                insertCosmetics.setString(4, UserCosmetics.serialize(UserCosmetics.DEFAULT.getMaterialUnlocked()));
+                                insertCosmetics.setString(2, BridgerUserCosmetics.serialize(BridgerUserCosmetics.DEFAULT.getFireWorkUnlocked()));
+                                insertCosmetics.setString(3, BridgerUserCosmetics.serialize(BridgerUserCosmetics.DEFAULT.getParticleUnlocked()));
+                                insertCosmetics.setString(4, BridgerUserCosmetics.serialize(BridgerUserCosmetics.DEFAULT.getMaterialUnlocked()));
 
                                 insertCosmetics.executeUpdate();
                                 insertCosmetics.close();
-                                cosmetics = UserCosmetics.DEFAULT;
+                                cosmetics = BridgerUserCosmetics.DEFAULT;
                             }
 
                             userCos.close();
-                            return new UserData(uuid, stats, settings, cosmetics);
+                            return new BridgerUserData(uuid, stats, settings, cosmetics);
                         }
                     }
                 } catch (Exception e) {
@@ -198,7 +198,7 @@ public class SQLite extends AbstractSQL implements IDatabaseProvider {
     }
 
     @Override
-    public void saveUserAsync(@NotNull UserData user) {
+    public void saveUserAsync(@NotNull BridgerUserData user) {
         getPlugin().getServer().getScheduler().runTaskAsynchronously(getPlugin(), new Runnable() {
             @Override
             public void run() {
@@ -226,9 +226,9 @@ public class SQLite extends AbstractSQL implements IDatabaseProvider {
 
                 try(final PreparedStatement updateCosmetics = connection.prepareStatement("UPDATE bridger_user_cosmetics SET fireworks = ?, particles = ?, materials = ? WHERE uid = ?");){
 
-                    updateCosmetics.setString(1, UserCosmetics.serialize(user.userCosmetics().getFireWorkUnlocked()));
-                    updateCosmetics.setString(2, UserCosmetics.serialize(user.userCosmetics().getParticleUnlocked()));
-                    updateCosmetics.setString(3, UserCosmetics.serialize(user.userCosmetics().getMaterialUnlocked()));
+                    updateCosmetics.setString(1, BridgerUserCosmetics.serialize(user.userCosmetics().getFireWorkUnlocked()));
+                    updateCosmetics.setString(2, BridgerUserCosmetics.serialize(user.userCosmetics().getParticleUnlocked()));
+                    updateCosmetics.setString(3, BridgerUserCosmetics.serialize(user.userCosmetics().getMaterialUnlocked()));
                     updateCosmetics.setString(4, user.getPlayerUID().toString());
 
                     updateCosmetics.executeUpdate();
@@ -243,7 +243,7 @@ public class SQLite extends AbstractSQL implements IDatabaseProvider {
     }
 
     @Override
-    public void saveAllUserSync(@NotNull List<UserData> users) {
+    public void saveAllUserSync(@NotNull List<BridgerUserData> users) {
         try(
                 final PreparedStatement updateSettings = connection.prepareStatement("UPDATE bridger_us_settings SET language = ?, particle = ?, material = ?, scoreboard = ? WHERE uid = ?;");
                 final PreparedStatement updateData = connection.prepareStatement("UPDATE bridger_user SET wins = ?, blocks_placed = ?, games_played = ?, best_time = ? WHERE uid = ?;");
@@ -251,7 +251,7 @@ public class SQLite extends AbstractSQL implements IDatabaseProvider {
         )  {
 
 
-            for (UserData user : users) {
+            for (BridgerUserData user : users) {
                 updateSettings.setString(1, user.userSettings().getLanguageAsString());
                 updateSettings.setString(2, user.userSettings().getParticleAsString());
                 updateSettings.setString(3, user.userSettings().getMaterialAsString());
@@ -268,9 +268,9 @@ public class SQLite extends AbstractSQL implements IDatabaseProvider {
 
                 updateData.executeUpdate();
 
-                cosmeticUpdate.setString(1, UserCosmetics.serialize(user.userCosmetics().getFireWorkUnlocked()));
-                cosmeticUpdate.setString(2, UserCosmetics.serialize(user.userCosmetics().getParticleUnlocked()));
-                cosmeticUpdate.setString(3, UserCosmetics.serialize(user.userCosmetics().getMaterialUnlocked()));
+                cosmeticUpdate.setString(1, BridgerUserCosmetics.serialize(user.userCosmetics().getFireWorkUnlocked()));
+                cosmeticUpdate.setString(2, BridgerUserCosmetics.serialize(user.userCosmetics().getParticleUnlocked()));
+                cosmeticUpdate.setString(3, BridgerUserCosmetics.serialize(user.userCosmetics().getMaterialUnlocked()));
                 cosmeticUpdate.setString(4, user.getPlayerUID().toString());
 
                 cosmeticUpdate.executeUpdate();
@@ -286,7 +286,7 @@ public class SQLite extends AbstractSQL implements IDatabaseProvider {
     }
 
     @Override
-    public void saveAllUsersAsync(@NotNull List<UserData> users) {
+    public void saveAllUsersAsync(@NotNull List<BridgerUserData> users) {
         getPlugin().getServer().getScheduler().runTaskAsynchronously(getPlugin(), new Runnable() {
             @Override
             public void run() {
@@ -298,7 +298,7 @@ public class SQLite extends AbstractSQL implements IDatabaseProvider {
 
 
 
-                    for (UserData user : users) {
+                    for (BridgerUserData user : users) {
                         updateSettings.setString(1, user.userSettings().getLanguageAsString());
                         updateSettings.setString(2, user.userSettings().getParticleAsString());
                         updateSettings.setString(3, user.userSettings().getMaterialAsString());
@@ -315,9 +315,9 @@ public class SQLite extends AbstractSQL implements IDatabaseProvider {
 
                         updateData.executeUpdate();
 
-                        cosmeticUpdate.setString(1, UserCosmetics.serialize(user.userCosmetics().getFireWorkUnlocked()));
-                        cosmeticUpdate.setString(2, UserCosmetics.serialize(user.userCosmetics().getParticleUnlocked()));
-                        cosmeticUpdate.setString(3, UserCosmetics.serialize(user.userCosmetics().getMaterialUnlocked()));
+                        cosmeticUpdate.setString(1, BridgerUserCosmetics.serialize(user.userCosmetics().getFireWorkUnlocked()));
+                        cosmeticUpdate.setString(2, BridgerUserCosmetics.serialize(user.userCosmetics().getParticleUnlocked()));
+                        cosmeticUpdate.setString(3, BridgerUserCosmetics.serialize(user.userCosmetics().getMaterialUnlocked()));
                         cosmeticUpdate.setString(4, user.getPlayerUID().toString());
 
                         cosmeticUpdate.executeUpdate();

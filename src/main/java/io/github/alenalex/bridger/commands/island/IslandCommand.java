@@ -6,8 +6,8 @@ import dev.triumphteam.cmd.core.annotation.Default;
 import dev.triumphteam.cmd.core.annotation.SubCommand;
 import io.github.alenalex.bridger.abstracts.AbstractCommand;
 import io.github.alenalex.bridger.manager.CommandManager;
-import io.github.alenalex.bridger.models.Island;
-import io.github.alenalex.bridger.models.player.UserData;
+import io.github.alenalex.bridger.models.BridgerIsland;
+import io.github.alenalex.bridger.models.player.BridgerUserData;
 import io.github.alenalex.bridger.variables.LangConfigurationPaths;
 import io.github.alenalex.bridger.variables.Permissions;
 import org.apache.commons.lang3.StringUtils;
@@ -47,10 +47,10 @@ public class IslandCommand extends AbstractCommand {
 
 
 
-        manager.plugin().gameHandler().toIsland(player).ifPresent(new Consumer<Island>() {
+        manager.plugin().gameHandler().toIsland(player).ifPresent(new Consumer<BridgerIsland>() {
             @Override
-            public void accept(Island island) {
-                manager.plugin().getLogger().info("Player has been loaded on to the island "+island.getIslandName());
+            public void accept(BridgerIsland bridgerIsland) {
+                manager.plugin().getLogger().info("Player has been loaded on to the island "+ bridgerIsland.getIslandName());
             }
         });
     }
@@ -68,20 +68,20 @@ public class IslandCommand extends AbstractCommand {
     @SubCommand("join")
     @Permission(Permissions.Commands.Island.BY_NAME)
     public void onJoinByNameCommand(@NotNull Player player, String islandName){
-        final UserData userData = manager.plugin().gameHandler().userManager().of(player.getUniqueId());
-        if(userData == null) {
+        final BridgerUserData bridgerUserData = manager.plugin().gameHandler().userManager().of(player.getUniqueId());
+        if(bridgerUserData == null) {
             return;
         }
 
         if(StringUtils.isBlank(islandName)){
-            manager.plugin().messagingUtils().sendTo(player, userData.userSettings().getLanguage().asComponent(LangConfigurationPaths.NOT_PROVIDED_VALID_ISLAND_NAME));
+            manager.plugin().messagingUtils().sendTo(player, bridgerUserData.userSettings().getLanguage().asComponent(LangConfigurationPaths.NOT_PROVIDED_VALID_ISLAND_NAME));
             return;
         }
 
-        manager.plugin().gameHandler().toIsland(player, userData ,islandName).ifPresent(new Consumer<Island>() {
+        manager.plugin().gameHandler().toIsland(player, bridgerUserData,islandName).ifPresent(new Consumer<BridgerIsland>() {
             @Override
-            public void accept(Island island) {
-                manager.plugin().getLogger().info("Player has been loaded on to the island "+island.getIslandName());
+            public void accept(BridgerIsland bridgerIsland) {
+                manager.plugin().getLogger().info("Player has been loaded on to the island "+ bridgerIsland.getIslandName());
             }
         });
     }
@@ -95,18 +95,18 @@ public class IslandCommand extends AbstractCommand {
     @SubCommand(value = "leave", alias = {"exit", "quit"})
     @Async
     public void onLeaveCommand(Player player){
-        final UserData userData = manager.plugin().gameHandler().userManager().of(player.getUniqueId());
-        if(userData == null) {
+        final BridgerUserData bridgerUserData = manager.plugin().gameHandler().userManager().of(player.getUniqueId());
+        if(bridgerUserData == null) {
             return;
         }
 
         if(!manager.plugin().gameHandler().isPlayerPlaying(player))
             return;
 
-        Island island = manager.plugin().gameHandler().getIslandOfPlayer(player).orElse(null);
-        if(island == null){
+        BridgerIsland bridgerIsland = manager.plugin().gameHandler().getIslandOfPlayer(player).orElse(null);
+        if(bridgerIsland == null){
             return;
         }
-        manager.plugin().gameHandler().playerQuitGame(player, userData);
+        manager.plugin().gameHandler().playerQuitGame(player, bridgerUserData);
     }
 }

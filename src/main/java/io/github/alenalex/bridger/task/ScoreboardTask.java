@@ -3,7 +3,7 @@ package io.github.alenalex.bridger.task;
 import io.github.alenalex.bridger.Bridger;
 import io.github.alenalex.bridger.abstracts.AbstractThreadTask;
 import io.github.alenalex.bridger.exceptions.IllegalThreadOperation;
-import io.github.alenalex.bridger.models.player.UserData;
+import io.github.alenalex.bridger.models.player.BridgerUserData;
 import io.github.alenalex.bridger.utils.adventure.MessageFormatter;
 import me.clip.placeholderapi.PlaceholderAPI;
 
@@ -28,7 +28,7 @@ public class ScoreboardTask extends AbstractThreadTask {
                     return;
 
                 try {
-                    for(UserData eachUser : getPlugin().gameHandler().userManager().getValueCollection()){
+                    for(BridgerUserData eachUser : getPlugin().gameHandler().userManager().getValueCollection()){
                         if(eachUser == null || eachUser.getPlayer() == null || (!eachUser.getPlayer().isOnline()))
                             continue;
 

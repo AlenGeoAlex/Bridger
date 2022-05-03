@@ -1,10 +1,10 @@
 package io.github.alenalex.bridger.handler;
 
 import io.github.alenalex.bridger.Bridger;
-import io.github.alenalex.bridger.manager.IslandManager;
-import io.github.alenalex.bridger.manager.UserManager;
-import io.github.alenalex.bridger.models.Island;
-import io.github.alenalex.bridger.models.player.UserData;
+import io.github.alenalex.bridger.manager.IslandManagerImpl;
+import io.github.alenalex.bridger.manager.UserManagerImpl;
+import io.github.alenalex.bridger.models.BridgerIsland;
+import io.github.alenalex.bridger.models.player.BridgerUserData;
 import io.github.alenalex.bridger.utils.adventure.internal.MessagePlaceholder;
 import io.github.alenalex.bridger.variables.LangConfigurationPaths;
 import org.bukkit.Bukkit;
@@ -19,24 +19,24 @@ import java.util.stream.Collectors;
 public class GameHandler {
 
     private final Bridger plugin;
-    private final IslandManager islandManager;
-    private final UserManager userManager;
+    private final IslandManagerImpl islandManagerImpl;
+    private final UserManagerImpl userManagerImpl;
 
     private final ConcurrentHashMap<UUID, String> activeBridges;
 
     public GameHandler(Bridger plugin) {
         this.plugin = plugin;
-        this.islandManager = new IslandManager(plugin);
-        this.userManager = new UserManager(plugin);
+        this.islandManagerImpl = new IslandManagerImpl(plugin);
+        this.userManagerImpl = new UserManagerImpl(plugin);
         this.activeBridges = new ConcurrentHashMap<>();
     }
 
-    public IslandManager islandManager(){
-        return islandManager;
+    public IslandManagerImpl islandManager(){
+        return islandManagerImpl;
     }
 
-    public UserManager userManager(){
-        return userManager;
+    public UserManagerImpl userManager(){
+        return userManagerImpl;
     }
 
     public Bridger getPlugin() {
@@ -51,12 +51,12 @@ public class GameHandler {
         return activeBridges.containsKey(pUID);
     }
 
-    public Optional<Island> getIslandOfPlayer(@NotNull Player player){
-        return Optional.ofNullable(islandManager.of(activeBridges.get(player.getUniqueId())));
+    public Optional<BridgerIsland> getIslandOfPlayer(@NotNull Player player){
+        return Optional.ofNullable(islandManagerImpl.of(activeBridges.get(player.getUniqueId())));
     }
 
-    public Optional<Island> getIslandOfPlayer(@NotNull UUID pUID){
-        return Optional.ofNullable(islandManager.of(activeBridges.get(pUID)));
+    public Optional<BridgerIsland> getIslandOfPlayer(@NotNull UUID pUID){
+        return Optional.ofNullable(islandManagerImpl.of(activeBridges.get(pUID)));
     }
 
     public Optional<Player> getPlayerOfIsland(@NotNull String islandName){
@@ -68,123 +68,123 @@ public class GameHandler {
                 .map(Bukkit::getPlayer);
     }
 
-    public Optional<Island> toIsland(@NotNull Player player, @NotNull UserData userData, String islandName){
+    public Optional<BridgerIsland> toIsland(@NotNull Player player, @NotNull BridgerUserData bridgerUserData, String islandName){
 
         if(activeBridges.containsKey(player.getUniqueId())){
-            plugin.messagingUtils().sendTo(player, userData.userSettings().getLanguage().asComponent(LangConfigurationPaths.ALREADY_HAVE_ISLAND));
+            plugin.messagingUtils().sendTo(player, bridgerUserData.userSettings().getLanguage().asComponent(LangConfigurationPaths.ALREADY_HAVE_ISLAND));
             return Optional.empty();
         }
 
-        Island island = islandManager.getFreeIslandByName(player, islandName).orElse(null);
+        BridgerIsland bridgerIsland = (BridgerIsland) islandManagerImpl.getFreeIslandByName(player, islandName).orElse(null);
 
-        if(island == null){
-            plugin.messagingUtils().sendTo(player, userData.userSettings().getLanguage().asComponent(LangConfigurationPaths.NO_FREE_ISLANDS));
+        if(bridgerIsland == null){
+            plugin.messagingUtils().sendTo(player, bridgerUserData.userSettings().getLanguage().asComponent(LangConfigurationPaths.NO_FREE_ISLANDS));
             return Optional.empty();
         }
 
-        island.setOccupied();
+        bridgerIsland.setOccupied();
 
-        activeBridges.put(player.getUniqueId(), island.getIslandName());
-        userData.userMatchCache().setPlayerAsIdle();
-        island.teleportToSpawn(player);
+        activeBridges.put(player.getUniqueId(), bridgerIsland.getIslandName());
+        bridgerUserData.userMatchCache().setPlayerAsIdle();
+        bridgerIsland.teleportToSpawn(player);
         plugin.messagingUtils().sendTo(player,
-                userData.userSettings().getLanguage().asComponent(LangConfigurationPaths.TELEPORTED_TO_ISLAND,
-                        MessagePlaceholder.of("%island-name%", island.getIslandName())
+                bridgerUserData.userSettings().getLanguage().asComponent(LangConfigurationPaths.TELEPORTED_TO_ISLAND,
+                        MessagePlaceholder.of("%island-name%", bridgerIsland.getIslandName())
                 ));
-        return Optional.of(island);
+        return Optional.of(bridgerIsland);
     }
 
-    public Optional<Island> toIsland(@NotNull Player player){
-        final UserData userData = userManager.of(player.getUniqueId());
-        if(userData == null) {
+    public Optional<BridgerIsland> toIsland(@NotNull Player player){
+        final BridgerUserData bridgerUserData = userManagerImpl.of(player.getUniqueId());
+        if(bridgerUserData == null) {
             plugin.getLogger().severe("Failed to get the data for user @"+getClass().getSimpleName()+"#toIsland(Player)");
             return Optional.empty();
         }
 
         if(activeBridges.containsKey(player.getUniqueId())){
-            plugin.messagingUtils().sendTo(player, userData.userSettings().getLanguage().asComponent(LangConfigurationPaths.ALREADY_HAVE_ISLAND));
+            plugin.messagingUtils().sendTo(player, bridgerUserData.userSettings().getLanguage().asComponent(LangConfigurationPaths.ALREADY_HAVE_ISLAND));
             return Optional.empty();
         }
 
-        Island island = islandManager.getAnyFreeIsland(player).orElse(null);
+        BridgerIsland bridgerIsland = (BridgerIsland) islandManagerImpl.getAnyFreeIsland(player).orElse(null);
 
-        if(island == null){
-            plugin.messagingUtils().sendTo(player, userData.userSettings().getLanguage().asComponent(LangConfigurationPaths.NO_FREE_ISLANDS));
+        if(bridgerIsland == null){
+            plugin.messagingUtils().sendTo(player, bridgerUserData.userSettings().getLanguage().asComponent(LangConfigurationPaths.NO_FREE_ISLANDS));
             return Optional.empty();
         }
 
-        island.setOccupied();
+        bridgerIsland.setOccupied();
 
-        activeBridges.put(player.getUniqueId(), island.getIslandName());
-        userData.userMatchCache().setPlayerAsIdle();
-        island.teleportToSpawn(player);
+        activeBridges.put(player.getUniqueId(), bridgerIsland.getIslandName());
+        bridgerUserData.userMatchCache().setPlayerAsIdle();
+        bridgerIsland.teleportToSpawn(player);
         plugin.messagingUtils().sendTo(player,
-                userData.userSettings().getLanguage().asComponent(LangConfigurationPaths.TELEPORTED_TO_ISLAND,
-                MessagePlaceholder.of("%island-name%", island.getIslandName())
+                bridgerUserData.userSettings().getLanguage().asComponent(LangConfigurationPaths.TELEPORTED_TO_ISLAND,
+                MessagePlaceholder.of("%island-name%", bridgerIsland.getIslandName())
                 ));
-        return Optional.of(island);
+        return Optional.of(bridgerIsland);
     }
 
-    public void toIsland(@NotNull Player player, @NotNull UserData userData, @NotNull Island island){
+    public void toIsland(@NotNull Player player, @NotNull BridgerUserData bridgerUserData, @NotNull BridgerIsland bridgerIsland){
         if(activeBridges.containsKey(player.getUniqueId())){
-            plugin.messagingUtils().sendTo(player, userData.userSettings().getLanguage().asComponent(LangConfigurationPaths.ALREADY_HAVE_ISLAND));
+            plugin.messagingUtils().sendTo(player, bridgerUserData.userSettings().getLanguage().asComponent(LangConfigurationPaths.ALREADY_HAVE_ISLAND));
             return;
         }
 
-        island.setOccupied();
+        bridgerIsland.setOccupied();
 
-        activeBridges.put(player.getUniqueId(), island.getIslandName());
-        userData.userMatchCache().setPlayerAsIdle();
-        island.teleportToSpawn(player);
+        activeBridges.put(player.getUniqueId(), bridgerIsland.getIslandName());
+        bridgerUserData.userMatchCache().setPlayerAsIdle();
+        bridgerIsland.teleportToSpawn(player);
         plugin.messagingUtils().sendTo(player,
-                userData.userSettings().getLanguage().asComponent(LangConfigurationPaths.TELEPORTED_TO_ISLAND,
-                        MessagePlaceholder.of("%island-name%", island.getIslandName())
+                bridgerUserData.userSettings().getLanguage().asComponent(LangConfigurationPaths.TELEPORTED_TO_ISLAND,
+                        MessagePlaceholder.of("%island-name%", bridgerIsland.getIslandName())
                 ));
     }
 
-    public void playerFirstBlock(@NotNull UserData userData){
-        userData.userMatchCache().setPlayerAsPlaying();
+    public void playerFirstBlock(@NotNull BridgerUserData bridgerUserData){
+        bridgerUserData.userMatchCache().setPlayerAsPlaying();
     }
 
     private void playerRestartGame(@NotNull Player player){
         if(!activeBridges.containsKey(player.getUniqueId()))
             return;
 
-        final UserData userData = userManager.of(player.getUniqueId());
-        if(userData == null) {
+        final BridgerUserData bridgerUserData = userManagerImpl.of(player.getUniqueId());
+        if(bridgerUserData == null) {
             plugin.getLogger().severe("Failed to get the data for user @"+getClass().getSimpleName()+"#playerRestartGame(Player)");
             return;
         }
 
-        final Island island = islandManager.of(activeBridges.get(player.getUniqueId()));
-        island.teleportToSpawn(player);
-        UserManager.setIslandItemsOnPlayer(player);
-        island.setResetting();
-        userData.userMatchCache().resetPlacedBlocks();
-        island.setIdle();
-        userData.userMatchCache().setPlayerAsIdle();
+        final BridgerIsland bridgerIsland = islandManagerImpl.of(activeBridges.get(player.getUniqueId()));
+        bridgerIsland.teleportToSpawn(player);
+        UserManagerImpl.setIslandItemsOnPlayer(player);
+        bridgerIsland.setResetting();
+        bridgerUserData.userMatchCache().resetPlacedBlocks();
+        bridgerIsland.setIdle();
+        bridgerUserData.userMatchCache().setPlayerAsIdle();
     }
 
     public void playerCompleteGame(@NotNull Player player, long completeTime){
         if(!activeBridges.containsKey(player.getUniqueId()))
             return;
 
-        final UserData userData = userManager.of(player.getUniqueId());
-        if(userData == null) {
+        final BridgerUserData bridgerUserData = userManagerImpl.of(player.getUniqueId());
+        if(bridgerUserData == null) {
             plugin.getLogger().severe("Failed to get the data for user @"+getClass().getSimpleName()+"#playerRestartGame(Player)");
             return;
         }
 
-        final Island island = islandManager.of(activeBridges.get(player.getUniqueId()));
-        userData.userStats().addAsCompletedGame();
-        userData.userMatchCache().setCurrentTime(completeTime - userData.userMatchCache().getStartTime());
+        final BridgerIsland bridgerIsland = islandManagerImpl.of(activeBridges.get(player.getUniqueId()));
+        bridgerUserData.userStats().addAsCompletedGame();
+        bridgerUserData.userMatchCache().setCurrentTime(completeTime - bridgerUserData.userMatchCache().getStartTime());
 
-        if(userData.userMatchCache().getCurrentTime() < userData.userStats().getBestTime()){
-            final String oldBestTime = userData.userStats().getBestTimeAsString();
-            userData.userStats().setBestTime(userData.userMatchCache().getCurrentTime());
-            final String newBestTime = userData.userStats().getBestTimeAsString();
-            userData.userSettings().getLanguage().asComponent(LangConfigurationPaths.NEW_BEST_TIME_TO_PLAYER,
-                    MessagePlaceholder.of("%time%",userData.userStats().getBestTime())
+        if(bridgerUserData.userMatchCache().getCurrentTime() < bridgerUserData.userStats().getBestTime()){
+            final String oldBestTime = bridgerUserData.userStats().getBestTimeAsString();
+            bridgerUserData.userStats().setBestTime(bridgerUserData.userMatchCache().getCurrentTime());
+            final String newBestTime = bridgerUserData.userStats().getBestTimeAsString();
+            bridgerUserData.userSettings().getLanguage().asComponent(LangConfigurationPaths.NEW_BEST_TIME_TO_PLAYER,
+                    MessagePlaceholder.of("%time%", bridgerUserData.userStats().getBestTime())
             );
 
             if(plugin.configurationHandler().getConfigurationFile().isBroadcastNewBestTimeToAllPlayersEnabled()){
@@ -192,8 +192,8 @@ public class GameHandler {
                     @Override
                     public void run() {
 
-                        for(UserData serverPlayer : userManager.getValueCollection()){
-                            if(serverPlayer.getPlayerUID().equals(userData.getPlayerUID()))
+                        for(BridgerUserData serverPlayer : userManagerImpl.getValueCollection()){
+                            if(serverPlayer.getPlayerUID().equals(bridgerUserData.getPlayerUID()))
                                 continue;
 
                             plugin.messagingUtils().sendTo(player,
@@ -208,12 +208,12 @@ public class GameHandler {
                 }.runTaskAsynchronously(plugin);
             }
         }
-        if(island.getRewards() > 0){
-            plugin.pluginHookManager().getEconomyProvider().deposit(player, island.getRewards());
+        if(bridgerIsland.getRewards() > 0){
+            plugin.pluginHookManager().getEconomyProvider().deposit(player, bridgerIsland.getRewards());
         }
         plugin.messagingUtils().sendTo(player,
-                userData.userSettings().getLanguage().asComponent(LangConfigurationPaths.COMPLETED_GAME,
-                        MessagePlaceholder.of("%time%", userData.userMatchCache().getCurrentTimeAsString())
+                bridgerUserData.userSettings().getLanguage().asComponent(LangConfigurationPaths.COMPLETED_GAME,
+                        MessagePlaceholder.of("%time%", bridgerUserData.userMatchCache().getCurrentTimeAsString())
                         )
                 );
         playerRestartGame(player);
@@ -223,44 +223,44 @@ public class GameHandler {
         if(!activeBridges.containsKey(player.getUniqueId()))
             return;
 
-        final UserData userData = userManager.of(player.getUniqueId());
-        if(userData == null) {
+        final BridgerUserData bridgerUserData = userManagerImpl.of(player.getUniqueId());
+        if(bridgerUserData == null) {
             plugin.getLogger().severe("Failed to get the data for user @"+getClass().getSimpleName()+"#playerRestartGame(Player)");
             return;
         }
 
-        final Island island = islandManager.of(activeBridges.get(player.getUniqueId()));
-        userData.userStats().addGame();
+        final BridgerIsland bridgerIsland = islandManagerImpl.of(activeBridges.get(player.getUniqueId()));
+        bridgerUserData.userStats().addGame();
         playerRestartGame(player);;
     }
 
-    public void playerQuitGame(Player player, UserData userData){
+    public void playerQuitGame(Player player, BridgerUserData bridgerUserData){
         if(!activeBridges.containsKey(player.getUniqueId()))
             return;
 
-        UserManager.handleLobbyTransport(player);
+        UserManagerImpl.handleLobbyTransport(player);
 
-        final Island island = islandManager.of(activeBridges.get(player.getUniqueId()));
-        islandManager.removeSpectators(island);
-        removePlayerFromIsland(userData, island);
-        plugin.messagingUtils().sendTo(player, userData.userSettings().getLanguage().asComponent(LangConfigurationPaths.PLAYER_LEAVE_GAME));
+        final BridgerIsland bridgerIsland = islandManagerImpl.of(activeBridges.get(player.getUniqueId()));
+        islandManagerImpl.removeSpectators(bridgerIsland);
+        removePlayerFromIsland(bridgerUserData, bridgerIsland);
+        plugin.messagingUtils().sendTo(player, bridgerUserData.userSettings().getLanguage().asComponent(LangConfigurationPaths.PLAYER_LEAVE_GAME));
     }
 
     public void onPlayerQuit(Player player){
         if(!activeBridges.containsKey(player.getUniqueId()))
             return;
 
-        final UserData userData = userManager.of(player.getUniqueId());
-        if(userData == null) {
+        final BridgerUserData bridgerUserData = userManagerImpl.of(player.getUniqueId());
+        if(bridgerUserData == null) {
             plugin.getLogger().severe("Failed to get the data for user @"+getClass().getSimpleName()+"#playerQuitServer(Player)");
             return;
         }
 
-        final Island island = islandManager.of(activeBridges.get(player.getUniqueId()));
-        islandManager.removeSpectators(island);
-        island.setResetting();
-        userData.userMatchCache().forceResetPlacedBlocks();
-        island.setIdle();
+        final BridgerIsland bridgerIsland = islandManagerImpl.of(activeBridges.get(player.getUniqueId()));
+        islandManagerImpl.removeSpectators(bridgerIsland);
+        bridgerIsland.setResetting();
+        bridgerUserData.userMatchCache().forceResetPlacedBlocks();
+        bridgerIsland.setIdle();
         activeBridges.remove(player.getUniqueId());
     }
 
@@ -268,25 +268,25 @@ public class GameHandler {
         if(!activeBridges.containsKey(player.getUniqueId()))
             return;
 
-        final UserData userData = userManager.of(player.getUniqueId());
-        if(userData == null) {
+        final BridgerUserData bridgerUserData = userManagerImpl.of(player.getUniqueId());
+        if(bridgerUserData == null) {
             plugin.getLogger().severe("Failed to get the data for user @"+getClass().getSimpleName()+"#kickPlayerFromIsland(Player)");
             return;
         }
-        UserManager.handleLobbyTransport(player);
+        UserManagerImpl.handleLobbyTransport(player);
 
-        final Island island = islandManager.of(activeBridges.get(player.getUniqueId()));
-        removePlayerFromIsland(userData, island);
+        final BridgerIsland bridgerIsland = islandManagerImpl.of(activeBridges.get(player.getUniqueId()));
+        removePlayerFromIsland(bridgerUserData, bridgerIsland);
         //TODO
 
     }
 
-    private void removePlayerFromIsland(@NotNull UserData userData, @NotNull Island island){
-        island.setResetting();
-        userData.userMatchCache().resetPlacedBlocks();
-        userData.userMatchCache().setPlayerAsLobby();
-        activeBridges.remove(userData.getPlayerUID());
-        island.setIdle();
+    private void removePlayerFromIsland(@NotNull BridgerUserData bridgerUserData, @NotNull BridgerIsland bridgerIsland){
+        bridgerIsland.setResetting();
+        bridgerUserData.userMatchCache().resetPlacedBlocks();
+        bridgerUserData.userMatchCache().setPlayerAsLobby();
+        activeBridges.remove(bridgerUserData.getPlayerUID());
+        bridgerIsland.setIdle();
     }
 
     public List<String> getActivePlayerNames(){

@@ -2,7 +2,7 @@ package io.github.alenalex.bridger.manager;
 
 import io.github.alenalex.bridger.Bridger;
 import io.github.alenalex.bridger.abstracts.AbstractRegistry;
-import io.github.alenalex.bridger.models.Island;
+import io.github.alenalex.bridger.models.BridgerIsland;
 import io.github.alenalex.bridger.models.setup.SetupSession;
 import io.github.alenalex.bridger.utils.adventure.internal.MessagePlaceholder;
 import io.github.alenalex.bridger.variables.PluginResponses;
@@ -68,13 +68,13 @@ public class SetupSessionManager extends AbstractRegistry<UUID, SetupSession> {
             return;
 
         final SetupSession setupSession = of(player.getUniqueId());
-        final Island island = setupSession.asIsland();
+        final BridgerIsland bridgerIsland = setupSession.asIsland();
         final Map<String, Object> islandData = setupSession.asSerializedSession();
 
-        plugin.gameHandler().islandManager().registerIsland(island);
-        plugin.configurationHandler().getIslandConfiguration().setIslandData(island.getIslandName(), islandData);
+        plugin.gameHandler().islandManager().registerIsland(bridgerIsland);
+        plugin.configurationHandler().getIslandConfiguration().setIslandData(bridgerIsland.getIslandName(), islandData);
         plugin.messagingUtils().sendTo(player, PluginResponses.SetupSession.SUCCESS
-            ,MessagePlaceholder.of("%name%", island.getIslandName())
+            ,MessagePlaceholder.of("%name%", bridgerIsland.getIslandName())
         );
         remove(player.getUniqueId());
         sessionRemoveConfirmList.remove(player.getUniqueId());

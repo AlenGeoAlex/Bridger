@@ -7,8 +7,8 @@ import dev.triumphteam.gui.guis.GuiItem;
 import io.github.alenalex.bridger.abstracts.AbstractDynamicGUI;
 import io.github.alenalex.bridger.gui.config.UIItem;
 import io.github.alenalex.bridger.handler.UIHandler;
-import io.github.alenalex.bridger.models.player.UserData;
-import io.github.alenalex.bridger.models.player.UserMatchCache;
+import io.github.alenalex.bridger.models.player.BridgerUserData;
+import io.github.alenalex.bridger.models.player.BridgerUserMatchCache;
 import io.github.alenalex.bridger.utils.adventure.internal.MessagePlaceholder;
 import io.github.alenalex.bridger.variables.LangConfigurationPaths;
 import org.apache.commons.lang3.text.WordUtils;
@@ -32,13 +32,13 @@ public class FireworkShop extends AbstractDynamicGUI<Gui> {
             @Override
             public Gui get() {
                 try {
-                    final UserData data = handler.plugin().gameHandler().userManager().getOrDefault(player.getUniqueId(), null);
+                    final BridgerUserData data = handler.plugin().gameHandler().userManager().getOrDefault(player.getUniqueId(), null);
                     if (data == null) {
                         handler.plugin().getLogger().warning("User data is null for player " + player.getName()+", at prepGui()");
                         return null;
                     }
 
-                    if(!(data.userMatchCache().getStatus() == UserMatchCache.Status.LOBBY)){
+                    if(!(data.userMatchCache().getStatus() == BridgerUserMatchCache.Status.LOBBY)){
                         handler.plugin().messagingUtils().sendTo(
                                 player,
                                 data.userSettings().getLanguage().asComponent(LangConfigurationPaths.ACTIVITY_BLOCKED)

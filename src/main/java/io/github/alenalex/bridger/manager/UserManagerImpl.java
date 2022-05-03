@@ -2,20 +2,23 @@ package io.github.alenalex.bridger.manager;
 
 import io.github.alenalex.bridger.Bridger;
 import io.github.alenalex.bridger.abstracts.AbstractRegistry;
+import io.github.alenalex.bridger.api.manager.UserManager;
+import io.github.alenalex.bridger.api.models.player.UserData;
 import io.github.alenalex.bridger.gui.config.HotBarConfig;
-import io.github.alenalex.bridger.models.player.UserData;
+import io.github.alenalex.bridger.models.player.BridgerUserData;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
-public class UserManager extends AbstractRegistry<UUID, UserData> {
+public class UserManagerImpl extends AbstractRegistry<UUID, BridgerUserData> implements UserManager {
 
     private final List<UUID> allowBuildOnLobbies;
-    public UserManager(Bridger plugin) {
+    public UserManagerImpl(Bridger plugin) {
         super(plugin);
         this.allowBuildOnLobbies = new ArrayList<>();
     }
@@ -76,5 +79,13 @@ public class UserManager extends AbstractRegistry<UUID, UserData> {
         this.allowBuildOnLobbies.remove(playerUID);
     }
 
+    @Override
+    public Optional<UserData> ofPlayer(@NotNull Player player) {
+        return Optional.ofNullable(of(player.getUniqueId()));
+    }
 
+    @Override
+    public Optional<UserData> ofPlayer(@NotNull UUID uuid) {
+        return Optional.ofNullable(of(uuid));
+    }
 }

@@ -1,6 +1,8 @@
 package io.github.alenalex.bridger;
 
 import com.google.gson.Gson;
+import io.github.alenalex.bridger.api.BridgerAPI;
+import io.github.alenalex.bridger.api.exceptions.IllegalAPIAccess;
 import io.github.alenalex.bridger.database.DataProvider;
 import io.github.alenalex.bridger.exceptions.FailedLocaleLoading;
 import io.github.alenalex.bridger.exceptions.IllegalInitializationException;
@@ -28,12 +30,21 @@ public final class Bridger extends JavaPlugin {
         return PLUGIN_RELOADING;
     }
 
+    private static BridgerAPI API = null;
+
     private static final Random RANDOM;
     private static final Gson GSON;
 
     static {
         RANDOM = new Random(System.currentTimeMillis());
         GSON = new Gson();
+    }
+
+    public static BridgerAPI api() throws IllegalAPIAccess {
+        if(API == null)
+            throw new IllegalAPIAccess("The api hasn't been initialized!");
+
+        return API;
     }
 
     public static Random randomInstance() {
@@ -78,6 +89,8 @@ public final class Bridger extends JavaPlugin {
         this.setupSessionManager = new SetupSessionManager(this);
         this.trackableTask = new TrackableTask(this);
         this.scoreboardTask = new ScoreboardTask(this);
+
+        API = new BridgerAPIImpl(this);
 
         if(!pluginHookManager.validateMinHookRequirements()) {
             getServer().getPluginManager().disablePlugin(this);

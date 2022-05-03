@@ -2,7 +2,8 @@ package io.github.alenalex.bridger.models;
 
 
 import io.github.alenalex.bridger.Bridger;
-import io.github.alenalex.bridger.variables.IslandStatus;
+import io.github.alenalex.bridger.api.models.Island;
+import io.github.alenalex.bridger.api.IslandStatus;
 import io.github.alenalex.bridger.variables.Materials;
 import net.minecraft.server.v1_8_R3.BlockPosition;
 import net.minecraft.server.v1_8_R3.EntityPlayer;
@@ -23,7 +24,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
-public final class Island {
+public final class BridgerIsland implements Island {
 
     public static final String PLACED_BLOCK = "placed_block";
 
@@ -44,7 +45,7 @@ public final class Island {
 
     private final List<UUID> spectators;
 
-    public Island(@NotNull String islandName, String permission,@NotNull Location spawnLocation,@NotNull Location endLocation,@NotNull Location pos1,@NotNull Location pos2, int minTimeRequired, int minBlocksRequired, double joinCost, double rewards) {
+    public BridgerIsland(@NotNull String islandName, String permission, @NotNull Location spawnLocation, @NotNull Location endLocation, @NotNull Location pos1, @NotNull Location pos2, int minTimeRequired, int minBlocksRequired, double joinCost, double rewards) {
         this.islandName = islandName;
         this.permission = permission;
         this.spawnLocation = spawnLocation;
@@ -61,7 +62,7 @@ public final class Island {
         this.spectators = new ArrayList<>();
     }
 
-    public Island(@NotNull String islandName, String permission,@NotNull Location spawnLocation,@NotNull Location endLocation,@NotNull Location pos1,@NotNull Location pos2, long minTimeRequired, int minBlocksRequired, double joinCost, double rewards) {
+    public BridgerIsland(@NotNull String islandName, String permission, @NotNull Location spawnLocation, @NotNull Location endLocation, @NotNull Location pos1, @NotNull Location pos2, long minTimeRequired, int minBlocksRequired, double joinCost, double rewards) {
         this.islandName = islandName;
         this.permission = permission;
         this.spawnLocation = spawnLocation;
@@ -78,42 +79,52 @@ public final class Island {
         this.spectators = new ArrayList<>();
     }
 
+    @Override
     public String getIslandName() {
         return islandName;
     }
 
+    @Override
     public String getPermission() {
         return permission;
     }
 
+    @Override
     public Location getSpawnLocation() {
         return spawnLocation;
     }
 
+    @Override
     public Location getEndLocation() {
         return endLocation;
     }
 
+    @Override
     public Location getPos1() {
         return pos1;
     }
 
+    @Override
     public Location getPos2() {
         return pos2;
     }
 
+    @Override
     public long getMinTimeRequired() {
         return minTimeRequired;
     }
 
+    @Override
     public int getMinBlocksRequired() {
         return minBlocksRequired;
     }
 
+    @Override
     public boolean isEnabled() {
         return enabled;
     }
 
+    @Override
     public IslandStatus getStatus() {
         return status;
     }
@@ -138,6 +149,7 @@ public final class Island {
         return placedBlocks > minBlocksRequired && TimeUnit.MILLISECONDS.toSeconds(timeTaken) > minTimeRequired;
     }
 
+    @Override
     public boolean hasPermission(@NotNull Player player) {
         if(StringUtils.isBlank(permission))
             return true;
@@ -145,26 +157,32 @@ public final class Island {
         return player.hasPermission(permission);
     }
 
+    @Override
     public boolean isIslandIdle() {
         return status == IslandStatus.IDLE;
     }
 
+    @Override
     public boolean isIslandOccupied() {
         return status == IslandStatus.OCCUPIED;
     }
 
+    @Override
     public boolean isIslandResetting() {
         return status == IslandStatus.RESETTING;
     }
 
+    @Override
     public World getIslandWorld() {
         return spawnLocation.getWorld();
     }
 
+    @Override
     public void teleportToSpawn(Player player) {
         player.teleport(spawnLocation);
     }
 
+    @Override
     public List<UUID> getSpectators() {
         return spectators;
     }
@@ -185,8 +203,8 @@ public final class Island {
                 Bukkit.getLogger().info("The island " + islandName + " has been prepared for resetting.");
                 getPossibleBlocksToRemove().thenAccept(blocks -> {
                     blocks.forEachRemaining(block -> {
-                        if(block.hasMetadata(Island.PLACED_BLOCK))
-                            block.removeMetadata(Island.PLACED_BLOCK, Bridger.instance());
+                        if(block.hasMetadata(BridgerIsland.PLACED_BLOCK))
+                            block.removeMetadata(BridgerIsland.PLACED_BLOCK, Bridger.instance());
 
                         net.minecraft.server.v1_8_R3.World nmsWorld = ((CraftWorld) getIslandWorld()).getHandle();
                         net.minecraft.server.v1_8_R3.Chunk nmsChunk = nmsWorld.getChunkAt(block.getX() >> 4, block.getZ() >> 4);
@@ -243,6 +261,7 @@ public final class Island {
         });
     }
 
+    @Override
     public boolean canPlayerJoinTheIsland(@NotNull Player player){
         return isEnabled()
                 && hasPermission(player)
@@ -250,10 +269,12 @@ public final class Island {
                 && Bridger.instance().pluginHookManager().getEconomyProvider().hasBalance(player, joinCost);
     }
 
+    @Override
     public double getJoinCost() {
         return joinCost;
     }
 
+    @Override
     public double getRewards() {
         return rewards;
     }

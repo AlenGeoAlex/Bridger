@@ -2,15 +2,15 @@ package io.github.alenalex.bridger.models.player;
 
 import com.google.common.base.Objects;
 import io.github.alenalex.bridger.Bridger;
+import io.github.alenalex.bridger.api.models.player.UserStats;
 import io.github.alenalex.bridger.utils.StringUtils;
-import org.apache.commons.lang3.time.DurationFormatUtils;
 
-public final class UserStats {
+public final class BridgerUserStats implements UserStats {
 
-    public static UserStats DEFAULT;
+    public static BridgerUserStats DEFAULT;
 
     static {
-        DEFAULT = new UserStats(0, 0, 0, 0);
+        DEFAULT = new BridgerUserStats(0, 0, 0, 0);
     }
 
 
@@ -19,25 +19,29 @@ public final class UserStats {
     private int gamesPlayed;
     private long bestTime;
 
-    public UserStats(int wins, int blocksPlaced, int gamesPlayed, long bestTime) {
+    public BridgerUserStats(int wins, int blocksPlaced, int gamesPlayed, long bestTime) {
         this.wins = wins;
         this.blocksPlaced = blocksPlaced;
         this.gamesPlayed = gamesPlayed;
         this.bestTime = bestTime;
     }
 
+    @Override
     public int getWins() {
         return wins;
     }
 
+    @Override
     public int getBlocksPlaced() {
         return blocksPlaced;
     }
 
+    @Override
     public int getGamesPlayed() {
         return gamesPlayed;
     }
 
+    @Override
     public long getBestTime() {
         return bestTime;
     }
@@ -91,8 +95,8 @@ public final class UserStats {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        UserStats userStats = (UserStats) o;
-        return wins == userStats.wins && blocksPlaced == userStats.blocksPlaced && gamesPlayed == userStats.gamesPlayed && bestTime == userStats.bestTime;
+        BridgerUserStats bridgerUserStats = (BridgerUserStats) o;
+        return wins == bridgerUserStats.wins && blocksPlaced == bridgerUserStats.blocksPlaced && gamesPlayed == bridgerUserStats.gamesPlayed && bestTime == bridgerUserStats.bestTime;
     }
 
     @Override

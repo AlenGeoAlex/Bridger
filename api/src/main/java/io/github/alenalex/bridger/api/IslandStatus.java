@@ -1,4 +1,4 @@
-package io.github.alenalex.bridger.variables;
+package io.github.alenalex.bridger.api;
 
 public enum IslandStatus {
     IDLE,

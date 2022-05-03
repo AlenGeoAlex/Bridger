@@ -1,9 +1,9 @@
 package io.github.alenalex.bridger.listener;
 
 import io.github.alenalex.bridger.Bridger;
-import io.github.alenalex.bridger.manager.UserManager;
-import io.github.alenalex.bridger.models.Island;
-import io.github.alenalex.bridger.models.player.UserData;
+import io.github.alenalex.bridger.manager.UserManagerImpl;
+import io.github.alenalex.bridger.models.BridgerIsland;
+import io.github.alenalex.bridger.models.player.BridgerUserData;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -24,18 +24,18 @@ public final class PlayerDeathListener implements Listener {
         event.setDeathMessage(null);
 
         final Player player = event.getEntity();
-        final UserData userData = plugin.gameHandler().userManager().of(player.getUniqueId());
+        final BridgerUserData bridgerUserData = plugin.gameHandler().userManager().of(player.getUniqueId());
 
-        if(userData == null)
+        if(bridgerUserData == null)
             return;
 
-        switch (userData.userMatchCache().getStatus()) {
+        switch (bridgerUserData.userMatchCache().getStatus()) {
             case LOBBY:{
-                UserManager.handleLobbyTransport(player);
+                UserManagerImpl.handleLobbyTransport(player);
                 break;
             }
             case SPECTATING:{
-                plugin.gameHandler().islandManager().stopSpectating(player, userData);
+                plugin.gameHandler().islandManager().stopSpectating(player, bridgerUserData);
                 break;
             }
             case PLAYING:{
@@ -45,13 +45,13 @@ public final class PlayerDeathListener implements Listener {
             }
             case IDLE:{
                 player.spigot().respawn();
-                Island island = plugin.gameHandler().getIslandOfPlayer(player).orElse(null);
-                if(island == null)
+                BridgerIsland bridgerIsland = plugin.gameHandler().getIslandOfPlayer(player).orElse(null);
+                if(bridgerIsland == null)
                     return;
                 plugin.getServer().getScheduler().runTaskLater(plugin, new Runnable() {
                     @Override
                     public void run() {
-                        island.teleportToSpawn(player);
+                        bridgerIsland.teleportToSpawn(player);
                     }
                 }, 10L);
                 break;

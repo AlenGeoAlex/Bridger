@@ -1,7 +1,7 @@
 package io.github.alenalex.bridger.listener;
 
 import io.github.alenalex.bridger.Bridger;
-import io.github.alenalex.bridger.models.player.UserData;
+import io.github.alenalex.bridger.models.player.BridgerUserData;
 import io.github.alenalex.bridger.variables.Permissions;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -22,9 +22,9 @@ public final class PlayerCraftingListener implements Listener {
             return;
 
         final Player player = (Player) event.getWhoClicked();
-        final UserData userData = plugin.gameHandler().userManager().of(player.getUniqueId());
+        final BridgerUserData bridgerUserData = plugin.gameHandler().userManager().of(player.getUniqueId());
 
-        if(userData == null)
+        if(bridgerUserData == null)
             return;
 
         if(player.hasPermission(Permissions.Admin.ADMIN_CRAFTING))

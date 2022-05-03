@@ -2,6 +2,7 @@ package io.github.alenalex.bridger.models.player;
 
 import com.google.common.base.Objects;
 import io.github.alenalex.bridger.Bridger;
+import io.github.alenalex.bridger.api.models.player.UserSettings;
 import io.github.alenalex.bridger.configs.MessageConfiguration;
 import io.github.alenalex.bridger.variables.Fireworks;
 import io.github.alenalex.bridger.variables.Materials;
@@ -12,12 +13,12 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
-public final class UserSettings {
+public final class BridgerUserSettings implements UserSettings {
 
-    public static final UserSettings DEFAULT;
+    public static final BridgerUserSettings DEFAULT;
 
     static {
-        DEFAULT = new UserSettings("en", null, null, null ,true);
+        DEFAULT = new BridgerUserSettings("en", null, null, null ,true);
     }
 
     @NotNull private String language;
@@ -29,7 +30,7 @@ public final class UserSettings {
 
     private ItemStack currentBlock;
 
-    public UserSettings(@NotNull String language, String material, String particle, String fireWork, boolean scoreboardEnabled) {
+    public BridgerUserSettings(@NotNull String language, String material, String particle, String fireWork, boolean scoreboardEnabled) {
         this.language = language;
         this.material = material;
         this.particle = particle;
@@ -39,7 +40,7 @@ public final class UserSettings {
         this.currentBlock = Materials.getItemStackByMaterialName(material);
     }
 
-    public UserSettings(String material, String particle, String fireWork, boolean scoreboardEnabled) {
+    public BridgerUserSettings(String material, String particle, String fireWork, boolean scoreboardEnabled) {
         this.language = "en";
         this.material = material;
         this.particle = particle;
@@ -49,6 +50,7 @@ public final class UserSettings {
         this.currentBlock = Materials.getItemStackByMaterialName(material);
     }
 
+    @Override
     public String getLanguageAsString() {
         return language;
     }
@@ -57,30 +59,37 @@ public final class UserSettings {
         return Bridger.instance().localeManager().getOrDefault(language);
     }
 
+    @Override
     public String getMaterialAsString() {
         return currentBlock.getType().name();
     }
 
+    @Override
     public ItemStack getCurrentBlock(){
         return currentBlock;
     }
 
+    @Override
     public String getCurrentBlockAsString(){
         return Materials.serializeItemStack(currentBlock);
     }
 
+    @Override
     public boolean hasMaterial() {
         return material != null;
     }
 
+    @Override
     public String getParticleAsString() {
         return particle;
     }
 
+    @Override
     public boolean hasFireWork() {
         return fireWork != null;
     }
 
+    @Override
     public String getFireWorkAsString() {
         return fireWork;
     }
@@ -89,10 +98,12 @@ public final class UserSettings {
         return Fireworks.getFireworkTypeByName(fireWork);
     }
 
+    @Override
     public boolean hasParticle() {
         return particle != null;
     }
 
+    @Override
     public boolean isScoreboardEnabled() {
         return scoreboardEnabled;
     }
@@ -121,6 +132,7 @@ public final class UserSettings {
         this.scoreboardEnabled = scoreboardEnabled;
     }
 
+    @Override
     public boolean isSetBackEnabled() {
         return setBackEnabled;
     }
@@ -135,7 +147,7 @@ public final class UserSettings {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        UserSettings settings = (UserSettings) o;
+        BridgerUserSettings settings = (BridgerUserSettings) o;
         return scoreboardEnabled == settings.scoreboardEnabled && setBackEnabled == settings.setBackEnabled && Objects.equal(language, settings.language) && Objects.equal(material, settings.material) && Objects.equal(particle, settings.particle);
     }
 

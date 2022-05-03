@@ -1,19 +1,17 @@
 package io.github.alenalex.bridger.models.player;
 
-import de.leonhard.storage.Json;
 import io.github.alenalex.bridger.Bridger;
-import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NonBlocking;
+import io.github.alenalex.bridger.api.models.player.UserCosmetics;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
-public class UserCosmetics {
+public class BridgerUserCosmetics implements UserCosmetics {
 
-    public static final UserCosmetics DEFAULT;
+    public static final BridgerUserCosmetics DEFAULT;
 
     static {
-        DEFAULT = new UserCosmetics(
+        DEFAULT = new BridgerUserCosmetics(
                 new ArrayList<>(),
                 new ArrayList<>(),
                 new ArrayList<>()
@@ -26,39 +24,45 @@ public class UserCosmetics {
 
     private boolean unlockAll;
 
-    public UserCosmetics(List<String> fireWorkUnlocked, List<String> materialUnlocked, List<String> particleUnlocked) {
+    public BridgerUserCosmetics(List<String> fireWorkUnlocked, List<String> materialUnlocked, List<String> particleUnlocked) {
         this.fireWorkUnlocked = fireWorkUnlocked;
         this.materialUnlocked = materialUnlocked;
         this.particleUnlocked = particleUnlocked;
         this.unlockAll = false;
     }
 
+    @Override
     public boolean isFireworkUnlocked(@NotNull String fireworkName){
         if(unlockAll)
             return true;
         return fireWorkUnlocked.contains(fireworkName);
     }
 
+    @Override
     public boolean isMaterialUnlocked(@NotNull String materialName){
         if(unlockAll)
             return true;
         return materialUnlocked.contains(materialName);
     }
 
+    @Override
     public boolean isParticleUnlocked(@NotNull String particleName){
         if(unlockAll)
             return true;
         return particleUnlocked.contains(particleName);
     }
 
+    @Override
     public void resetFireworks(){
         fireWorkUnlocked.clear();
     }
 
+    @Override
     public void resetMaterials(){
         materialUnlocked.clear();
     }
 
+    @Override
     public void resetParticles(){
         particleUnlocked.clear();
     }
@@ -85,6 +89,7 @@ public class UserCosmetics {
         this.unlockAll = unlockAll;
     }
 
+    @Override
     public boolean isUnlockAllEnabled(){
         return unlockAll;
     }

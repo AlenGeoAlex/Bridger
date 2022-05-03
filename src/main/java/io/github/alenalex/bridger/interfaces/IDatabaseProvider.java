@@ -1,6 +1,6 @@
 package io.github.alenalex.bridger.interfaces;
 
-import io.github.alenalex.bridger.models.player.UserData;
+import io.github.alenalex.bridger.models.player.BridgerUserData;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -17,12 +17,12 @@ public interface IDatabaseProvider {
 
     boolean prepareDatabase();
 
-    CompletableFuture<UserData> loadOrRegisterUser(@NotNull UUID uuid);
+    CompletableFuture<BridgerUserData> loadOrRegisterUser(@NotNull UUID uuid);
 
-    void saveAllUserSync(@NotNull List<UserData> users);
+    void saveAllUserSync(@NotNull List<BridgerUserData> users);
 
-    void saveUserAsync(@NotNull UserData user);
+    void saveUserAsync(@NotNull BridgerUserData user);
 
-    void saveAllUsersAsync(@NotNull List<UserData> users);
+    void saveAllUsersAsync(@NotNull List<BridgerUserData> users);
 
 }

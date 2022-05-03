@@ -3,10 +3,11 @@ package io.github.alenalex.bridger.manager;
 import de.leonhard.storage.internal.FlatFile;
 import io.github.alenalex.bridger.Bridger;
 import io.github.alenalex.bridger.abstracts.AbstractRegistry;
-import io.github.alenalex.bridger.exceptions.IllegalRegistryOperation;
-import io.github.alenalex.bridger.models.Island;
-import io.github.alenalex.bridger.models.player.UserData;
-import io.github.alenalex.bridger.models.player.UserMatchCache;
+import io.github.alenalex.bridger.api.models.Island;
+import io.github.alenalex.bridger.api.models.player.UserData;
+import io.github.alenalex.bridger.models.BridgerIsland;
+import io.github.alenalex.bridger.models.player.BridgerUserData;
+import io.github.alenalex.bridger.models.player.BridgerUserMatchCache;
 import io.github.alenalex.bridger.utils.FlatFileUtils;
 import io.github.alenalex.bridger.utils.adventure.internal.MessagePlaceholder;
 import io.github.alenalex.bridger.variables.LangConfigurationPaths;
@@ -20,9 +21,9 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-public class IslandManager extends AbstractRegistry<String, Island> {
+public class IslandManagerImpl extends AbstractRegistry<String, BridgerIsland> implements io.github.alenalex.bridger.api.manager.IslandManager {
 
-    public IslandManager(Bridger plugin) {
+    public IslandManagerImpl(Bridger plugin) {
         super(plugin);
     }
 
@@ -45,8 +46,8 @@ public class IslandManager extends AbstractRegistry<String, Island> {
                 final double joinCost = islandConfig.getDouble(islandName + ".join-cost");
                 final double reward = islandConfig.getDouble(islandName + ".reward-coins");
 
-                final Island island =
-                        new Island(
+                final BridgerIsland bridgerIsland =
+                        new BridgerIsland(
                                 islandName,
                                 perm,
                                 spawn,
@@ -59,29 +60,33 @@ public class IslandManager extends AbstractRegistry<String, Island> {
                                 reward
                         );
 
-                island.setEnabled(enabled);
+                bridgerIsland.setEnabled(enabled);
 
                 plugin.getLogger().info("Loaded island with name " + islandName + "!");
-                registerIsland(island);
+                registerIsland(bridgerIsland);
             } else {
                 plugin.getLogger().warning("Failed to load island with the name "+islandName+"! Seems like locations are not provided valid!");
             }
         }
     }
 
+    @Override
     public List<Island> getAllFreeIslands(){
         return getValueStream().collect(Collectors.toList());
     }
 
+    @Override
     public List<Island> getAllFreeIslands(@NotNull Player player){
         return getValueStream()
                 .filter(island -> island.canPlayerJoinTheIsland(player))
                 .collect(Collectors.toList());
     }
 
+    @Override
     public Optional<Island> getAnyFreeIsland(@NotNull Player player){
         return getValueStream()
                 .filter(island -> island.canPlayerJoinTheIsland(player))
+                .map(island -> (Island) island)
                 .findAny();
     }
 
@@ -89,67 +94,76 @@ public class IslandManager extends AbstractRegistry<String, Island> {
         if(!isKeyRegistered(islandName))
             return Optional.empty();
 
-        final Island island = of(islandName);
-        if(island.canPlayerJoinTheIsland(player))
-            return Optional.of(island);
+        final BridgerIsland bridgerIsland = of(islandName);
+        if(bridgerIsland.canPlayerJoinTheIsland(player))
+            return Optional.of(bridgerIsland);
         else return Optional.empty();
     }
 
+    @Override
     public List<Island> getAllOccupiedIsland(){
-        return getValueStream().filter(Island::isIslandOccupied).collect(Collectors.toList());
+        return getValueStream().filter(BridgerIsland::isIslandOccupied).collect(Collectors.toList());
     }
 
+    @Override
     public List<Island> getAllEnabledIsland(){
-        return getValueStream().filter(Island::isEnabled).collect(Collectors.toList());
+        return getValueStream().filter(BridgerIsland::isEnabled).collect(Collectors.toList());
     }
 
+    @Override
     public List<Island> getAllResettingIslands(){
-        return getValueStream().filter(Island::isIslandResetting).collect(Collectors.toList());
+        return getValueStream().filter(BridgerIsland::isIslandResetting).collect(Collectors.toList());
     }
 
+    @Override
     public void disableIsland(@NotNull String islandName){
         if(isKeyRegistered(islandName))
             return;
 
-        final Island island = of(islandName);
-        if(island.isIslandOccupied()){
+        final BridgerIsland bridgerIsland = of(islandName);
+        if(bridgerIsland.isIslandOccupied()){
             //TODO
             Player player = plugin.gameHandler().getPlayerOfIsland(islandName).orElse(null);
             if(player == null)
                 return;
 
-            UserData userData = plugin.gameHandler().userManager().of(player.getUniqueId());
-            if(userData == null)
+            BridgerUserData bridgerUserData = plugin.gameHandler().userManager().of(player.getUniqueId());
+            if(bridgerUserData == null)
                 return;
 
             plugin.gameHandler().kickPlayerFromIsland(player);
-            userData.userSettings().getLanguage().asComponent(LangConfigurationPaths.KICK_ISLAND_DISABLED);
+            bridgerUserData.userSettings().getLanguage().asComponent(LangConfigurationPaths.KICK_ISLAND_DISABLED);
 
 
         }else {
-            island.setEnabled(false);
+            bridgerIsland.setEnabled(false);
         }
     }
 
+    @Override
     public void removeSpectators(@NotNull Island island){
-        if(island.getSpectators().isEmpty())
+        final BridgerIsland bridgerIsland = (BridgerIsland) island;
+
+        if(bridgerIsland.getSpectators().isEmpty())
             return;
 
-        for(UUID spectatingPlayer : island.getSpectators()){
+        for(UUID spectatingPlayer : bridgerIsland.getSpectators()){
             final Player player = Bukkit.getPlayer(spectatingPlayer);
             if(player == null)
                 return;
 
-            final UserData data = plugin.gameHandler().userManager().of(spectatingPlayer);
+            final BridgerUserData data = plugin.gameHandler().userManager().of(spectatingPlayer);
             if(data == null)
                 continue;
 
             stopSpectating(player, data);
         }
-        island.getSpectators().clear();
+        bridgerIsland.getSpectators().clear();
     }
 
-    public void stopSpectating(@NotNull Player player, UserData userData){
+    @Override
+    public void stopSpectating(@NotNull Player player, UserData uD){
+        final BridgerUserData userData = (BridgerUserData) uD;
         for(Player serverPlayer : Bukkit.getOnlinePlayers()){
             if(!player.isOnline())
                 break;
@@ -160,32 +174,33 @@ public class IslandManager extends AbstractRegistry<String, Island> {
             serverPlayer.showPlayer(player);
         }
 
-        UserManager.handleLobbyTransport(player);
+        UserManagerImpl.handleLobbyTransport(player);
     }
 
+    @Override
     public void startSpectating(@NotNull Player player, Player target){
-        final UserData userData = plugin.gameHandler().userManager().of(player.getUniqueId());
-        if(userData == null)
+        final BridgerUserData bridgerUserData = plugin.gameHandler().userManager().of(player.getUniqueId());
+        if(bridgerUserData == null)
             return;
 
         if(plugin.gameHandler().isPlayerPlaying(target)){
-            plugin.messagingUtils().sendTo(player, userData.userSettings().getLanguage().asComponent(LangConfigurationPaths.CANNOT_SPECTATE_NON_PLAYERS));
+            plugin.messagingUtils().sendTo(player, bridgerUserData.userSettings().getLanguage().asComponent(LangConfigurationPaths.CANNOT_SPECTATE_NON_PLAYERS));
             return;
         }
 
-        if(!(userData.userMatchCache().getStatus() == UserMatchCache.Status.LOBBY)){
-            plugin.messagingUtils().sendTo(player, userData.userSettings().getLanguage().asComponent(LangConfigurationPaths.CANNOT_SPECTATE_WHILE_IN_GAME));
+        if(!(bridgerUserData.userMatchCache().getStatus() == BridgerUserMatchCache.Status.LOBBY)){
+            plugin.messagingUtils().sendTo(player, bridgerUserData.userSettings().getLanguage().asComponent(LangConfigurationPaths.CANNOT_SPECTATE_WHILE_IN_GAME));
             return;
         }
 
-        final Island island = plugin.gameHandler().getIslandOfPlayer(player).orElse(null);
-        if(island == null){
-            plugin.messagingUtils().sendTo(player, userData.userSettings().getLanguage().asComponent(LangConfigurationPaths.NO_ISLAND_FOUND));
+        final BridgerIsland bridgerIsland = plugin.gameHandler().getIslandOfPlayer(player).orElse(null);
+        if(bridgerIsland == null){
+            plugin.messagingUtils().sendTo(player, bridgerUserData.userSettings().getLanguage().asComponent(LangConfigurationPaths.NO_ISLAND_FOUND));
             return;
         }
 
-        island.addSpectator(player.getUniqueId());
-        userData.userMatchCache().setSpectatingIsland(island.getIslandName());
+        bridgerIsland.addSpectator(player.getUniqueId());
+        bridgerUserData.userMatchCache().setSpectatingIsland(bridgerIsland.getIslandName());
 
 
         for(Player serverPlayer : Bukkit.getOnlinePlayers()){
@@ -200,25 +215,27 @@ public class IslandManager extends AbstractRegistry<String, Island> {
 
         player.teleport(target);
         plugin.messagingUtils().sendTo(player,
-                userData.userSettings().getLanguage().asComponent(LangConfigurationPaths.SPECTATING_ON,
+                bridgerUserData.userSettings().getLanguage().asComponent(LangConfigurationPaths.SPECTATING_ON,
                 MessagePlaceholder.of("%spec_player%", target.getName())
                 )
         );
     }
 
+    @Override
     public void enableIsland(@NotNull String islandName){
         if(isKeyRegistered(islandName))
             return;
 
-        final Island island = of(islandName);
-        island.setEnabled(true);
+        final BridgerIsland bridgerIsland = of(islandName);
+        bridgerIsland.setEnabled(true);
     }
 
-    public void registerIsland(@NotNull Island island){
-        register(island.getIslandName(), island);
-        island.setEnabled(true);
+    public void registerIsland(@NotNull BridgerIsland bridgerIsland){
+        register(bridgerIsland.getIslandName(), bridgerIsland);
+        bridgerIsland.setEnabled(true);
     }
 
+    @Override
     public void reloadIsland(@NotNull String islandName){
         if(!isKeyRegistered(islandName))
             return;
@@ -227,7 +244,9 @@ public class IslandManager extends AbstractRegistry<String, Island> {
         //TODO
     }
 
-
-
+    @Override
+    public Optional<Island> ofName(@NotNull String name) {
+        return Optional.ofNullable(of(name));
+    }
 
 }

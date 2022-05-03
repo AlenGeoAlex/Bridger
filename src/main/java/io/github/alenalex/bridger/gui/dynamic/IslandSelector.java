@@ -6,17 +6,17 @@ import dev.triumphteam.gui.guis.Gui;
 import dev.triumphteam.gui.guis.GuiItem;
 import dev.triumphteam.gui.guis.PaginatedGui;
 import io.github.alenalex.bridger.abstracts.AbstractDynamicGUI;
-import io.github.alenalex.bridger.exceptions.IllegalUIAccess;
-import io.github.alenalex.bridger.exceptions.UIManipulationException;
+import io.github.alenalex.bridger.api.models.Island;
 import io.github.alenalex.bridger.handler.UIHandler;
-import io.github.alenalex.bridger.models.Island;
-import io.github.alenalex.bridger.models.player.UserData;
-import io.github.alenalex.bridger.models.player.UserMatchCache;
+import io.github.alenalex.bridger.models.BridgerIsland;
+import io.github.alenalex.bridger.models.player.BridgerUserData;
+import io.github.alenalex.bridger.models.player.BridgerUserMatchCache;
 import io.github.alenalex.bridger.utils.adventure.internal.MessagePlaceholder;
 import io.github.alenalex.bridger.variables.LangConfigurationPaths;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.hamcrest.core.Is;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.CompletableFuture;
@@ -34,13 +34,13 @@ public class IslandSelector extends AbstractDynamicGUI<PaginatedGui> {
             @Override
             public PaginatedGui get() {
                 try {
-                    final UserData data = handler.plugin().gameHandler().userManager().of(player.getUniqueId());
+                    final BridgerUserData data = handler.plugin().gameHandler().userManager().of(player.getUniqueId());
                     if(data == null) {
                         player.sendMessage(ChatColor.RED+"Failed to open GUI, Please re-login again");
                         return null;
                     }
 
-                    if(!(data.userMatchCache().getStatus() == UserMatchCache.Status.LOBBY)){
+                    if(!(data.userMatchCache().getStatus() == BridgerUserMatchCache.Status.LOBBY)){
                         handler.plugin().messagingUtils().sendTo(
                                 player,
                                 data.userSettings().getLanguage().asComponent(LangConfigurationPaths.ACTIVITY_BLOCKED)
@@ -104,19 +104,20 @@ public class IslandSelector extends AbstractDynamicGUI<PaginatedGui> {
                     gui.setItem(getConfiguration().getIslandSelectorPreviousPage().slot(), preItem);
 
                     for(Island island : handler.plugin().gameHandler().islandManager().getAllFreeIslands(player)){
+                        final BridgerIsland bridgerIsland = (BridgerIsland) island;
 
                         final GuiItem item = ItemBuilder
                                 .from(getConfiguration().getIslandSelectorItem().itemStack())
                                 .name(getConfiguration().getIslandSelectorItem().nameAsComponent(
-                                        MessagePlaceholder.of("%name%",island.getIslandName())
+                                        MessagePlaceholder.of("%name%", bridgerIsland.getIslandName())
                                 ))
                                 .lore(getConfiguration().getIslandSelectorItem().loreAsComponent(
-                                        MessagePlaceholder.of("%cost%",island.getJoinCost())
+                                        MessagePlaceholder.of("%cost%", bridgerIsland.getJoinCost())
                                 ))
                                 .asGuiItem(new GuiAction<InventoryClickEvent>() {
                                     @Override
                                     public void execute(InventoryClickEvent event) {
-                                        if(!island.isIslandIdle()){
+                                        if(!bridgerIsland.isIslandIdle()){
                                             handler.plugin().messagingUtils().sendTo(
                                                     player,
                                                     data.userSettings().getLanguage().asComponent(LangConfigurationPaths.ISLAND_OCCUPIED_GUI)
@@ -125,7 +126,7 @@ public class IslandSelector extends AbstractDynamicGUI<PaginatedGui> {
                                             return;
                                         }
 
-                                        handler.plugin().gameHandler().toIsland(player, data, island);
+                                        handler.plugin().gameHandler().toIsland(player, data, bridgerIsland);
                                     }
                                 });
 

@@ -1,7 +1,7 @@
 package io.github.alenalex.bridger.models.setup;
 
 import io.github.alenalex.bridger.Bridger;
-import io.github.alenalex.bridger.models.Island;
+import io.github.alenalex.bridger.models.BridgerIsland;
 import io.github.alenalex.bridger.utils.FlatFileUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -138,25 +138,25 @@ public class SetupSession {
         return ValidityStatus.VALID;
     }
 
-    public Island asIsland(){
+    public BridgerIsland asIsland(){
         if(minBlocksRequired <= 0)
             minBlocksRequired = -1;
 
         if(minSecRequired <= 0)
             minSecRequired = -1;
 
-        return new Island(islandName, permissionRequired, spawnPoint, endPoint, pos1, pos2, minBlocksRequired, minSecRequired, joinCost, rewardCost);
+        return new BridgerIsland(islandName, permissionRequired, spawnPoint, endPoint, pos1, pos2, minBlocksRequired, minSecRequired, joinCost, rewardCost);
     }
 
-    public static SetupSession asSession(@NotNull Player player, @NotNull Island island){
-        return new SetupSession(player.getUniqueId(), island.getIslandName())
-                .setPos1(island.getPos1())
-                .setPos2(island.getPos2())
-                .setSpawnPoint(island.getSpawnLocation())
-                .setEndPoint(island.getEndLocation())
-                .setMinBlocksRequired(island.getMinBlocksRequired())
-                .setMinSecRequired(Math.toIntExact(TimeUnit.MILLISECONDS.toSeconds(island.getMinTimeRequired())))
-                .setPermissionRequired(island.getPermission());
+    public static SetupSession asSession(@NotNull Player player, @NotNull BridgerIsland bridgerIsland){
+        return new SetupSession(player.getUniqueId(), bridgerIsland.getIslandName())
+                .setPos1(bridgerIsland.getPos1())
+                .setPos2(bridgerIsland.getPos2())
+                .setSpawnPoint(bridgerIsland.getSpawnLocation())
+                .setEndPoint(bridgerIsland.getEndLocation())
+                .setMinBlocksRequired(bridgerIsland.getMinBlocksRequired())
+                .setMinSecRequired(Math.toIntExact(TimeUnit.MILLISECONDS.toSeconds(bridgerIsland.getMinTimeRequired())))
+                .setPermissionRequired(bridgerIsland.getPermission());
     }
 
     public Map<String, Object> asSerializedSession(){

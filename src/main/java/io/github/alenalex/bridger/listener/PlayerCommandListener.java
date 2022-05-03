@@ -1,7 +1,7 @@
 package io.github.alenalex.bridger.listener;
 
 import io.github.alenalex.bridger.Bridger;
-import io.github.alenalex.bridger.models.player.UserData;
+import io.github.alenalex.bridger.models.player.BridgerUserData;
 import io.github.alenalex.bridger.variables.LangConfigurationPaths;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -29,12 +29,12 @@ public final class PlayerCommandListener implements Listener {
         final String command = event.getMessage();
         if(plugin.configurationHandler().getConfigurationFile().getCommandToBlock().contains(command)){
             event.setCancelled(true);
-            final UserData userData = plugin.gameHandler().userManager().of(player.getUniqueId());
+            final BridgerUserData bridgerUserData = plugin.gameHandler().userManager().of(player.getUniqueId());
 
-            if(userData == null)
+            if(bridgerUserData == null)
                 return;
 
-            plugin.messagingUtils().sendTo(player, userData.userSettings().getLanguage().asComponent(LangConfigurationPaths.BLOCKED_COMMAND));
+            plugin.messagingUtils().sendTo(player, bridgerUserData.userSettings().getLanguage().asComponent(LangConfigurationPaths.BLOCKED_COMMAND));
         }
     }
 }

@@ -1,9 +1,9 @@
 package io.github.alenalex.bridger.listener;
 
 import io.github.alenalex.bridger.Bridger;
-import io.github.alenalex.bridger.manager.UserManager;
-import io.github.alenalex.bridger.models.Island;
-import io.github.alenalex.bridger.models.player.UserData;
+import io.github.alenalex.bridger.manager.UserManagerImpl;
+import io.github.alenalex.bridger.models.BridgerIsland;
+import io.github.alenalex.bridger.models.player.BridgerUserData;
 import io.github.alenalex.bridger.utils.LocationUtils;
 import io.github.alenalex.bridger.utils.adventure.MessageFormatter;
 import io.github.alenalex.bridger.variables.LangConfigurationPaths;
@@ -35,64 +35,64 @@ public final class PlayerMovementListener implements Listener {
         final Location from = event.getFrom();
 
         final Player player = event.getPlayer();
-        final UserData userData = plugin.gameHandler().userManager().of(player.getUniqueId());
+        final BridgerUserData bridgerUserData = plugin.gameHandler().userManager().of(player.getUniqueId());
 
-        if(userData == null)
+        if(bridgerUserData == null)
             return;
 
 
-        switch (userData.userMatchCache().getStatus()){
+        switch (bridgerUserData.userMatchCache().getStatus()){
 
             case LOBBY: {
                 if (to.getBlockY() <= plugin.configurationHandler().getConfigurationFile().getVoidDetectionHeight()) {
-                    UserManager.handleLobbyTransport(player);
+                    UserManagerImpl.handleLobbyTransport(player);
 
-                    plugin.messagingUtils().sendTo(player, userData.userSettings().getLanguage().asComponent(LangConfigurationPaths.TELEPORTED_VOID_DETECTION));
+                    plugin.messagingUtils().sendTo(player, bridgerUserData.userSettings().getLanguage().asComponent(LangConfigurationPaths.TELEPORTED_VOID_DETECTION));
                     return;
                 }
                 break;
             }
             case SPECTATING: {
                 if (to.getBlockY() <= plugin.configurationHandler().getConfigurationFile().getVoidDetectionHeight()) {
-                    Island island = plugin.gameHandler().islandManager().of(userData.userMatchCache().getSpectatingIsland());
-                    if (island == null) {
-                        plugin.gameHandler().islandManager().stopSpectating(player, userData);
+                    BridgerIsland bridgerIsland = plugin.gameHandler().islandManager().of(bridgerUserData.userMatchCache().getSpectatingIsland());
+                    if (bridgerIsland == null) {
+                        plugin.gameHandler().islandManager().stopSpectating(player, bridgerUserData);
                         plugin.messagingUtils().sendTo(player, MessageFormatter.transform(PluginResponses.Others.UNKNOWN_CAUSE));
                         return;
                     }
-                    final Player islandOwner = plugin.gameHandler().getPlayerOfIsland(island.getIslandName()).orElse(null);
+                    final Player islandOwner = plugin.gameHandler().getPlayerOfIsland(bridgerIsland.getIslandName()).orElse(null);
                     if (islandOwner == null) {
-                        plugin.gameHandler().islandManager().stopSpectating(player, userData);
+                        plugin.gameHandler().islandManager().stopSpectating(player, bridgerUserData);
                         plugin.messagingUtils().sendTo(player, MessageFormatter.transform(PluginResponses.Others.UNKNOWN_CAUSE));
                         return;
                     }
 
                     player.teleport(islandOwner);
-                    plugin.messagingUtils().sendTo(player, userData.userSettings().getLanguage().asComponent(LangConfigurationPaths.TELEPORTED_VOID_DETECTION));
+                    plugin.messagingUtils().sendTo(player, bridgerUserData.userSettings().getLanguage().asComponent(LangConfigurationPaths.TELEPORTED_VOID_DETECTION));
                     return;
                 }
                 break;
             }
             case IDLE: {
-                Island island = plugin.gameHandler().getIslandOfPlayer(player).orElse(null);
-                if(island == null)
+                BridgerIsland bridgerIsland = plugin.gameHandler().getIslandOfPlayer(player).orElse(null);
+                if(bridgerIsland == null)
                     return;
 
                 if (to.getBlockY() <= plugin.configurationHandler().getConfigurationFile().getVoidDetectionHeight()) {
-                    island.teleportToSpawn(player);
+                    bridgerIsland.teleportToSpawn(player);
                     return;
                 }
 
                 if (plugin.configurationHandler().getConfigurationFile().isCheatDetectionIdleCompletion()) {
-                    if (to.equals(island.getEndLocation())) {
-                        player.kickPlayer(userData.userSettings().getLanguage().asLegacyColorizedString(LangConfigurationPaths.CHEAT_PROTECTION_REACHED_IN_IDLE.getPath()));
+                    if (to.equals(bridgerIsland.getEndLocation())) {
+                        player.kickPlayer(bridgerUserData.userSettings().getLanguage().asLegacyColorizedString(LangConfigurationPaths.CHEAT_PROTECTION_REACHED_IN_IDLE.getPath()));
                     }
                 }
                 break;
             }
             case PLAYING: {
-                Island island = plugin.gameHandler().getIslandOfPlayer(player).orElse(null);
-                if(island == null)
+                BridgerIsland bridgerIsland = plugin.gameHandler().getIslandOfPlayer(player).orElse(null);
+                if(bridgerIsland == null)
                     return;
 
                 if (to.getBlockY() <= plugin.configurationHandler().getConfigurationFile().getVoidDetectionHeight()) {
@@ -102,25 +102,25 @@ public final class PlayerMovementListener implements Listener {
 
 
 
-                if(LocationUtils.isSameLocation(to, island.getEndLocation())) {
-                    if(!(userData.userMatchCache().getBlocksPlaced() >= island.getMinBlocksRequired())){
+                if(LocationUtils.isSameLocation(to, bridgerIsland.getEndLocation())) {
+                    if(!(bridgerUserData.userMatchCache().getBlocksPlaced() >= bridgerIsland.getMinBlocksRequired())){
                         if(plugin.configurationHandler().getConfigurationFile().isCheatDetectionMinBlocks()) {
                             player.kickPlayer(MessageFormatter.colorizeLegacy("&c&lCheat detection: &cYou didn't satisfy the islands condition!"));
                         }else {
                             plugin.gameHandler().playerFailedGame(player);
-                            plugin.messagingUtils().sendTo(player, userData.userSettings().getLanguage().asComponent(LangConfigurationPaths.CHEAT_PROTECTION_MIN_BLOCK));
+                            plugin.messagingUtils().sendTo(player, bridgerUserData.userSettings().getLanguage().asComponent(LangConfigurationPaths.CHEAT_PROTECTION_MIN_BLOCK));
                         }
                        return;
                     }
 
-                    final long timeTook =  userData.userMatchCache().getStartTime();
+                    final long timeTook =  bridgerUserData.userMatchCache().getStartTime();
 
-                    if(!(timeTook > island.getMinTimeRequired())) {
+                    if(!(timeTook > bridgerIsland.getMinTimeRequired())) {
                         if(plugin.configurationHandler().getConfigurationFile().isCheatDetectionMinTime()) {
                             player.kickPlayer(MessageFormatter.colorizeLegacy("&c&lCheat detection: &cYou didn't satisfy the islands condition!"));
                         }else {
                             plugin.gameHandler().playerFailedGame(player);
-                            plugin.messagingUtils().sendTo(player, userData.userSettings().getLanguage().asComponent(LangConfigurationPaths.CHEAT_PROTECTION_MIN_TIME));
+                            plugin.messagingUtils().sendTo(player, bridgerUserData.userSettings().getLanguage().asComponent(LangConfigurationPaths.CHEAT_PROTECTION_MIN_TIME));
                         }
                         return;
                     }

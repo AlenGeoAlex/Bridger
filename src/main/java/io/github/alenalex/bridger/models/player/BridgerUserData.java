@@ -1,6 +1,7 @@
 package io.github.alenalex.bridger.models.player;
 
 import io.github.alenalex.bridger.Bridger;
+import io.github.alenalex.bridger.api.models.player.UserData;
 import io.github.alenalex.bridger.variables.Fireworks;
 import io.github.alenalex.bridger.variables.LangConfigurationPaths;
 import org.bukkit.Bukkit;
@@ -19,45 +20,45 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-public final class UserData {
+public final class BridgerUserData implements UserData {
 
     @NotNull private final UUID playerUID;
-    @NotNull private final UserStats userStats;
-    @NotNull private final UserSettings userSettings;
-    @NotNull private final UserCosmetics userCosmetics;
-    @NotNull private final UserMatchCache userMatchCache;
+    @NotNull private final BridgerUserStats bridgerUserStats;
+    @NotNull private final BridgerUserSettings bridgerUserSettings;
+    @NotNull private final BridgerUserCosmetics bridgerUserCosmetics;
+    @NotNull private final BridgerUserMatchCache bridgerUserMatchCache;
 
-    public UserData(@NotNull UUID playerUID, @NotNull UserStats userStats, @NotNull UserSettings userSettings, @NotNull UserCosmetics userCosmetics) {
+    public BridgerUserData(@NotNull UUID playerUID, @NotNull BridgerUserStats bridgerUserStats, @NotNull BridgerUserSettings bridgerUserSettings, @NotNull BridgerUserCosmetics bridgerUserCosmetics) {
         this.playerUID = playerUID;
-        this.userStats = userStats;
-        this.userSettings = userSettings;
-        this.userCosmetics = userCosmetics;
-        this.userMatchCache = new UserMatchCache(this);
+        this.bridgerUserStats = bridgerUserStats;
+        this.bridgerUserSettings = bridgerUserSettings;
+        this.bridgerUserCosmetics = bridgerUserCosmetics;
+        this.bridgerUserMatchCache = new BridgerUserMatchCache(this);
     }
 
-    @NotNull
+    @NotNull @Override
     public UUID getPlayerUID() {
         return playerUID;
     }
 
-    @NotNull
+    @NotNull @Override
     public Optional<Player> getOptionalPlayer() {
         return Optional.ofNullable(Bukkit.getPlayer(playerUID));
     }
 
-    @Nullable
+    @Nullable @Override
     public Player getPlayer(){
         return Bukkit.getPlayer(playerUID);
     }
 
-    @NotNull
-    public UserStats userStats() {
-        return userStats;
+    @NotNull @Override
+    public BridgerUserStats userStats() {
+        return bridgerUserStats;
     }
 
-    @NotNull
-    public UserSettings userSettings() {
-        return userSettings;
+    @NotNull @Override
+    public BridgerUserSettings userSettings() {
+        return bridgerUserSettings;
     }
 
     public void doFireworksOnPlayerLocation (){
@@ -67,10 +68,10 @@ public final class UserData {
         if(!Bridger.instance().configurationHandler().getConfigurationFile().isFireworkEnabled())
             return;
 
-        if(!userSettings.hasFireWork())
+        if(!bridgerUserSettings.hasFireWork())
             return;
 
-        final Optional<FireworkEffect.Type> type = userSettings.getFireWork();
+        final Optional<FireworkEffect.Type> type = bridgerUserSettings.getFireWork();
 
         if(type.isPresent()){
             Bridger.instance().getServer().getScheduler().runTask(Bridger.instance(), () -> {
@@ -93,12 +94,12 @@ public final class UserData {
                 fw.setFireworkMeta(fwm);
             });
         }else {
-            Bridger.instance().getLogger().warning("User " + player.getName() + " has an unknown firework type "+userSettings.getFireWorkAsString()+" selected as his firework. The plugin will try to remove it!");
+            Bridger.instance().getLogger().warning("User " + player.getName() + " has an unknown firework type "+ bridgerUserSettings.getFireWorkAsString()+" selected as his firework. The plugin will try to remove it!");
             Bridger.instance().messagingUtils().sendTo(
                     player,
-                    userSettings.getLanguage().asComponent(LangConfigurationPaths.UNABLE_TO_PROCESS_SELECTED_FIREWORK)
+                    bridgerUserSettings.getLanguage().asComponent(LangConfigurationPaths.UNABLE_TO_PROCESS_SELECTED_FIREWORK)
             );
-            userSettings.setFireWork(null);
+            bridgerUserSettings.setFireWork(null);
         }
 
     }
@@ -111,7 +112,7 @@ public final class UserData {
                 .keySet().
                 stream()
                 .filter(type -> {
-                    boolean b = !userCosmetics.getFireWorkUnlocked().contains(type.name());
+                    boolean b = !bridgerUserCosmetics.getFireWorkUnlocked().contains(type.name());
                     return b;
                 }).
                 collect(Collectors.toList());
@@ -125,7 +126,7 @@ public final class UserData {
                 .keySet().
                 stream()
                 .filter(type -> {
-                    boolean b = !userCosmetics.getMaterialUnlocked().contains(type.getType().name());
+                    boolean b = !bridgerUserCosmetics.getMaterialUnlocked().contains(type.getType().name());
                     return b;
                 }).
                 collect(Collectors.toList());
@@ -136,30 +137,30 @@ public final class UserData {
         return Bridger.instance();
     }
 
-    @NotNull
-    public UserCosmetics userCosmetics() {
-        return userCosmetics;
+    @NotNull @Override
+    public BridgerUserCosmetics userCosmetics() {
+        return bridgerUserCosmetics;
     }
 
-    @NotNull
-    public UserMatchCache userMatchCache(){
-        return userMatchCache;
+    @NotNull @Override
+    public BridgerUserMatchCache userMatchCache(){
+        return bridgerUserMatchCache;
     }
 
     public void setScoreboardOff(){
-        if(!this.userSettings.isScoreboardEnabled())
+        if(!this.bridgerUserSettings.isScoreboardEnabled())
             return;
 
-        this.userSettings.setScoreboardEnabled(false);
-        this.userMatchCache.deleteScoreboard();
+        this.bridgerUserSettings.setScoreboardEnabled(false);
+        this.bridgerUserMatchCache.deleteScoreboard();
     }
 
     public void setScoreboardOn(){
-        if(this.userSettings.isScoreboardEnabled())
+        if(this.bridgerUserSettings.isScoreboardEnabled())
             return;
 
-        this.userSettings.setScoreboardEnabled(true);
-        this.userMatchCache.spawnScoreboard();
+        this.bridgerUserSettings.setScoreboardEnabled(true);
+        this.bridgerUserMatchCache.spawnScoreboard();
     }
 
     @Override
