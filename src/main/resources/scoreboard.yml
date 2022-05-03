@@ -1,0 +1,28 @@
+scoreboard-enabled: true
+update-time: 1000
+lobby-scoreboard:
+  title: "&cBridger"
+  lines:
+    - "&fName&7: &c%player_name%"
+    - "&fPing&7: %player_ping%"
+    - "&fRank&7:"
+    - "&r"
+    - "&fServer&7: &aLobby - 1"
+
+match-scoreboard:
+  title: "&cBridger"
+  lines:
+    - "&fName&7: &c%player_name%"
+    - "&fPing&7: %player_ping%"
+    - "&fRank&7:"
+    - "&r"
+    - "&fServer&7: &aMatch Scoreboard"
+
+spectate-scoreboard:
+  title: "&cBridger"
+  lines:
+    - "&fName&7: &c%player_name%"
+    - "&fPing&7: %player_ping%"
+    - "&fRank&7:"
+    - "&r"
+    - "&fServer&7: &aSpectate Scoreboard"

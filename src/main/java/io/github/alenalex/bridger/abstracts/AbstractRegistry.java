@@ -6,19 +6,20 @@ import io.github.alenalex.bridger.utils.Pair;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 public abstract class AbstractRegistry<K, V> {
 
     protected final Bridger plugin;
-    private final HashMap<K, V> registry;
+    private final ConcurrentHashMap<K, V> registry;
 
     private K defaultKey;
 
     public AbstractRegistry(Bridger plugin) {
         this.plugin = plugin;
-        this.registry = new HashMap<>();
+        this.registry = new ConcurrentHashMap<>();
         this.defaultKey = null;
     }
 

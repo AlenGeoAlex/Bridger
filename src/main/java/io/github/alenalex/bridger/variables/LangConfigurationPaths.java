@@ -44,6 +44,12 @@ public enum LangConfigurationPaths {
 
     COMPLETED_GAME("completed-game"),
     ACTION_BAR("action-bar-countdown"),
+
+    SCOREBOARD_ENABLED("scoreboard-enabled"),
+    SCOREBOARD_DISABLED("scoreboard-disabled"),
+
+    SCOREBOARD_ALREADY_ENABLED("scoreboard-already-enabled"),
+    SCOREBOARD_ALREADY_DISABLED("scoreboard-already-disabled"),
     ;
     private final String path;
 

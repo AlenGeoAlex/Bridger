@@ -4,8 +4,10 @@ import io.github.alenalex.bridger.abstracts.AbstractFileSettings;
 import io.github.alenalex.bridger.gui.config.HotBarConfig;
 import io.github.alenalex.bridger.handler.ConfigurationHandler;
 import io.github.alenalex.bridger.utils.FlatFileUtils;
+import io.github.alenalex.bridger.utils.adventure.MessageFormatter;
 import io.github.alenalex.bridger.variables.ConfigurationPaths;
 import org.apache.commons.lang3.EnumUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
@@ -45,6 +47,9 @@ public class ConfigurationFile extends AbstractFileSettings {
     private final List<HotBarConfig> lobbyOther;
 
     private int actionBarUpdateTime;
+
+    private String serverJoinMessage;
+    private String serverLeaveMessage;
 
     public ConfigurationFile(ConfigurationHandler handler) {
         super(handler);
@@ -122,7 +127,13 @@ public class ConfigurationFile extends AbstractFileSettings {
         }
 
         this.actionBarUpdateTime = this.file.getInt(ConfigurationPaths.ACTION_BAR_UPDATE_RATE.getPath());
-        this.actionBarUpdateTime = this.actionBarUpdateTime <= 50 ? 100 : this.actionBarUpdateTime;
+        this.actionBarUpdateTime = this.actionBarUpdateTime <= 99 ? 100 : this.actionBarUpdateTime;
+
+        this.serverJoinMessage = this.file.getString(ConfigurationPaths.SERVER_JOIN_MESSAGE.getPath());
+        this.serverLeaveMessage = this.file.getString(ConfigurationPaths.SERVER_LEAVE_MESSAGE.getPath());
+
+        this.serverJoinMessage = StringUtils.isBlank(serverJoinMessage) ? null : MessageFormatter.colorizeLegacy(this.serverJoinMessage);
+        this.serverLeaveMessage = StringUtils.isBlank(serverLeaveMessage) ? null : MessageFormatter.colorizeLegacy(this.serverLeaveMessage);
     }
 
     @Override
@@ -225,5 +236,13 @@ public class ConfigurationFile extends AbstractFileSettings {
 
     public int getActionBarUpdateTime() {
         return actionBarUpdateTime;
+    }
+
+    public String getServerJoinMessage() {
+        return serverJoinMessage;
+    }
+
+    public String getServerLeaveMessage() {
+        return serverLeaveMessage;
     }
 }

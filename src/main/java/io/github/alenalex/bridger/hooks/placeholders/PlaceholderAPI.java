@@ -10,7 +10,6 @@ public class PlaceholderAPI extends AbstractPluginHook  {
 
     public PlaceholderAPI(HookManager manager) {
         super(manager, "PlaceholderAPI");
-
     }
 
     @Override

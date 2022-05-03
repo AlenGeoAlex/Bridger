@@ -5,24 +5,27 @@ import io.github.alenalex.bridger.models.player.UserData;
 import io.github.alenalex.bridger.variables.LangConfigurationPaths;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.UUID;
 
-public final class ConnectionListener implements Listener {
+public final class PlayerConnectionListener implements Listener {
 
     private final Bridger plugin;
 
-    public ConnectionListener(Bridger plugin) {
+    public PlayerConnectionListener(Bridger plugin) {
         this.plugin = plugin;
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOW)
     public void onPlayerJoin(PlayerJoinEvent event){
         final Player player = event.getPlayer();
         final UUID playerUUID = player.getUniqueId();
+
+        event.setJoinMessage(plugin.configurationHandler().getConfigurationFile().getServerJoinMessage());
 
         plugin.dataProvider().getDatabaseProvider().loadOrRegisterUser(playerUUID).thenAccept(user -> {
            if(user == null){
@@ -35,18 +38,20 @@ public final class ConnectionListener implements Listener {
         });
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOW)
     public void onPlayerDisconnect(PlayerQuitEvent event){
 
         final UUID playerUUID = event.getPlayer().getUniqueId();
         final UserData userData = plugin.gameHandler().userManager().of(playerUUID);
+
+        event.setQuitMessage(plugin.configurationHandler().getConfigurationFile().getServerLeaveMessage());
 
         if(userData == null){
             plugin.getLogger().warning("Failed to save user " + event.getPlayer().getName()+". The data returned null from registry.");
             return;
         }
 
-        plugin.gameHandler().playerQuitServer(event.getPlayer());
+        plugin.gameHandler().onPlayerQuit(event.getPlayer());
         plugin.setupSessionManager().onPlayerQuit(playerUUID);
 
         plugin.dataProvider().getDatabaseProvider().saveUserAsync(userData);

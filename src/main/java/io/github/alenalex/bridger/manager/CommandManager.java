@@ -12,7 +12,8 @@ import io.github.alenalex.bridger.commands.Test;
 import io.github.alenalex.bridger.commands.admin.BridgerAdminCommand;
 import io.github.alenalex.bridger.commands.admin.DebugCommand;
 import io.github.alenalex.bridger.commands.island.IslandCommand;
-import io.github.alenalex.bridger.commands.island.LeaveCommand;
+import io.github.alenalex.bridger.commands.player.LeaveCommand;
+import io.github.alenalex.bridger.commands.player.ScoreboardCommand;
 import io.github.alenalex.bridger.commands.setup.SessionCommand;
 import io.github.alenalex.bridger.models.player.UserData;
 import io.github.alenalex.bridger.variables.CommandCompletions;
@@ -81,7 +82,7 @@ public class CommandManager {
                         .userManager()
                         .getValueCollection()
                         .stream()
-                        .map(UserData::getPlayer)
+                        .map(UserData::getOptionalPlayer)
                         .filter(Optional::isPresent)
                         .map(player -> player.get().getName())
                         .collect(Collectors.toList());
@@ -107,6 +108,7 @@ public class CommandManager {
                 new IslandCommand(this),
                 new DebugCommand(this),
                 new LeaveCommand(this),
+                new ScoreboardCommand(this),
                 new BridgerAdminCommand(this)
         );
 

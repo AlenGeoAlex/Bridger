@@ -1,10 +1,10 @@
 package io.github.alenalex.bridger.models.player;
 
+import fr.mrmicky.fastboard.FastBoard;
 import io.github.alenalex.bridger.Bridger;
 import io.github.alenalex.bridger.models.Island;
 import io.github.alenalex.bridger.utils.StringUtils;
 import io.github.alenalex.bridger.workload.core.Workload;
-import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -12,17 +12,16 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class UserMatchCache {
     private transient final UserData userData;
     private final List<Block> placedBlocks;
     private long startTime;
     private long currentTime;
-
-
     private String spectatingIsland;
-
     private Status status;
+    private FastBoard scoreBoard;
 
     public UserMatchCache(UserData userData) {
         this.userData = userData;
@@ -31,6 +30,12 @@ public class UserMatchCache {
         this.currentTime = 0L;
         this.spectatingIsland = null;
         this.status = Status.LOBBY;
+        this.scoreBoard = new FastBoard(Objects.requireNonNull(userData.getPlayer()));
+        this.scoreBoard.updateTitle(Bridger.instance().configurationHandler().getScoreboardConfiguration().getLobbyConfig().getTranslatedTitle());
+    }
+
+    public FastBoard getScoreBoard() {
+        return scoreBoard;
     }
 
     public enum Status {
@@ -94,11 +99,13 @@ public class UserMatchCache {
     public void setSpectatingIsland(String spectatingIsland) {
         this.status = Status.SPECTATING;
         this.spectatingIsland = spectatingIsland;
+        this.scoreBoard.updateTitle(Bridger.instance().configurationHandler().getScoreboardConfiguration().getSpectateConfig().getTranslatedTitle());
     }
 
     public void clearSpectatingIsland(){
         setSpectatingIsland(null);
         this.status = Status.LOBBY;
+        this.scoreBoard.updateTitle(Bridger.instance().configurationHandler().getScoreboardConfiguration().getLobbyConfig().getTranslatedTitle());
     }
 
     public boolean isUserSpectating(){
@@ -123,16 +130,17 @@ public class UserMatchCache {
 
     public void setPlayerAsIdle(){
         status = Status.IDLE;
+        this.scoreBoard.updateTitle(Bridger.instance().configurationHandler().getScoreboardConfiguration().getMatchConfig().getTranslatedTitle());
     }
 
     public void setPlayerAsPlaying(){
         setStartTime(System.currentTimeMillis());
         status = Status.PLAYING;
-
     }
 
     public void setPlayerAsLobby(){
         status = Status.LOBBY;
+        this.scoreBoard.updateTitle(Bridger.instance().configurationHandler().getScoreboardConfiguration().getLobbyConfig().getTranslatedTitle());
     }
 
     public Status getStatus() {
@@ -147,5 +155,17 @@ public class UserMatchCache {
         return placedBlocks.size();
     }
 
+    public void deleteScoreboard(){
+        this.scoreBoard.delete();
+        this.scoreBoard = null;
+    }
 
+    public void spawnScoreboard(){
+        this.scoreBoard = new FastBoard(Objects.requireNonNull(userData.getPlayer()));
+        if(status == Status.LOBBY)
+            this.scoreBoard.updateTitle(Bridger.instance().configurationHandler().getScoreboardConfiguration().getLobbyConfig().getTranslatedTitle());
+        else if(status == Status.SPECTATING)
+            this.scoreBoard.updateTitle(Bridger.instance().configurationHandler().getScoreboardConfiguration().getSpectateConfig().getTranslatedTitle());
+        else this.scoreBoard.updateTitle(Bridger.instance().configurationHandler().getScoreboardConfiguration().getMatchConfig().getTranslatedTitle());
+    }
 }

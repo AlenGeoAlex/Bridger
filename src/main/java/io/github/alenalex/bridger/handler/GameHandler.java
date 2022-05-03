@@ -246,7 +246,7 @@ public class GameHandler {
         plugin.messagingUtils().sendTo(player, userData.userSettings().getLanguage().asComponent(LangConfigurationPaths.PLAYER_LEAVE_GAME));
     }
 
-    public void playerQuitServer(Player player){
+    public void onPlayerQuit(Player player){
         if(!activeBridges.containsKey(player.getUniqueId()))
             return;
 

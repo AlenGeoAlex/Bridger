@@ -35,7 +35,8 @@ public class BridgerAdminCommand extends AbstractCommand {
 
         switch (fileName.toUpperCase()){
             case "CONFIG": case "CFG": case "CONFIGURATION":
-                manager.plugin().configurationHandler().reloadHandler();
+                manager.plugin().configurationHandler().getConfigurationFile().prepareReload();
+                manager.plugin().configurationHandler().getConfigurationFile().loadFile();
                 manager.plugin().trackableTask().stopThread();
                 manager.plugin().trackableTask().startThread();
                 manager.plugin().messagingUtils().sendTo(sender, MessageFormatter.transform(PluginResponses.Commands.Admin.RELOAD_COMPLETE));
@@ -46,10 +47,24 @@ public class BridgerAdminCommand extends AbstractCommand {
                     manager.plugin().getLogger().severe("The plugin will be disabled!");
                     manager.plugin().getServer().getPluginManager().disablePlugin(manager.plugin());
                 }
+                manager.plugin().messagingUtils().sendTo(sender, MessageFormatter.transform(PluginResponses.Commands.Admin.RELOAD_COMPLETE));
                 break;
             case "ISLAND": case "ISLANDS":
 
+                manager.plugin().messagingUtils().sendTo(sender, MessageFormatter.transform(PluginResponses.Commands.Admin.RELOAD_COMPLETE));
                break;
+            case "SCOREBOARD": case "SB": case "SCRBRDS":
+                manager.plugin().scoreboardTask().stopThread();
+                manager.plugin().configurationHandler().getScoreboardConfiguration().prepareReload();
+                manager.plugin().configurationHandler().getScoreboardConfiguration().loadFile();
+                if(manager.plugin().configurationHandler().getScoreboardConfiguration().isScoreboardEnabled()) {
+                    manager.plugin().scoreboardTask().setThreadCallPeriod(manager.plugin().configurationHandler().getScoreboardConfiguration().getScoreboardUpdateTime());
+                    if (!manager.plugin().scoreboardTask().startThread()) {
+                        manager.plugin().getLogger().warning("Failed to initialize thread pool for Game monitor");
+                    }
+                }
+                manager.plugin().messagingUtils().sendTo(sender, MessageFormatter.transform(PluginResponses.Commands.Admin.RELOAD_COMPLETE));
+                break;
             default:
                 manager.plugin().messagingUtils().sendTo(sender, MessageFormatter.transform(PluginResponses.Others.UNKNOWN_CAUSE));
         }

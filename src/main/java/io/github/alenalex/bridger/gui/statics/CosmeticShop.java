@@ -108,7 +108,7 @@ public class CosmeticShop extends AbstractStaticGUI<Gui> {
                     });
 
             final GuiItem materialShop = ItemBuilder
-                    .from(Material.BED_BLOCK)
+                    .from(Material.STONE)
                     .name(MessageFormatter.convertToComponent("<aqua>Materials"))
                     .lore(
                             MessageFormatter.convertToComponent("<gray>Click to open material shop"),

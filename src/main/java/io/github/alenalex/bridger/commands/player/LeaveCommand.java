@@ -1,4 +1,4 @@
-package io.github.alenalex.bridger.commands.island;
+package io.github.alenalex.bridger.commands.player;
 
 import dev.triumphteam.cmd.core.annotation.Default;
 import io.github.alenalex.bridger.abstracts.AbstractCommand;

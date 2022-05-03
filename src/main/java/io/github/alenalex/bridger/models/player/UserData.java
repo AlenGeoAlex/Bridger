@@ -14,7 +14,6 @@ import org.bukkit.inventory.meta.FireworkMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -42,8 +41,13 @@ public final class UserData {
     }
 
     @NotNull
-    public Optional<Player> getPlayer() {
+    public Optional<Player> getOptionalPlayer() {
         return Optional.ofNullable(Bukkit.getPlayer(playerUID));
+    }
+
+    @Nullable
+    public Player getPlayer(){
+        return Bukkit.getPlayer(playerUID);
     }
 
     @NotNull
@@ -57,7 +61,7 @@ public final class UserData {
     }
 
     public void doFireworksOnPlayerLocation (){
-        final Player player = getPlayer().orElse(null);
+        final Player player = getOptionalPlayer().orElse(null);
         if(player == null || !player.isOnline()) return;
 
         if(!Bridger.instance().configurationHandler().getConfigurationFile().isFireworkEnabled())
@@ -140,6 +144,22 @@ public final class UserData {
     @NotNull
     public UserMatchCache userMatchCache(){
         return userMatchCache;
+    }
+
+    public void setScoreboardOff(){
+        if(!this.userSettings.isScoreboardEnabled())
+            return;
+
+        this.userSettings.setScoreboardEnabled(false);
+        this.userMatchCache.deleteScoreboard();
+    }
+
+    public void setScoreboardOn(){
+        if(this.userSettings.isScoreboardEnabled())
+            return;
+
+        this.userSettings.setScoreboardEnabled(true);
+        this.userMatchCache.spawnScoreboard();
     }
 
     @Override

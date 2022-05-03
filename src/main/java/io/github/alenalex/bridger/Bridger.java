@@ -13,14 +13,20 @@ import io.github.alenalex.bridger.manager.CommandManager;
 import io.github.alenalex.bridger.manager.HookManager;
 import io.github.alenalex.bridger.manager.LocaleManager;
 import io.github.alenalex.bridger.manager.SetupSessionManager;
+import io.github.alenalex.bridger.task.ScoreboardTask;
 import io.github.alenalex.bridger.task.TrackableTask;
 import io.github.alenalex.bridger.utils.adventure.MessagingUtils;
-import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Random;
 
 public final class Bridger extends JavaPlugin {
+
+    private static boolean PLUGIN_RELOADING = false;
+
+    public static boolean isPluginReloading() {
+        return PLUGIN_RELOADING;
+    }
 
     private static final Random RANDOM;
     private static final Gson GSON;
@@ -55,6 +61,7 @@ public final class Bridger extends JavaPlugin {
     private CommandManager commandManager;
     private SetupSessionManager setupSessionManager;
     private TrackableTask trackableTask;
+    private ScoreboardTask scoreboardTask;
 
     @Override
     public void onEnable() {
@@ -70,6 +77,7 @@ public final class Bridger extends JavaPlugin {
         this.commandManager = new CommandManager(this);
         this.setupSessionManager = new SetupSessionManager(this);
         this.trackableTask = new TrackableTask(this);
+        this.scoreboardTask = new ScoreboardTask(this);
 
         if(!pluginHookManager.validateMinHookRequirements()) {
             getServer().getPluginManager().disablePlugin(this);
@@ -136,7 +144,7 @@ public final class Bridger extends JavaPlugin {
             return;
         }
         //Register all the plugin listener
-        getServer().getPluginManager().registerEvents(new ConnectionListener(this), this);
+        getServer().getPluginManager().registerEvents(new PlayerConnectionListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerBlockListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerMovementListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerDeathListener(this), this);
@@ -155,8 +163,17 @@ public final class Bridger extends JavaPlugin {
         this.commandManager.registerMessages();
         this.commandManager.registerCommands();
 
+        this.trackableTask.setThreadCallPeriod(this.configurationHandler.getConfigurationFile().getActionBarUpdateTime());
+        if(!this.trackableTask.startThread()) {
+            getLogger().warning("Failed to initialize thread pool for Game monitor");
+        }
 
-        this.trackableTask.startThread();
+        if(this.configurationHandler.getScoreboardConfiguration().isScoreboardEnabled()) {
+            this.scoreboardTask.setThreadCallPeriod(this.configurationHandler.getScoreboardConfiguration().getScoreboardUpdateTime());
+            if (!this.scoreboardTask.startThread()) {
+                getLogger().warning("Failed to initialize thread pool for Scoreboards");
+            }
+        }
     }
 
     @Override
@@ -172,17 +189,33 @@ public final class Bridger extends JavaPlugin {
 
         if(this.trackableTask != null)
             this.trackableTask.stopThread();
+
+        if(this.scoreboardTask != null)
+            this.scoreboardTask.stopThread();
     }
 
     public void prepareReloadTask(){
+        PLUGIN_RELOADING = true;
         this.configurationHandler.reloadHandler();
         if(!this.localeManager.reloadLocaleManager()){
             getLogger().severe("Failed to load locales!");
             getLogger().severe("The plugin will be disabled!");
             getServer().getPluginManager().disablePlugin(this);
         }
+
         this.trackableTask.stopThread();
-        this.trackableTask.startThread();
+        this.trackableTask.setThreadCallPeriod(this.configurationHandler.getConfigurationFile().getActionBarUpdateTime());
+        if(!this.trackableTask.startThread()) {
+            getLogger().warning("Failed to initialize thread pool for Game monitor");
+        }
+
+        if(this.configurationHandler.getScoreboardConfiguration().isScoreboardEnabled()) {
+            this.scoreboardTask.setThreadCallPeriod(this.configurationHandler.getScoreboardConfiguration().getScoreboardUpdateTime());
+            if (!this.scoreboardTask.startThread()) {
+                getLogger().warning("Failed to initialize thread pool for Game monitor");
+            }
+        }
+        PLUGIN_RELOADING = false;
     }
 
     public ConfigurationHandler configurationHandler() {
@@ -223,5 +256,9 @@ public final class Bridger extends JavaPlugin {
 
     public TrackableTask trackableTask(){
         return trackableTask;
+    }
+
+    public ScoreboardTask scoreboardTask(){
+        return scoreboardTask;
     }
 }

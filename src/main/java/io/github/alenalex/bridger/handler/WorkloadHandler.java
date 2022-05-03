@@ -13,10 +13,8 @@ public class WorkloadHandler implements IHandler {
     private final WorkloadDistributor workloadDistributor;
 
     private WorkloadThread syncThread;
-    private WorkloadThread asyncThread;
 
     private BukkitTask syncTask;
-    private BukkitTask asyncTask;
 
     public WorkloadHandler(Bridger plugin) {
         this.plugin = plugin;
@@ -26,17 +24,12 @@ public class WorkloadHandler implements IHandler {
     @Override
     public boolean initHandler(){
         this.syncThread = workloadDistributor.createThread(220000L);
-        this.asyncThread = workloadDistributor.createThread(5000000L);
-
-
-
-        return syncThread != null && asyncThread != null;
+        return syncThread != null;
     }
 
     @Override
     public void prepareHandler() {
         this.syncTask = plugin.getServer().getScheduler().runTaskTimer(plugin, syncThread, 1L, 1L);
-        this.asyncTask = plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, asyncThread, 1L, 1L);
     }
 
     @Override
@@ -49,15 +42,9 @@ public class WorkloadHandler implements IHandler {
         if(syncTask != null)
             syncTask.cancel();
 
-        if(asyncTask != null)
-            asyncTask.cancel();
     }
 
     public WorkloadThread getSyncThread() {
         return syncThread;
-    }
-
-    public WorkloadThread getAsyncThread() {
-        return asyncThread;
     }
 }

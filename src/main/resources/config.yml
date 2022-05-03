@@ -1,5 +1,5 @@
 storage:
-  type: MySQL
+  type: SQLite
   host: localhost
   port: 3306
   ssl: false
@@ -11,6 +11,9 @@ broadcast-new-best-time-all-players: true
 
 ##Action bar is run on a separate thread!
 update-action-bar-on-every-ms: 500
+
+server-join-message: ""
+server-leave-message: ""
 
 allow-block-interaction-on-lobby:
   place-block: false

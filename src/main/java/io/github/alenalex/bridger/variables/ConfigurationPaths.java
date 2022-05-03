@@ -41,6 +41,9 @@ public enum ConfigurationPaths {
     LOBBY_SELECTOR("lobby-items.island-selector"),
     LOBBY_JOIN("lobby-items.join"),
     LOBBY_OTHERS("lobby-items.others"),
+
+    SERVER_JOIN_MESSAGE("server-join-message"),
+    SERVER_LEAVE_MESSAGE("server-leave-message"),
     ;
 
     private String path;

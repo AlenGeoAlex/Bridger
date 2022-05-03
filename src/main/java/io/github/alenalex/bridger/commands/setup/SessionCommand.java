@@ -21,28 +21,20 @@ import java.util.Map;
 
 public class SessionCommand extends AbstractCommand {
 
-    private static final HashMap<String, String> COMMAND_DESCRIPTION = new HashMap<String, String>(){{
-        put("create [name]", "Creates a session with the name.");
-        put("delete", "Deletes any active session on your behalf");
-        put("validate", "Validates your current session, It will show if you have missed any compulsory configuration");
-        put("pos1", "Sets the position 1 to your current location");
-        put("pos2", "Sets the position 2 to your current location");
-        put("spawn", "Sets the spawn position of the player to your current location");
-        put("end", "Sets the end position of the player to your current location");
-        put("perm [perm.node]", "Sets the perm node of the island that a player required to join");
-        put("min-blocks [min.blocks]", "Sets the minimum no of blocks a player required to place in order to complete the practice");
-        put("min-time [min.time]", "Sets the minimum time a player required to complete the practice");
-        put("setjoincost [cost]", "Sets the cost needed to join the island" );
-        put("setreward [cost]", "Sets the amount of coins if a player wins a round!");
-    }};
-
     public SessionCommand(CommandManager manager) {
         super(manager, "session");
-    }
-
-    @Override
-    public Map<String, String> getCommandDescriptionMap() {
-        return COMMAND_DESCRIPTION;
+        this.registerHelpMessage("create [name]","Creates a session with the name.");
+        this.registerHelpMessage("delete", "Deletes any active session on your behalf");
+        this.registerHelpMessage("validate", "Validates your current session, It will show if you have missed any compulsory configuration");
+        this.registerHelpMessage("pos1", "Sets the position 1 to your current location");
+        this.registerHelpMessage("pos2", "Sets the position 2 to your current location");
+        this.registerHelpMessage("spawn", "Sets the spawn position of the player to your current location");
+        this.registerHelpMessage("end", "Sets the end position of the player to your current location");
+        this.registerHelpMessage("perm [perm.node]", "Sets the perm node of the island that a player required to join");
+        this.registerHelpMessage("min-blocks [min.blocks]","Sets the minimum no of blocks a player required to place in order to complete the practice");
+        this.registerHelpMessage("min-time [min.time]", "Sets the minimum time a player required to complete the practice");
+        this.registerHelpMessage("setjoincost [cost]", "Sets the cost needed to join the island");
+        this.registerHelpMessage("setreward [cost]", "Sets the amount of coins if a player wins a round!");
     }
 
     @Default

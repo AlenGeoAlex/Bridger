@@ -5,6 +5,7 @@ import io.github.alenalex.bridger.exceptions.IllegalHookAccess;
 import io.github.alenalex.bridger.hooks.VaultEconomyProvider;
 import io.github.alenalex.bridger.hooks.placeholders.PlaceholderAPI;
 import io.github.alenalex.bridger.interfaces.IEconomyProvider;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.List;
@@ -49,6 +50,13 @@ public class HookManager {
             throw new IllegalHookAccess("Economy provider isn't registered, It shouldn't happen, but seems like somethings off, Please contact the developer");
 
         return economyProvider;
+    }
+
+    public boolean isHookEnabled(@NotNull String hookName){
+        if(!allHooks.containsKey(hookName))
+            return false;
+
+        return allHooks.get(hookName);
     }
 
     public Map<String, Boolean> getAllHooks() {
