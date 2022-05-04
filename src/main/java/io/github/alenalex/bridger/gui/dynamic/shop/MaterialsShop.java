@@ -79,7 +79,7 @@ public class MaterialsShop extends AbstractDynamicGUI<PaginatedGui> {
                                             handler.plugin().messagingUtils().sendTo(
                                                     player,
                                                     data.userSettings().getLanguage().asComponent(LangConfigurationPaths.SHOP_PURCHASE_FAIL_NO_CASH,
-                                                            MessagePlaceholder.of(" %item-name%", name)
+                                                            MessagePlaceholder.of("%item-name%", name)
                                                     )
                                             );
                                             return;
@@ -90,7 +90,7 @@ public class MaterialsShop extends AbstractDynamicGUI<PaginatedGui> {
                                         handler.plugin().messagingUtils().sendTo(
                                                 player,
                                                 data.userSettings().getLanguage().asComponent(LangConfigurationPaths.SHOP_SUCCESSFULLY_PURCHASED,
-                                                        MessagePlaceholder.of(" %item-name%", name),
+                                                        MessagePlaceholder.of("%item-name%", name),
                                                         MessagePlaceholder.of("%item-price%", amount)
                                                 )
                                         );

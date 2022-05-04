@@ -13,21 +13,18 @@ import java.util.UUID;
 public class HeadUtils {
 
     public static ItemStack getHead(final String base64) {
-
-        final ItemStack head = new ItemStack(Material.SKULL_ITEM);
-        final SkullMeta meta = (SkullMeta) head.getItemMeta();
-        final GameProfile profile = new GameProfile(UUID.randomUUID(), "");
+        ItemStack head = new ItemStack(Material.SKULL_ITEM, 1, (short)3);
+        SkullMeta meta = (SkullMeta) head.getItemMeta();
+        GameProfile profile = new GameProfile(UUID.randomUUID(), "");
         profile.getProperties().put("textures", new Property("textures", base64));
-        final Field profileField;
+        Field profileField = null;
         try {
             profileField = meta.getClass().getDeclaredField("profile");
             profileField.setAccessible(true);
             profileField.set(meta, profile);
-        } catch (final IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {
+        } catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {
             e.printStackTrace();
-            return new ItemStack(Material.SKULL_ITEM);
         }
-
         head.setItemMeta(meta);
         return head;
     }

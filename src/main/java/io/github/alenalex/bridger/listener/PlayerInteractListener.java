@@ -55,7 +55,7 @@ public final class PlayerInteractListener implements Listener {
         System.out.println("PlayerInteractListener");
         System.out.println(1);
 
-        if(event.getItem() != null && !event.getItem().hasItemMeta())
+        if(event.getItem() == null || !event.getItem().hasItemMeta())
             return;
 
         System.out.println(2);
@@ -78,6 +78,10 @@ public final class PlayerInteractListener implements Listener {
             case IDLE:
             case PLAYING:
             {
+                if(plugin.configurationHandler().getConfigurationFile().getMatchLeaveItem().isInteractionSimilar(event.getItem())) {
+                    event.setCancelled(true);
+                    player.performCommand("island leave");
+                }
                 break;
             }
             case LOBBY:

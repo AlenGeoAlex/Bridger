@@ -25,6 +25,8 @@ public class UserManager extends AbstractRegistry<UUID, UserData> {
         Bridger.instance().getServer().getScheduler().runTask(Bridger.instance(), () -> {
             player.teleport(Bridger.instance().configurationHandler().getConfigurationFile().getSpawnLocation());
 
+            player.getInventory().clear();
+
             player.setHealth(20);
             player.setGameMode(GameMode.ADVENTURE);
             player.setFlying(false);
@@ -57,6 +59,9 @@ public class UserManager extends AbstractRegistry<UUID, UserData> {
         final Player player = userData.getPlayer();
         if(player == null)
             return;
+
+        player.getInventory().clear();
+
 
         player.setHealth(20);
         player.setGameMode(GameMode.SURVIVAL);

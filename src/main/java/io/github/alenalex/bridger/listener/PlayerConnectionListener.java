@@ -1,6 +1,7 @@
 package io.github.alenalex.bridger.listener;
 
 import io.github.alenalex.bridger.Bridger;
+import io.github.alenalex.bridger.manager.UserManager;
 import io.github.alenalex.bridger.models.player.UserData;
 import io.github.alenalex.bridger.variables.LangConfigurationPaths;
 import org.bukkit.entity.Player;
@@ -36,6 +37,7 @@ public final class PlayerConnectionListener implements Listener {
 
            plugin.gameHandler().userManager().registerOverride(playerUUID, user);
         });
+        UserManager.handleLobbyTransport(player);
     }
 
     @EventHandler(priority = EventPriority.LOW)

@@ -37,8 +37,13 @@ public final class PlayerBlockListener implements Listener {
         switch (userData.userMatchCache().getStatus()){
             //Start the game
             case IDLE: {
+                if(plugin.configurationHandler().getConfigurationFile().getMatchLeaveItem().isInteractionSimilar(event.getItemInHand())){
+                    event.setCancelled(true);
+                }
+
                 Island island = plugin.gameHandler().getIslandOfPlayer(player).orElse(null);
                 if (island == null) return;
+
 
                 if (island.isIslandResetting()) {
                     event.setCancelled(true);
@@ -65,6 +70,10 @@ public final class PlayerBlockListener implements Listener {
             }
                 //Nothing special, just add those blocks to the cache
             case PLAYING: {
+                if(plugin.configurationHandler().getConfigurationFile().getMatchLeaveItem().isInteractionSimilar(event.getItemInHand())){
+                    event.setCancelled(true);
+                }
+
                 if (plugin.configurationHandler().getConfigurationFile().getPlacementBlockedMaterial().contains(event.getBlockAgainst().getType())) {
                     event.setCancelled(true);
                     plugin.messagingUtils().sendTo(player, userData.userSettings().getLanguage().asComponent(LangConfigurationPaths.CANNOT_PLACE_BLOCK_HERE));
