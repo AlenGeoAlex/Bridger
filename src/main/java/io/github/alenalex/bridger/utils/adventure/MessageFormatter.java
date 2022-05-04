@@ -4,6 +4,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import net.kyori.adventure.text.minimessage.tag.standard.StandardTags;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.apache.commons.lang3.StringUtils;
 import org.bukkit.ChatColor;
 import org.jetbrains.annotations.NotNull;
@@ -89,5 +90,16 @@ public final class MessageFormatter {
             messagesToTransform = pl.replacePlaceholders(messagesToTransform);
         }
         return transform(messagesToTransform);
+    }
+
+    public static String toLegacyString(@NotNull Component component){
+        return LegacyComponentSerializer.legacySection().serialize(component);
+    }
+
+    public static List<String> toLegacyString(@NotNull List<Component> components){
+        return components
+                .stream()
+                .map(MessageFormatter::toLegacyString)
+                .collect(Collectors.toList());
     }
 }

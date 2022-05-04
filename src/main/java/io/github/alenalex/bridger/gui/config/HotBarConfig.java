@@ -1,11 +1,13 @@
 package io.github.alenalex.bridger.gui.config;
 
 import de.leonhard.storage.sections.FlatFileSection;
+import io.github.alenalex.bridger.models.player.UserData;
 import io.github.alenalex.bridger.utils.FlatFileUtils;
 import io.github.alenalex.bridger.utils.adventure.MessageFormatter;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -67,6 +69,15 @@ public class HotBarConfig {
         if(stack == null)
             throw new IllegalArgumentException("Invalid item stack");
 
+        final ItemMeta meta = stack.getItemMeta();
+
+        if(meta != null){
+            System.out.println(MessageFormatter.toLegacyString(text));
+            meta.setDisplayName(MessageFormatter.toLegacyString(text));
+            meta.setLore(MessageFormatter.toLegacyString(components));
+            stack.setItemMeta(meta);
+        }
+
         return new HotBarConfig(stack, slot, text, components, section.getStringList("commands"));
     }
 
@@ -74,4 +85,5 @@ public class HotBarConfig {
         player.getInventory().setItem(slot, itemStack);
         player.updateInventory();
     }
+    
 }

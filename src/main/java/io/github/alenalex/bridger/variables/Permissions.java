@@ -21,6 +21,7 @@ public class Permissions {
 
         public static class Admin{
             public static final String RELOAD = "bridger.command.admin.reload";
+            public static final String BUILD = "bridger.command.admin.build";
         }
     }
 

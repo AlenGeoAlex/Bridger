@@ -107,13 +107,13 @@ public final class PlayerBlockListener implements Listener {
         if(userData == null)
             return;
 
-        if(userData.userMatchCache().getStatus() == UserMatchCache.Status.LOBBY){
-            if(player.getGameMode() == GameMode.CREATIVE
-                    || player.hasPermission(Permissions.Admin.ADMIN_BUILD)
-                    || plugin.gameHandler().userManager().isPlayerAllowedToBuild(player)
-            )
-                return;
+        if(player.getGameMode() == GameMode.CREATIVE
+                || player.hasPermission(Permissions.Admin.ADMIN_BUILD)
+                || plugin.gameHandler().userManager().isPlayerAllowedToBuild(player)
+        )
+            return;
 
+        if(userData.userMatchCache().getStatus() == UserMatchCache.Status.LOBBY){
             if(!plugin.configurationHandler().getConfigurationFile().isDoAllowBreakingBlocksOnLobby())
                 event.setCancelled(true);
         }else {

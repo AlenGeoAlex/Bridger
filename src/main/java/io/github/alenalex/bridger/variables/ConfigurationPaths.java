@@ -44,6 +44,10 @@ public enum ConfigurationPaths {
 
     SERVER_JOIN_MESSAGE("server-join-message"),
     SERVER_LEAVE_MESSAGE("server-leave-message"),
+
+    BLOCK_COUNT_MATCH("match-settings.no-of-blocks"),
+    MATCH_LEAVE_GAME_ITEM("match-settings.leave-match")
+
     ;
 
     private String path;

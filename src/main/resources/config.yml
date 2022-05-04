@@ -45,24 +45,33 @@ lobby-items:
     lore:
       - "<gray>Click to open the shop"
   settings:
-    enabled: true
+    enabled: false
     item:
     slot:
     name:
     lore: []
   join:
-    enabled: true
+    enabled: false
     item:
     slot:
     name:
     lore: []
   island-selector:
-    enabled: true
+    enabled: false
     item:
     slot:
     name:
     lore: []
   others: []
+
+match-settings:
+  no-of-blocks: 120
+  leave-match:
+    enabled: true
+    item: BARRIER
+    slot: 8
+    name: "<red>Leave"
+    lore: []
 
 cosmetics:
   firework:

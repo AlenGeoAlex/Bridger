@@ -33,6 +33,8 @@ public final class PluginResponses {
 
         public static class Admin{
             public static final String RELOAD_COMPLETE = "<green>Reloaded the plugin successfully!";
+            public static final String ENABLED_BUILD = "<green>Build perms has been enabled!";
+            public static final String DISABLED_BUILD = "<red>Disabled build perms!";
         }
     }
 

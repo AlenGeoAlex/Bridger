@@ -1,6 +1,7 @@
 package io.github.alenalex.bridger.listener;
 
 import io.github.alenalex.bridger.Bridger;
+import io.github.alenalex.bridger.gui.config.HotBarConfig;
 import io.github.alenalex.bridger.models.player.UserData;
 import io.github.alenalex.bridger.variables.Permissions;
 import org.bukkit.entity.Player;
@@ -52,14 +53,19 @@ public final class PlayerInteractListener implements Listener {
         if(event.isCancelled())
             return;
 
+        System.out.println(1);
+
         if(event.getItem() != null && !event.getItem().hasItemMeta())
             return;
+
+        System.out.println(2);
 
         final ItemStack clickedItem = event.getItem();
 
         if(!clickedItem.getItemMeta().hasDisplayName())
             return;
 
+        System.out.println(3);
         plugin.getLogger().info(clickedItem.getItemMeta().getDisplayName());
 
         final Player player = event.getPlayer();
@@ -72,7 +78,6 @@ public final class PlayerInteractListener implements Listener {
             case IDLE:
             case PLAYING:
             {
-
                 break;
             }
             case LOBBY:

@@ -6,6 +6,7 @@ import io.github.alenalex.bridger.gui.config.HotBarConfig;
 import io.github.alenalex.bridger.models.player.UserData;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -52,12 +53,24 @@ public class UserManager extends AbstractRegistry<UUID, UserData> {
 
     }
 
-    public static void setIslandItemsOnPlayer(@NotNull Player player){
+    public static void setIslandItemsOnPlayer(@NotNull UserData userData){
+        final Player player = userData.getPlayer();
+        if(player == null)
+            return;
 
-    }
+        player.setHealth(20);
+        player.setGameMode(GameMode.SURVIVAL);
+        player.setFlying(false);
+        player.setFoodLevel(20);
 
-    public static void setBlocksOnPlayer(@NotNull Player player){
+        ItemStack toSet = userData.userSettings().getCurrentBlock();
+        for(int invLoop = 0; invLoop <= Bridger.instance().configurationHandler().getConfigurationFile().getBlockCount(); invLoop++){
+            player.getInventory().addItem(toSet);
+        }
 
+        if(Bridger.instance().configurationHandler().getConfigurationFile().getMatchLeaveItem() != null){
+            Bridger.instance().configurationHandler().getConfigurationFile().getMatchLeaveItem().applyOn(player);
+        }
     }
 
     public boolean isPlayerAllowedToBuild(@NotNull Player player){

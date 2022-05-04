@@ -105,8 +105,8 @@ public final class UserSettings {
     }
 
     public void setMaterial(String material) {
-        this.material = material;
         this.currentBlock = Materials.getItemStackByMaterialName(material);
+        this.material = currentBlock.getType().name();
     }
 
     public void setParticle(String particle) {

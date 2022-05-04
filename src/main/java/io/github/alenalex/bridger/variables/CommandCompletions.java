@@ -12,10 +12,11 @@ public class CommandCompletions {
         public static final String CONFIG_RELOAD = "configReload";
         public static final String ALL_PLAYERS = "allPlayers";
         public static final String ENABLED_LOCALE = "enabledLocale";
+        public static final String PLAYERS = "players";
     }
 
     public static class Parameters{
-        public static final List<String> CONFIG_RELOAD = Arrays.asList("config","locale","island");
+        public static final List<String> CONFIG_RELOAD = Arrays.asList("config","locale","island", "scoreboard");
         public static final List<String> ISLAND_SESSION_PERMISSION = Collections.singletonList("bridger.join.");
     }
 }

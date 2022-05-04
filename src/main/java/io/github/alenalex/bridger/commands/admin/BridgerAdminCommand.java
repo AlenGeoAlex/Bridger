@@ -3,13 +3,16 @@ package io.github.alenalex.bridger.commands.admin;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.annotation.Optional;
 import dev.triumphteam.cmd.core.annotation.SubCommand;
+import dev.triumphteam.cmd.core.annotation.Suggestion;
 import io.github.alenalex.bridger.abstracts.AbstractCommand;
 import io.github.alenalex.bridger.manager.CommandManager;
 import io.github.alenalex.bridger.utils.adventure.MessageFormatter;
+import io.github.alenalex.bridger.variables.CommandCompletions;
 import io.github.alenalex.bridger.variables.Permissions;
 import io.github.alenalex.bridger.variables.PluginResponses;
 import org.apache.commons.lang3.StringUtils;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
@@ -17,15 +20,18 @@ import java.util.Map;
 public class BridgerAdminCommand extends AbstractCommand {
     public BridgerAdminCommand(CommandManager manager) {
         super(manager, "bridgeradmin");
-    }
-
-    @Override
-    public Map<String, String> getCommandDescriptionMap() {
-        return null;
+        registerHelpMessage("reload", "Reloads the entire plugin.");
+        registerHelpMessage("reload config", "Reloads only the main config.");
+        registerHelpMessage("reload locale", "Reloads the locale of the plugin.");
+        registerHelpMessage("reload island", "Reloads the island configuration");
+        registerHelpMessage("reload scoreboard", "Reloads the scoreboard configuration");
+        registerHelpMessage("build", "Allows you to build on restricted situations.");
+        registerHelpMessage("build [player]", "Allows specified player to build on restricted situations.");
     }
 
     @SubCommand("reload")
     @Permission(Permissions.Commands.Admin.RELOAD)
+    @Suggestion(CommandCompletions.Keys.CONFIG_RELOAD)
     public void onReloadCommand(@NotNull CommandSender sender, @Optional String fileName){
         if(StringUtils.isBlank(fileName)){
             manager.plugin().prepareReloadTask();
@@ -69,4 +75,31 @@ public class BridgerAdminCommand extends AbstractCommand {
                 manager.plugin().messagingUtils().sendTo(sender, MessageFormatter.transform(PluginResponses.Others.UNKNOWN_CAUSE));
         }
     }
+
+    @SubCommand("build")
+    @Permission(Permissions.Commands.Admin.BUILD)
+    @Suggestion(CommandCompletions.Keys.PLAYERS)
+    public void onBuildCommand(@NotNull Player player, @Optional Player target){
+        if(target == null){
+            if(manager.plugin().gameHandler().userManager().isPlayerAllowedToBuild(player)){
+                manager.plugin().gameHandler().userManager().removeBuildPermsToPlayer(player);
+                manager.plugin().messagingUtils().sendTo(player, PluginResponses.Commands.Admin.DISABLED_BUILD);
+            }else {
+                manager.plugin().gameHandler().userManager().addBuildPermsToPlayer(player);
+                manager.plugin().messagingUtils().sendTo(player, PluginResponses.Commands.Admin.ENABLED_BUILD);
+            }
+        }else {
+            if(manager.plugin().gameHandler().userManager().isPlayerAllowedToBuild(target)){
+                manager.plugin().gameHandler().userManager().removeBuildPermsToPlayer(target);
+                manager.plugin().messagingUtils().sendTo(player, PluginResponses.Commands.Admin.DISABLED_BUILD);
+                manager.plugin().messagingUtils().sendTo(target, PluginResponses.Commands.Admin.DISABLED_BUILD);
+            }else {
+                manager.plugin().gameHandler().userManager().addBuildPermsToPlayer(target);
+                manager.plugin().messagingUtils().sendTo(player, PluginResponses.Commands.Admin.ENABLED_BUILD);
+                manager.plugin().messagingUtils().sendTo(target, PluginResponses.Commands.Admin.ENABLED_BUILD);
+            }
+        }
+    }
+
+
 }

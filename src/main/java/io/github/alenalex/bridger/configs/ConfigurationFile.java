@@ -51,6 +51,9 @@ public class ConfigurationFile extends AbstractFileSettings {
     private String serverJoinMessage;
     private String serverLeaveMessage;
 
+    private int blockCount;
+    private HotBarConfig matchLeaveItem;
+
     public ConfigurationFile(ConfigurationHandler handler) {
         super(handler);
         this.enabledFireworkModels = new HashMap<>();
@@ -134,6 +137,9 @@ public class ConfigurationFile extends AbstractFileSettings {
 
         this.serverJoinMessage = StringUtils.isBlank(serverJoinMessage) ? null : MessageFormatter.colorizeLegacy(this.serverJoinMessage);
         this.serverLeaveMessage = StringUtils.isBlank(serverLeaveMessage) ? null : MessageFormatter.colorizeLegacy(this.serverLeaveMessage);
+
+        this.blockCount = this.file.getInt(ConfigurationPaths.BLOCK_COUNT_MATCH.getPath());
+        this.matchLeaveItem = HotBarConfig.of(getSectionOf(ConfigurationPaths.MATCH_LEAVE_GAME_ITEM.getPath()));
     }
 
     @Override
@@ -244,5 +250,13 @@ public class ConfigurationFile extends AbstractFileSettings {
 
     public String getServerLeaveMessage() {
         return serverLeaveMessage;
+    }
+
+    public int getBlockCount() {
+        return blockCount;
+    }
+
+    public HotBarConfig getMatchLeaveItem() {
+        return matchLeaveItem;
     }
 }

@@ -87,6 +87,7 @@ public class GameHandler {
         activeBridges.put(player.getUniqueId(), island.getIslandName());
         userData.userMatchCache().setPlayerAsIdle();
         island.teleportToSpawn(player);
+        UserManager.setIslandItemsOnPlayer(userData);
         plugin.messagingUtils().sendTo(player,
                 userData.userSettings().getLanguage().asComponent(LangConfigurationPaths.TELEPORTED_TO_ISLAND,
                         MessagePlaceholder.of("%island-name%", island.getIslandName())
@@ -118,6 +119,7 @@ public class GameHandler {
         activeBridges.put(player.getUniqueId(), island.getIslandName());
         userData.userMatchCache().setPlayerAsIdle();
         island.teleportToSpawn(player);
+        UserManager.setIslandItemsOnPlayer(userData);
         plugin.messagingUtils().sendTo(player,
                 userData.userSettings().getLanguage().asComponent(LangConfigurationPaths.TELEPORTED_TO_ISLAND,
                 MessagePlaceholder.of("%island-name%", island.getIslandName())
@@ -136,6 +138,7 @@ public class GameHandler {
         activeBridges.put(player.getUniqueId(), island.getIslandName());
         userData.userMatchCache().setPlayerAsIdle();
         island.teleportToSpawn(player);
+        UserManager.setIslandItemsOnPlayer(userData);
         plugin.messagingUtils().sendTo(player,
                 userData.userSettings().getLanguage().asComponent(LangConfigurationPaths.TELEPORTED_TO_ISLAND,
                         MessagePlaceholder.of("%island-name%", island.getIslandName())
@@ -158,7 +161,7 @@ public class GameHandler {
 
         final Island island = islandManager.of(activeBridges.get(player.getUniqueId()));
         island.teleportToSpawn(player);
-        UserManager.setIslandItemsOnPlayer(player);
+        UserManager.setIslandItemsOnPlayer(userData);
         island.setResetting();
         userData.userMatchCache().resetPlacedBlocks();
         island.setIdle();
