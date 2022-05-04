@@ -19,6 +19,7 @@ import io.github.alenalex.bridger.models.player.UserData;
 import io.github.alenalex.bridger.variables.CommandCompletions;
 import io.github.alenalex.bridger.variables.LangConfigurationPaths;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -98,7 +99,17 @@ public class CommandManager {
             }
         });
 
-
+        commandManager.registerSuggestion(SuggestionKey.of(CommandCompletions.Keys.PLAYERS), new SuggestionResolver<CommandSender>() {
+            @Override
+            public @NotNull List<String> resolve(@NotNull CommandSender sender, @NotNull SuggestionContext context) {
+                return plugin
+                        .getServer()
+                        .getOnlinePlayers()
+                        .stream()
+                        .map(HumanEntity::getName)
+                        .collect(Collectors.toList());
+            }
+        });
     }
 
     public void registerCommands(){

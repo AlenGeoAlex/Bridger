@@ -81,9 +81,25 @@ public class HotBarConfig {
         return new HotBarConfig(stack, slot, text, components, section.getStringList("commands"));
     }
 
+    public boolean isInteractionSimilar(@NotNull ItemStack stack){
+        if(!stack.hasItemMeta())
+            return stack.getType() == this.itemStack.getType();
+
+        final String displayName = stack.getItemMeta().hasDisplayName() ? stack.getItemMeta().getDisplayName() : null;
+        if(displayName == null)
+            return stack.getType() == this.itemStack.getType();
+
+        final String text = MessageFormatter.toLegacyString(name);
+
+        System.out.println("HotBarConfig "+text);
+
+        return stack.getType() == itemStack.getType()
+                && text.equals(displayName);
+    }
+
     public void applyOn(@NotNull Player player){
         player.getInventory().setItem(slot, itemStack);
         player.updateInventory();
     }
-    
+
 }

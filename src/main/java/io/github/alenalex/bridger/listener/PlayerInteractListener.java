@@ -52,7 +52,7 @@ public final class PlayerInteractListener implements Listener {
     public void onPlayerHotBarEvent(@NotNull PlayerInteractEvent event){
         if(event.isCancelled())
             return;
-
+        System.out.println("PlayerInteractListener");
         System.out.println(1);
 
         if(event.getItem() != null && !event.getItem().hasItemMeta())
