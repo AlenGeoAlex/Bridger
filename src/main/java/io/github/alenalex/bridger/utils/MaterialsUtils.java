@@ -1,4 +1,4 @@
-package io.github.alenalex.bridger.variables;
+package io.github.alenalex.bridger.utils;
 
 import io.github.alenalex.bridger.Bridger;
 import org.apache.commons.lang3.EnumUtils;
@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 
-public class Materials {
+public class MaterialsUtils {
 
     public static ItemStack getItemStackByMaterialName(@NotNull String materialName){
         if(StringUtils.isBlank(materialName))

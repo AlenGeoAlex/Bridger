@@ -1,10 +1,12 @@
 package io.github.alenalex.bridger.gui.config;
 
 import de.leonhard.storage.sections.FlatFileSection;
+import io.github.alenalex.bridger.Bridger;
 import io.github.alenalex.bridger.models.player.UserData;
 import io.github.alenalex.bridger.utils.FlatFileUtils;
 import io.github.alenalex.bridger.utils.adventure.MessageFormatter;
 import net.kyori.adventure.text.Component;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -72,7 +74,6 @@ public class HotBarConfig {
         final ItemMeta meta = stack.getItemMeta();
 
         if(meta != null){
-            System.out.println(MessageFormatter.toLegacyString(text));
             meta.setDisplayName(MessageFormatter.toLegacyString(text));
             meta.setLore(MessageFormatter.toLegacyString(components));
             stack.setItemMeta(meta);
@@ -91,10 +92,22 @@ public class HotBarConfig {
 
         final String text = MessageFormatter.toLegacyString(name);
 
-        System.out.println("HotBarConfig "+text);
-
         return stack.getType() == itemStack.getType()
                 && text.equals(displayName);
+    }
+
+    public void performCommands(@NotNull Player player){
+        if(!hasCommands())
+            return;
+
+        Bukkit.getScheduler().runTask(Bridger.instance(), new Runnable() {
+            @Override
+            public void run() {
+                for(String eachCommand : commands){
+                    player.performCommand(eachCommand);
+                }
+            }
+        });
     }
 
     public void applyOn(@NotNull Player player){

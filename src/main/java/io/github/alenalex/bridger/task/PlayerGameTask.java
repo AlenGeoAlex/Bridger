@@ -13,9 +13,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-public class TrackableTask extends AbstractThreadTask {
+public class PlayerGameTask extends AbstractThreadTask {
 
-    public TrackableTask(@NotNull Bridger plugin) {
+    public PlayerGameTask(@NotNull Bridger plugin) {
         super(plugin, "GameTracker", 1);
     }
 
@@ -45,6 +45,15 @@ public class TrackableTask extends AbstractThreadTask {
                             continue;
 
                         final long currentSec = System.currentTimeMillis() - userData.userMatchCache().getStartTime();
+
+                        if(userData.userSettings().isSetBackEnabled()){
+                            if(currentSec >= TimeUnit.SECONDS.toMillis(userData.userSettings().getSetBack())){
+                                getPlugin().gameHandler().playerFailedGame(player);
+                                getPlugin().messagingUtils().sendActionBar(player, userData.userSettings().getLanguage().asComponent(LangConfigurationPaths.SETBACK_REACHED));
+                                continue;
+                            }
+
+                        }
 
                         String hms = String.format("%02d :%02d :%02d",
                                 TimeUnit.MILLISECONDS.toMinutes(currentSec) % TimeUnit.HOURS.toMinutes(1),

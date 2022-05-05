@@ -22,6 +22,7 @@ public class Permissions {
         public static class Admin{
             public static final String RELOAD = "bridger.command.admin.reload";
             public static final String BUILD = "bridger.command.admin.build";
+            public static final String SETBACK = "bridger.command.admin.setback";
         }
     }
 
@@ -37,6 +38,8 @@ public class Permissions {
         public static final String BLOCK_PLACE = "bridger.spectator.placeblocks";
     }
 
-
+    public static class SetBack{
+        public static final String SET_BACK = "bridger.setback.use";
+    }
 
 }

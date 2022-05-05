@@ -14,7 +14,7 @@ import io.github.alenalex.bridger.manager.HookManager;
 import io.github.alenalex.bridger.manager.LocaleManager;
 import io.github.alenalex.bridger.manager.SetupSessionManager;
 import io.github.alenalex.bridger.task.ScoreboardTask;
-import io.github.alenalex.bridger.task.TrackableTask;
+import io.github.alenalex.bridger.task.PlayerGameTask;
 import io.github.alenalex.bridger.utils.adventure.MessagingUtils;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -60,7 +60,7 @@ public final class Bridger extends JavaPlugin {
     private HookManager pluginHookManager;
     private CommandManager commandManager;
     private SetupSessionManager setupSessionManager;
-    private TrackableTask trackableTask;
+    private PlayerGameTask playerGameTask;
     private ScoreboardTask scoreboardTask;
 
     @Override
@@ -76,7 +76,7 @@ public final class Bridger extends JavaPlugin {
         this.pluginHookManager = new HookManager(this);
         this.commandManager = new CommandManager(this);
         this.setupSessionManager = new SetupSessionManager(this);
-        this.trackableTask = new TrackableTask(this);
+        this.playerGameTask = new PlayerGameTask(this);
         this.scoreboardTask = new ScoreboardTask(this);
 
         if(!pluginHookManager.validateMinHookRequirements()) {
@@ -163,8 +163,8 @@ public final class Bridger extends JavaPlugin {
         this.commandManager.registerMessages();
         this.commandManager.registerCommands();
 
-        this.trackableTask.setThreadCallPeriod(this.configurationHandler.getConfigurationFile().getActionBarUpdateTime());
-        if(!this.trackableTask.startThread()) {
+        this.playerGameTask.setThreadCallPeriod(this.configurationHandler.getConfigurationFile().getActionBarUpdateTime());
+        if(!this.playerGameTask.startThread()) {
             getLogger().warning("Failed to initialize thread pool for Game monitor");
         }
 
@@ -187,8 +187,8 @@ public final class Bridger extends JavaPlugin {
             workloadHandler.disableHandler();
         }
 
-        if(this.trackableTask != null)
-            this.trackableTask.stopThread();
+        if(this.playerGameTask != null)
+            this.playerGameTask.stopThread();
 
         if(this.scoreboardTask != null)
             this.scoreboardTask.stopThread();
@@ -203,13 +203,15 @@ public final class Bridger extends JavaPlugin {
             getServer().getPluginManager().disablePlugin(this);
         }
 
-        this.trackableTask.stopThread();
-        this.trackableTask.setThreadCallPeriod(this.configurationHandler.getConfigurationFile().getActionBarUpdateTime());
-        if(!this.trackableTask.startThread()) {
+        this.playerGameTask.stopThread();
+        this.playerGameTask.reloadThread();
+        this.playerGameTask.setThreadCallPeriod(this.configurationHandler.getConfigurationFile().getActionBarUpdateTime());
+        if(!this.playerGameTask.startThread()) {
             getLogger().warning("Failed to initialize thread pool for Game monitor");
         }
 
         if(this.configurationHandler.getScoreboardConfiguration().isScoreboardEnabled()) {
+            this.scoreboardTask.reloadThread();
             this.scoreboardTask.setThreadCallPeriod(this.configurationHandler.getScoreboardConfiguration().getScoreboardUpdateTime());
             if (!this.scoreboardTask.startThread()) {
                 getLogger().warning("Failed to initialize thread pool for Game monitor");
@@ -254,8 +256,8 @@ public final class Bridger extends JavaPlugin {
         return setupSessionManager;
     }
 
-    public TrackableTask trackableTask(){
-        return trackableTask;
+    public PlayerGameTask trackableTask(){
+        return playerGameTask;
     }
 
     public ScoreboardTask scoreboardTask(){

@@ -4,7 +4,7 @@ import com.google.common.base.Objects;
 import io.github.alenalex.bridger.Bridger;
 import io.github.alenalex.bridger.configs.MessageConfiguration;
 import io.github.alenalex.bridger.variables.Fireworks;
-import io.github.alenalex.bridger.variables.Materials;
+import io.github.alenalex.bridger.utils.MaterialsUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.bukkit.FireworkEffect;
 import org.bukkit.inventory.ItemStack;
@@ -25,7 +25,7 @@ public final class UserSettings {
     private String particle;
     private String fireWork;
     private boolean scoreboardEnabled;
-    private boolean setBackEnabled;
+    private int setBack;
 
     private ItemStack currentBlock;
 
@@ -35,8 +35,8 @@ public final class UserSettings {
         this.particle = particle;
         this.fireWork = fireWork;
         this.scoreboardEnabled = scoreboardEnabled;
-        this.setBackEnabled = false;
-        this.currentBlock = Materials.getItemStackByMaterialName(material);
+        this.setBack = 0;
+        this.currentBlock = MaterialsUtils.getItemStackByMaterialName(material);
     }
 
     public UserSettings(String material, String particle, String fireWork, boolean scoreboardEnabled) {
@@ -45,8 +45,8 @@ public final class UserSettings {
         this.particle = particle;
         this.scoreboardEnabled = scoreboardEnabled;
         this.fireWork = fireWork;
-        this.setBackEnabled = false;
-        this.currentBlock = Materials.getItemStackByMaterialName(material);
+        this.setBack = 0;
+        this.currentBlock = MaterialsUtils.getItemStackByMaterialName(material);
     }
 
     public String getLanguageAsString() {
@@ -66,7 +66,7 @@ public final class UserSettings {
     }
 
     public String getCurrentBlockAsString(){
-        return Materials.serializeItemStack(currentBlock);
+        return MaterialsUtils.serializeItemStack(currentBlock);
     }
 
     public boolean hasMaterial() {
@@ -105,7 +105,7 @@ public final class UserSettings {
     }
 
     public void setMaterial(String material) {
-        this.currentBlock = Materials.getItemStackByMaterialName(material);
+        this.currentBlock = MaterialsUtils.getItemStackByMaterialName(material);
         this.material = currentBlock.getType().name();
     }
 
@@ -122,26 +122,52 @@ public final class UserSettings {
     }
 
     public boolean isSetBackEnabled() {
-        return setBackEnabled;
+        return setBack != 0;
     }
 
-    public void setSetBackEnabled(boolean setBackEnabled) {
-        this.setBackEnabled = setBackEnabled;
+    public void setSetBack(int setBackEnabled) {
+        this.setBack = setBackEnabled;
     }
 
+    public int getSetBack() {
+        return setBack;
+    }
 
+    public void incrementSetBack(){
+        setBack++;
+    }
+
+    public void incrementSetBackBy(int count){
+        setBack+=count;
+    }
+
+    public void decrementSetBack(){
+        setBack--;
+        if(setBack <= 0)
+            resetSetBack();
+    }
+
+    public void decrementSetBackBy(int count){
+        setBack-=count;
+        if(setBack <= 0)
+            resetSetBack();
+    }
+
+    public void resetSetBack(){
+        this.setBack = 0;
+    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UserSettings settings = (UserSettings) o;
-        return scoreboardEnabled == settings.scoreboardEnabled && setBackEnabled == settings.setBackEnabled && Objects.equal(language, settings.language) && Objects.equal(material, settings.material) && Objects.equal(particle, settings.particle);
+        return scoreboardEnabled == settings.scoreboardEnabled && setBack == settings.setBack && Objects.equal(language, settings.language) && Objects.equal(material, settings.material) && Objects.equal(particle, settings.particle) && Objects.equal(fireWork, settings.fireWork) && Objects.equal(currentBlock, settings.currentBlock);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(language, material, particle, scoreboardEnabled, setBackEnabled);
+        return Objects.hashCode(language, material, particle, fireWork, scoreboardEnabled, setBack, currentBlock);
     }
 
     @Override
@@ -150,8 +176,10 @@ public final class UserSettings {
                 "language='" + language + '\'' +
                 ", material='" + material + '\'' +
                 ", particle='" + particle + '\'' +
+                ", fireWork='" + fireWork + '\'' +
                 ", scoreboardEnabled=" + scoreboardEnabled +
-                ", setBackEnabled=" + setBackEnabled +
+                ", setBack=" + setBack +
+                ", currentBlock=" + currentBlock +
                 '}';
     }
 

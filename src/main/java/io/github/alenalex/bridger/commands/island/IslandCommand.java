@@ -22,21 +22,13 @@ import java.util.function.Consumer;
 
 public class IslandCommand extends AbstractCommand {
 
-    private static final HashMap<String, String> COMMAND_DESCRIPTION = new HashMap<String, String>(){{
-        put("island", "Join any free island available.");
-        put("help", "Shows this help menu.");
-        put("join [name]", "Joins an island with the provided name if its available!");
-        put("gui", "Opens up Island Gui");
-        put("leave", "Leaves your island.");
-    }};
-
     public IslandCommand(CommandManager manager) {
         super(manager, "island", Arrays.asList("is","isl","bridge"));
-    }
-
-    @Override
-    public Map<String, String> getCommandDescriptionMap() {
-        return COMMAND_DESCRIPTION;
+        this.registerHelpMessage("island", "Join any free island available.");
+        this.registerHelpMessage("help", "Shows this help menu.");
+        this.registerHelpMessage("join [name]", "Joins an island with the provided name if its available!");
+        this.registerHelpMessage("gui", "Opens up Island Gui");
+        this.registerHelpMessage("leave","Leaves your island.");
     }
 
     @Default
@@ -58,10 +50,6 @@ public class IslandCommand extends AbstractCommand {
     @SubCommand("help")
     @Async
     public void onHelpCommand(Player player){
-        if(player == null){
-            return;
-        }
-
         sendHelpMessage(player);
     }
 

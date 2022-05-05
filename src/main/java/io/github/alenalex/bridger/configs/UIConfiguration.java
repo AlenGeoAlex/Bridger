@@ -16,6 +16,9 @@ public class UIConfiguration extends AbstractFileSettings {
     private UIConfig islandSelectorConfig;
     private UIItem islandSelectorItem, islandSelectorSpectateItem, islandSelectorNextPage, islandSelectorPreviousPage;
 
+    private UIConfig playerSettingConfig;
+    private UIItem playerSelectingMaterial, playerSelectingFirework, playerSelectingParticle, playerSelectingClose, playerSelectingSetBack;
+
     public UIConfiguration(ConfigurationHandler handler) {
         super(handler);
     }
@@ -33,6 +36,12 @@ public class UIConfiguration extends AbstractFileSettings {
         this.islandSelectorSpectateItem = UIItem.buildFrom(getSectionOf("island-selector.buttons.spec-button"));
         this.islandSelectorNextPage = UIItem.buildFrom(getSectionOf("island-selector.buttons.next-button"));
         this.islandSelectorPreviousPage = UIItem.buildFrom(getSectionOf("island-selector.buttons.pre-button"));
+
+        this.playerSettingConfig = UIConfig.buildFrom(getSectionOf("player.settings"));
+        this.playerSelectingMaterial = UIItem.buildFrom(getSectionOf("player.settings.buttons.materials-selector"));
+        this.playerSelectingParticle = UIItem.buildFrom(getSectionOf("player.settings.buttons.particles-selector"));
+        this.playerSelectingFirework = UIItem.buildFrom(getSectionOf("player.settings.buttons.firework-selector"));
+        this.playerSelectingClose = UIItem.buildFrom(getSectionOf("player.settings.buttons.close-button"));
     }
 
     @Override
@@ -74,5 +83,29 @@ public class UIConfiguration extends AbstractFileSettings {
 
     public UIItem getIslandSelectorPreviousPage() {
         return islandSelectorPreviousPage;
+    }
+
+    public UIConfig getPlayerSettingConfig() {
+        return playerSettingConfig;
+    }
+
+    public UIItem getPlayerSelectingMaterial() {
+        return playerSelectingMaterial;
+    }
+
+    public UIItem getPlayerSelectingFirework() {
+        return playerSelectingFirework;
+    }
+
+    public UIItem getPlayerSelectingParticle() {
+        return playerSelectingParticle;
+    }
+
+    public UIItem getPlayerSelectingClose() {
+        return playerSelectingClose;
+    }
+
+    public UIItem getPlayerSelectingSetBack() {
+        return playerSelectingSetBack;
     }
 }

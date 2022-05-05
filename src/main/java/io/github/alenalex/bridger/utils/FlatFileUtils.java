@@ -86,6 +86,10 @@ public class FlatFileUtils {
             final Material material = Material.getMaterial(split[1]);
             final byte data = Byte.parseByte(split[2]);
 
+            System.out.println(itemStackString);
+            System.out.println(material.name());
+            System.out.println(data);
+
             return new ItemStack(material, 1, data);
 
         }else {

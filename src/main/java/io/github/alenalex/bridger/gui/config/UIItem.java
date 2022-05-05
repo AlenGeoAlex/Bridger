@@ -78,15 +78,22 @@ public class UIItem {
 
     //TODO Check out this
     public static UIItem buildFrom(@NotNull FlatFileSection section){
-        final ItemStack stack = FlatFileUtils.deserializeItemStack(section.getString("item"));
+        return buildFrom(section, false);
+    }
+
+    public static UIItem buildFrom(@NotNull FlatFileSection section, boolean allowDummyMaterial){
+        ItemStack stack = FlatFileUtils.deserializeItemStack(section.getString("item"));
         final String name = section.getString("name");
         final List<String> loreList = section.getStringList("lore");
         final int slot = section.getInt("slot");
         final int amount = section.getInt("amount");
 
-        if(stack == null)
-            throw new IllegalUIAccess("The item in the config "+section.getPathPrefix()+" is null");
-
+        if(stack == null) {
+            if(allowDummyMaterial)
+                stack = new ItemStack(Material.STONE);
+            else
+                throw new IllegalUIAccess("The item in the config " + section.getPathPrefix() + " is null");
+        }
         return new UIItem(name, slot, loreList, amount, stack);
     }
 

@@ -50,6 +50,10 @@ public enum LangConfigurationPaths {
 
     SCOREBOARD_ALREADY_ENABLED("scoreboard-already-enabled"),
     SCOREBOARD_ALREADY_DISABLED("scoreboard-already-disabled"),
+
+    SETBACK_SET("setback-set-to"),
+    SETBACK_REMOVED("setback-turned-off"),
+    SETBACK_REACHED("setback-reached"),
     ;
     private final String path;
 

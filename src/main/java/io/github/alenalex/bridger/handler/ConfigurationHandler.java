@@ -57,6 +57,7 @@ public class ConfigurationHandler implements IHandler {
         uiConfiguration.prepareReload();
         islandConfiguration.prepareReload();
         scoreboardConfiguration.prepareReload();
+        this.prepareHandler();
     }
 
 

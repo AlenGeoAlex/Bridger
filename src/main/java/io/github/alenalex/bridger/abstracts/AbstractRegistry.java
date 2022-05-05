@@ -155,7 +155,7 @@ public abstract class AbstractRegistry<K, V> {
         return true;
     }
 
-    public V onDefault(){
+    public V ofDefault(){
         if(defaultKey == null)
             throw new IllegalRegistryOperation("Default key is not set!");
 
@@ -182,5 +182,8 @@ public abstract class AbstractRegistry<K, V> {
         return registry.keySet();
     }
 
-
+    public void flushRegistry(){
+        this.registry.clear();
+        this.defaultKey = null;
+    }
 }

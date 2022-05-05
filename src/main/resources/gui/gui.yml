@@ -2,7 +2,7 @@ island-selector:
   title: "<red>Select Island</red>"
   rows: 6
   fillers:
-    "[LEGACY]:STAINED_GLASS_PANE:3":
+    "[LEGACY]:STAINED_GLASS_PANE:5":
       - 45
       - 46
       - 48
@@ -42,6 +42,81 @@ island-selector:
         - "<gray>Click to go to previous page!"
         - "<white>You are currently on <green>%page%<gray>/<red>%total%"
 
+player:
+  settings:
+    title: "<red>Settings"
+    rows: 3
+    fillers:
+      "[LEGACY]:STAINED_GLASS_PANE:5":
+        - 0
+        - 1
+        - 2
+        - 3
+        - 4
+        - 5
+        - 6
+        - 7
+        - 8
+        - 9
+        - 17
+        - 18
+        - 19
+        - 20
+        - 21
+        - 23
+        - 24
+        - 25
+        - 26
+    buttons:
+      materials-selector:
+        item: "WOOL"
+        slot: 11
+        name: "<yellow>Materials</yellow>"
+        lore:
+          - "<reset>"
+          - "<gray>Select your default practice material!"
+          - "<white>All your unlocked materials"
+          - "<white>will be shown here."
+          - "<reset>"
+          - "<white>You can unlock more on <red>Shop"
+      particles-selector:
+        item: "REDSTONE_DUST"
+        slot: 12
+        name: "<yellow>Particles</yellow>"
+        lore:
+          - "<reset>"
+          - "<gray>Select your reset particles!"
+          - "<white>All your unlocked particles"
+          - "<white>will be shown here."
+          - "<reset>"
+          - "<white>You can unlock more on <red>Shop"
+      firework-selector:
+        item: "FIREWORK"
+        slot: 13
+        name: "<yellow>Firework</yellow>"
+        lore:
+          - "<reset>"
+          - "<gray>Select your victory firework!"
+          - "<white>All your unlocked particles"
+          - "<white>will be shown here."
+          - "<reset>"
+          - "<white>You can unlock more on <red>Shop"
+      setback-selector:
+        item: "GOLD_BLOCK"
+        slot: 15
+        name: "<yellow>Select Setbacks</yellow>"
+        lore:
+          - "<reset>"
+          - "<gray>Select your victory firework!"
+          - "<white>All your unlocked particles"
+          - "<white>will be shown here."
+          - "<reset>"
+          - "<white>You can unlock more on <red>Shop"
+      close-button:
+        item: "BARRIER"
+        slot: 22
+        name: "<red>Close"
+        lore: []
 shop:
   fireworks:
     title: "<aqua>Unlock Fireworks</aqua>"

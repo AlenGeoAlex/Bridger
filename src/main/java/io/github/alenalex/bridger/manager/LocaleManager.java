@@ -59,6 +59,7 @@ public class LocaleManager extends AbstractRegistry<String, MessageConfiguration
     }
 
     public boolean reloadLocaleManager() {
+        flushRegistry();
         initLocaleManager();
         try {
             loadLocales();

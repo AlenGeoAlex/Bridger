@@ -3,7 +3,7 @@ package io.github.alenalex.bridger.models;
 
 import io.github.alenalex.bridger.Bridger;
 import io.github.alenalex.bridger.variables.IslandStatus;
-import io.github.alenalex.bridger.variables.Materials;
+import io.github.alenalex.bridger.utils.MaterialsUtils;
 import net.minecraft.server.v1_8_R3.BlockPosition;
 import net.minecraft.server.v1_8_R3.EntityPlayer;
 import net.minecraft.server.v1_8_R3.IBlockData;
@@ -233,7 +233,7 @@ public final class Island {
                             //it will check whether its in list of enabled block
 
                             //if block#hasMetaData || block#isInListOfEnabledBlocks
-                            if(block.hasMetadata(PLACED_BLOCK) || Materials.isMaterialTypeEnabled(block.getType()))
+                            if(block.hasMetadata(PLACED_BLOCK) || MaterialsUtils.isMaterialTypeEnabled(block.getType()))
                                 blocks.add(block);
                         }
                     }

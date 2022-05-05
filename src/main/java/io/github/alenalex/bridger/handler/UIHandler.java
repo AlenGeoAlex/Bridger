@@ -2,9 +2,11 @@ package io.github.alenalex.bridger.handler;
 
 import io.github.alenalex.bridger.Bridger;
 import io.github.alenalex.bridger.gui.dynamic.IslandSelector;
+import io.github.alenalex.bridger.gui.dynamic.profile.PlayerSettings;
 import io.github.alenalex.bridger.gui.dynamic.shop.FireworkShop;
 import io.github.alenalex.bridger.gui.dynamic.shop.MaterialsShop;
 import io.github.alenalex.bridger.gui.statics.CosmeticShop;
+import io.github.alenalex.bridger.gui.statics.SetBackSelector;
 import io.github.alenalex.bridger.interfaces.IHandler;
 
 public class UIHandler implements IHandler {
@@ -17,17 +19,22 @@ public class UIHandler implements IHandler {
 
     private final IslandSelector islandSelector;
 
+    private final PlayerSettings playerSettings;
+    private final SetBackSelector setBackSelector;
+
     public UIHandler(Bridger plugin) {
         this.plugin = plugin;
         this.cosmeticShop = new CosmeticShop(this);
         this.fireworkShop = new FireworkShop(this);
         this.materialsShop = new MaterialsShop(this);
         this.islandSelector = new IslandSelector(this);
+        this.playerSettings = new PlayerSettings(this);
+        this.setBackSelector = new SetBackSelector(this);
     }
 
     @Override
     public boolean initHandler() {
-        return cosmeticShop.initGui();
+        return cosmeticShop.initGui() && setBackSelector.initGui();
     }
 
     @Override
@@ -47,7 +54,7 @@ public class UIHandler implements IHandler {
 
     @Override
     public void reloadHandler() {
-        IHandler.super.reloadHandler();
+        initHandler();
     }
 
     public FireworkShop getFireworkShop() {
@@ -64,5 +71,13 @@ public class UIHandler implements IHandler {
 
     public IslandSelector getIslandSelector() {
         return islandSelector;
+    }
+
+    public PlayerSettings getPlayerSettings() {
+        return playerSettings;
+    }
+
+    public SetBackSelector getSetBackSelector() {
+        return setBackSelector;
     }
 }

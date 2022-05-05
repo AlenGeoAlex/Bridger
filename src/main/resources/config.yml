@@ -40,28 +40,37 @@ lobby-items:
   shop:
     enabled: true
     item: "[BASE64]:eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYjIxNjQ2MzU5MzM0OTZhZmNkNWQ3OTNhZThiNTNjYWI4NjI0N2YwN2U4NjI0YzQ3YTNhZTM4MzkxNTUzMDk3NSJ9fX0="
-    slot: 0
+    slot: 1
     name: "<aqua>Shop"
     lore:
       - "<gray>Click to open the shop"
+      - "<reset>"
+      - "<white>Shop allows many things"
+      - "<white>to be as purchasable with in game money"
   settings:
-    enabled: false
-    item:
-    slot:
-    name:
+    enabled: true
+    item: "[BASE64]:eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZTRkNDliYWU5NWM3OTBjM2IxZmY1YjJmMDEwNTJhNzE0ZDYxODU0ODFkNWIxYzg1OTMwYjNmOTlkMjMyMTY3NCJ9fX0="
+    slot: 3
+    name: "<red>Player Settings"
     lore: []
   join:
-    enabled: false
-    item:
-    slot:
-    name:
-    lore: []
+    enabled: true
+    item: "[BASE64]:eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYTA4NjExMWQ2NDQ1NDRiYTIwODY2MTk4M2IwYjlhZDZkNDk4Y2Q4ZGZhMDNlMjIxMjkyNTZmNzFmODlhZDVkNiJ9fX0="
+    slot: 4
+    name: "<green>Join Island"
+    lore:
+      - "<gray>Join any free island!"
+      - "<reset>"
+      - "<white>This would take into consideration"
+      - "<white>your permissions and your account balance"
+      - "<white>if the island needs one!"
   island-selector:
-    enabled: false
-    item:
-    slot:
-    name:
-    lore: []
+    enabled: true
+    item: "GOLD_BLOCK"
+    slot: 6
+    name: "<yellow>Island Selector"
+    lore:
+      - "<gray>Opens up the island selector GUI"
   others: []
 
 match-settings:

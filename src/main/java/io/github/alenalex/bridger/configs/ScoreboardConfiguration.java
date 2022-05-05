@@ -44,6 +44,7 @@ public class ScoreboardConfiguration extends AbstractFileSettings {
         this.lobbyConfig = null;
         this.spectateConfig = null;
         this.matchConfig = null;
+
     }
 
 

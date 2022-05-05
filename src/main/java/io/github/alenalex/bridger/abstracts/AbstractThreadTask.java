@@ -14,7 +14,7 @@ public abstract class AbstractThreadTask {
 
     private final Bridger plugin;
     private final String threadName;
-    protected final ScheduledExecutorService servicePool;
+    protected ScheduledExecutorService servicePool;
     private final int poolSize;
 
     private long threadCallPeriod;
@@ -66,8 +66,10 @@ public abstract class AbstractThreadTask {
         if(runnableTask == null)
             throw new ThreadInitializationError("The provided runnable task for thread execution is empty!");
 
+
         this.servicePool.scheduleAtFixedRate(callableTask(), 0L, threadCallPeriod, TimeUnit.MILLISECONDS);
         this.running = true;
+        plugin.getLogger().info("Thread spawned for "+threadName+" task!");
         return true;
     }
 
@@ -80,6 +82,15 @@ public abstract class AbstractThreadTask {
         this.servicePool.shutdown();
         this.running = false;
         plugin.getLogger().info("The thread "+threadName+" has been dropped successfully");
+    }
+
+    public void reloadThread(){
+        if(!this.servicePool.isShutdown()) {
+            plugin.getLogger().warning("The thread "+threadName+" was forced to abort with "+this.servicePool.shutdownNow().size()+" task left!");
+        }
+
+        this.servicePool = null;
+        this.servicePool = new ScheduledThreadPoolExecutor(poolSize);
     }
 
     protected abstract Runnable callableTask();

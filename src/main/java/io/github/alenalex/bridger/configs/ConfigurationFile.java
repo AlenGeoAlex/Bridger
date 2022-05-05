@@ -149,7 +149,6 @@ public class ConfigurationFile extends AbstractFileSettings {
         this.commandToBlock.clear();
         this.placementBlockedMaterial.clear();
         this.lobbyOther.clear();
-        this.loadFile();
     }
 
     public String getStorageType() {

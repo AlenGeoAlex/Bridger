@@ -86,9 +86,44 @@ public final class PlayerInteractListener implements Listener {
             }
             case LOBBY:
             {
+                if(plugin.configurationHandler().getConfigurationFile().getLobbyJoin() != null){
+                    if(plugin.configurationHandler().getConfigurationFile().getLobbyJoin().isInteractionSimilar(event.getItem())){
+                        event.setCancelled(true);
+                        player.performCommand("island");
+                        return;
+                    }
+                }
 
+                if(plugin.configurationHandler().getConfigurationFile().getLobbySettings() != null){
+                    if(plugin.configurationHandler().getConfigurationFile().getLobbySettings().isInteractionSimilar(event.getItem())){
+                        event.setCancelled(true);
+                        plugin.uiHandler().getPlayerSettings().openFor(player);
+                        return;
+                    }
+                }
 
+                if(plugin.configurationHandler().getConfigurationFile().getLobbySelector() != null){
+                    if(plugin.configurationHandler().getConfigurationFile().getLobbySelector().isInteractionSimilar(event.getItem())){
+                        event.setCancelled(true);
+                        plugin.uiHandler().getIslandSelector().openFor(player);
+                        return;
+                    }
+                }
 
+                if(plugin.configurationHandler().getConfigurationFile().getLobbyShop() != null){
+                    if(plugin.configurationHandler().getConfigurationFile().getLobbyShop().isInteractionSimilar(event.getItem())){
+                        event.setCancelled(true);
+                        plugin.uiHandler().getCosmeticShop().openFor(player);
+                        return;
+                    }
+                }
+
+                for(HotBarConfig config : plugin.configurationHandler().getConfigurationFile().getLobbyOther()){
+                    if(config.isInteractionSimilar(event.getItem())){
+                        config.performCommands(player);
+                        break;
+                    }
+                }
                 break;
             }
             case SPECTATING:
