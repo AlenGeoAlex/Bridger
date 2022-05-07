@@ -4,10 +4,12 @@ import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.annotation.Default;
 import dev.triumphteam.cmd.core.annotation.Optional;
 import dev.triumphteam.cmd.core.annotation.SubCommand;
+import dev.triumphteam.cmd.core.annotation.Suggestion;
 import io.github.alenalex.bridger.abstracts.AbstractCommand;
 import io.github.alenalex.bridger.manager.CommandManager;
 import io.github.alenalex.bridger.models.player.UserData;
 import io.github.alenalex.bridger.utils.adventure.internal.MessagePlaceholder;
+import io.github.alenalex.bridger.variables.CommandCompletions;
 import io.github.alenalex.bridger.variables.LangConfigurationPaths;
 import io.github.alenalex.bridger.variables.Permissions;
 import org.bukkit.entity.Player;
@@ -23,6 +25,7 @@ public class SetBackCommand extends AbstractCommand {
         this.registerHelpMessage("decrease [value]", "Decrease the current value to setback");
         this.registerHelpMessage("reset", "Turn off the setback!");
         this.registerHelpMessage("off", "Turn off the setback");
+        this.registerHelpMessage("gui", "Opens up the GUI of setbacks");
     }
 
     @Default
@@ -32,6 +35,7 @@ public class SetBackCommand extends AbstractCommand {
 
     @SubCommand("set")
     @Permission(Permissions.SetBack.SET_BACK)
+    @Suggestion(CommandCompletions.Keys.VALUES_SETBACK)
     public void onSetCommand(@NotNull final Player player, Integer value){
         final UserData userData = manager.plugin().gameHandler().userManager().of(player.getUniqueId());
         if(userData == null)
@@ -50,6 +54,8 @@ public class SetBackCommand extends AbstractCommand {
     }
 
     @SubCommand("add")
+    @Permission(Permissions.SetBack.SET_BACK)
+    @Suggestion(CommandCompletions.Keys.VALUES_1_10)
     public void onAddCommand(@NotNull final Player player, @Optional Integer value){
         final UserData userData = manager.plugin().gameHandler().userManager().of(player.getUniqueId());
         if(userData == null)
@@ -67,6 +73,8 @@ public class SetBackCommand extends AbstractCommand {
     }
 
     @SubCommand("decrease")
+    @Permission(Permissions.SetBack.SET_BACK)
+    @Suggestion(CommandCompletions.Keys.VALUES_1_10)
     public void onDecreaseCommand(@NotNull final Player player, @Optional Integer value){
         final UserData userData = manager.plugin().gameHandler().userManager().of(player.getUniqueId());
         if(userData == null)
@@ -93,5 +101,10 @@ public class SetBackCommand extends AbstractCommand {
         manager.plugin().messagingUtils().sendTo(player, userData.userSettings().getLanguage().asComponent(LangConfigurationPaths.SETBACK_REMOVED));
     }
 
+    @SubCommand(value = "gui")
+    @Permission(Permissions.SetBack.SET_BACK_GUI)
+    public void onGuiCommand(@NotNull final Player player){
+        manager.plugin().uiHandler().getSetBackSelector().openFor(player);
+    }
 
 }

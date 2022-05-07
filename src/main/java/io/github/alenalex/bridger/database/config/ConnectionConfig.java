@@ -1,4 +1,4 @@
-package io.github.alenalex.bridger.database.sql.config;
+package io.github.alenalex.bridger.database.config;
 
 import com.zaxxer.hikari.HikariConfig;
 import de.leonhard.storage.sections.FlatFileSection;
@@ -88,4 +88,6 @@ public class ConnectionConfig {
         config.addDataSourceProperty("maintainTimeStats", "false");
         return config;
     }
+
+
 }

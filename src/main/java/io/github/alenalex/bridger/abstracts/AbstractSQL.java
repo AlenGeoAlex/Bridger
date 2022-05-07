@@ -2,7 +2,7 @@ package io.github.alenalex.bridger.abstracts;
 
 import com.zaxxer.hikari.HikariConfig;
 import io.github.alenalex.bridger.Bridger;
-import io.github.alenalex.bridger.database.sql.config.ConnectionConfig;
+import io.github.alenalex.bridger.database.config.ConnectionConfig;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 

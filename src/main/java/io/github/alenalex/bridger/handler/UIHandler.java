@@ -2,6 +2,7 @@ package io.github.alenalex.bridger.handler;
 
 import io.github.alenalex.bridger.Bridger;
 import io.github.alenalex.bridger.gui.dynamic.IslandSelector;
+import io.github.alenalex.bridger.gui.dynamic.cosmetics.MaterialSelector;
 import io.github.alenalex.bridger.gui.dynamic.profile.PlayerSettings;
 import io.github.alenalex.bridger.gui.dynamic.shop.FireworkShop;
 import io.github.alenalex.bridger.gui.dynamic.shop.MaterialsShop;
@@ -22,6 +23,8 @@ public class UIHandler implements IHandler {
     private final PlayerSettings playerSettings;
     private final SetBackSelector setBackSelector;
 
+    private final MaterialSelector materialSelector;
+
     public UIHandler(Bridger plugin) {
         this.plugin = plugin;
         this.cosmeticShop = new CosmeticShop(this);
@@ -30,6 +33,7 @@ public class UIHandler implements IHandler {
         this.islandSelector = new IslandSelector(this);
         this.playerSettings = new PlayerSettings(this);
         this.setBackSelector = new SetBackSelector(this);
+        this.materialSelector = new MaterialSelector(this);
     }
 
     @Override
@@ -79,5 +83,9 @@ public class UIHandler implements IHandler {
 
     public SetBackSelector getSetBackSelector() {
         return setBackSelector;
+    }
+
+    public MaterialSelector getMaterialSelector() {
+        return materialSelector;
     }
 }

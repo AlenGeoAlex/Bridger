@@ -20,7 +20,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 
-public class FireworkShop extends AbstractDynamicGUI<Gui> {
+public final class FireworkShop extends AbstractDynamicGUI<Gui> {
 
     public FireworkShop(UIHandler handler) {
         super(handler);

@@ -17,7 +17,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
 
-public class CosmeticShop extends AbstractStaticGUI<Gui> {
+public final class CosmeticShop extends AbstractStaticGUI<Gui> {
 
     public CosmeticShop(UIHandler handler) {
         super(handler);

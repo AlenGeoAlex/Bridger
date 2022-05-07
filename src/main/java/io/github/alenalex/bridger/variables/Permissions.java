@@ -40,6 +40,7 @@ public class Permissions {
 
     public static class SetBack{
         public static final String SET_BACK = "bridger.setback.use";
+        public static final String SET_BACK_GUI = "bridger.setback.gui";
     }
 
 }

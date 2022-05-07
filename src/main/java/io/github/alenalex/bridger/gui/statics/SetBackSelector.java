@@ -17,7 +17,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
 
-public class SetBackSelector extends AbstractStaticGUI<Gui> {
+public final class SetBackSelector extends AbstractStaticGUI<Gui> {
 
     public SetBackSelector(UIHandler handler) {
         super(handler);

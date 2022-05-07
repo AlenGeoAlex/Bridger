@@ -11,6 +11,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -57,6 +58,7 @@ public class FlatFileUtils {
         }
     }
 
+    @Nullable
     public static ItemStack deserializeItemStack(@NotNull String itemStackString){
 
         if(StringUtils.isEmpty(itemStackString))
@@ -86,12 +88,7 @@ public class FlatFileUtils {
             final Material material = Material.getMaterial(split[1]);
             final byte data = Byte.parseByte(split[2]);
 
-            System.out.println(itemStackString);
-            System.out.println(material.name());
-            System.out.println(data);
-
             return new ItemStack(material, 1, data);
-
         }else {
             return EnumUtils.isValidEnum(Material.class, itemStackString) ? new ItemStack(Material.valueOf(itemStackString)) : null;
         }

@@ -5,20 +5,14 @@ import de.leonhard.storage.Json;
 import de.leonhard.storage.Yaml;
 import de.leonhard.storage.internal.FlatFile;
 import de.leonhard.storage.sections.FlatFileSection;
-import dev.triumphteam.gui.builder.item.ItemBuilder;
+
 import io.github.alenalex.bridger.exceptions.IllegalFlatFileException;
 import io.github.alenalex.bridger.handler.ConfigurationHandler;
 import io.github.alenalex.bridger.utils.FlatFileUtils;
-import io.github.alenalex.bridger.utils.HeadUtils;
 import io.github.alenalex.bridger.utils.adventure.MessageFormatter;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextReplacementConfig;
-import org.apache.commons.lang3.EnumUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.Validate;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 

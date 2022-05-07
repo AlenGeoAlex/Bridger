@@ -2,9 +2,11 @@ package io.github.alenalex.bridger.gui.config;
 
 import de.leonhard.storage.sections.FlatFileSection;
 import io.github.alenalex.bridger.Bridger;
+import io.github.alenalex.bridger.manager.HookManager;
 import io.github.alenalex.bridger.models.player.UserData;
 import io.github.alenalex.bridger.utils.FlatFileUtils;
 import io.github.alenalex.bridger.utils.adventure.MessageFormatter;
+import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -100,11 +102,13 @@ public class HotBarConfig {
         if(!hasCommands())
             return;
 
+        final boolean isPlaceholderEnabled = Bridger.instance().pluginHookManager().isHookEnabled(HookManager.PLACEHOLDER_API);
         Bukkit.getScheduler().runTask(Bridger.instance(), new Runnable() {
             @Override
             public void run() {
                 for(String eachCommand : commands){
-                    player.performCommand(eachCommand);
+                    if(isPlaceholderEnabled) player.performCommand(PlaceholderAPI.setPlaceholders(player, eachCommand));
+                    else player.performCommand(eachCommand);
                 }
             }
         });

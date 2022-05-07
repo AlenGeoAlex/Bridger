@@ -1,5 +1,6 @@
 package io.github.alenalex.bridger.interfaces;
 
+import io.github.alenalex.bridger.models.leaderboard.LeaderboardPlayer;
 import io.github.alenalex.bridger.models.player.UserData;
 import org.jetbrains.annotations.NotNull;
 
@@ -24,5 +25,9 @@ public interface IDatabaseProvider {
     void saveUserAsync(@NotNull UserData user);
 
     void saveAllUsersAsync(@NotNull List<UserData> users);
+
+    String providerName();
+
+    CompletableFuture<List<LeaderboardPlayer>> getLeaderboardPlayers();
 
 }

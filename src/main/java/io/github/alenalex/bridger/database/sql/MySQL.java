@@ -2,8 +2,9 @@ package io.github.alenalex.bridger.database.sql;
 
 import io.github.alenalex.bridger.Bridger;
 import io.github.alenalex.bridger.abstracts.AbstractSQL;
-import io.github.alenalex.bridger.database.sql.config.ConnectionConfig;
+import io.github.alenalex.bridger.database.config.ConnectionConfig;
 import io.github.alenalex.bridger.interfaces.IDatabaseProvider;
+import io.github.alenalex.bridger.models.leaderboard.LeaderboardPlayer;
 import io.github.alenalex.bridger.models.player.UserData;
 import org.jetbrains.annotations.NotNull;
 
@@ -73,5 +74,15 @@ public class MySQL extends AbstractSQL implements  IDatabaseProvider {
     @Override
     public void saveAllUsersAsync(@NotNull List<UserData> users) {
 
+    }
+
+    @Override
+    public String providerName() {
+        return "MySQL";
+    }
+
+    @Override
+    public CompletableFuture<List<LeaderboardPlayer>> getLeaderboardPlayers() {
+        return null;
     }
 }

@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 
-public class PlayerSettings extends AbstractDynamicGUI<Gui> {
+public final class PlayerSettings extends AbstractDynamicGUI<Gui> {
 
     public PlayerSettings(UIHandler handler) {
         super(handler);
@@ -57,7 +57,7 @@ public class PlayerSettings extends AbstractDynamicGUI<Gui> {
                         .from(getConfiguration().getPlayerSelectingMaterial().itemStack())
                         .name(getConfiguration().getPlayerSelectingMaterial().nameAsComponent())
                         .lore(getConfiguration().getPlayerSelectingMaterial().loreAsComponent())
-                        .asGuiItem();
+                        .asGuiItem(event -> handler.getMaterialSelector().openFor(player));
 
                 gui.setItem(getConfiguration().getPlayerSelectingMaterial().slot(), materialButton);
 
@@ -66,7 +66,6 @@ public class PlayerSettings extends AbstractDynamicGUI<Gui> {
                         .name(getConfiguration().getPlayerSelectingSetBack().nameAsComponent())
                         .lore(getConfiguration().getPlayerSelectingSetBack().loreAsComponent())
                         .asGuiItem(event -> {
-                            gui.close(player);
                             handler.getSetBackSelector().openFor(player);
                         });
 

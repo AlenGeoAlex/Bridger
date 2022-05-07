@@ -19,6 +19,9 @@ public class UIConfiguration extends AbstractFileSettings {
     private UIConfig playerSettingConfig;
     private UIItem playerSelectingMaterial, playerSelectingFirework, playerSelectingParticle, playerSelectingClose, playerSelectingSetBack;
 
+    private UIConfig materialSelectorConfig;
+    private UIItem materialSelectorNext, materialSelectorPre;
+
     public UIConfiguration(ConfigurationHandler handler) {
         super(handler);
     }
@@ -41,7 +44,12 @@ public class UIConfiguration extends AbstractFileSettings {
         this.playerSelectingMaterial = UIItem.buildFrom(getSectionOf("player.settings.buttons.materials-selector"));
         this.playerSelectingParticle = UIItem.buildFrom(getSectionOf("player.settings.buttons.particles-selector"));
         this.playerSelectingFirework = UIItem.buildFrom(getSectionOf("player.settings.buttons.firework-selector"));
+        this.playerSelectingSetBack = UIItem.buildFrom(getSectionOf("player.settings.buttons.setback-selector"));
         this.playerSelectingClose = UIItem.buildFrom(getSectionOf("player.settings.buttons.close-button"));
+
+        this.materialSelectorConfig = UIConfig.buildFrom(getSectionOf("selector.material"));
+        this.materialSelectorNext = UIItem.buildFrom(getSectionOf("selector.material.buttons.next-button"));
+        this.materialSelectorPre = UIItem.buildFrom(getSectionOf("selector.material.buttons.pre-button"));
     }
 
     @Override
@@ -107,5 +115,17 @@ public class UIConfiguration extends AbstractFileSettings {
 
     public UIItem getPlayerSelectingSetBack() {
         return playerSelectingSetBack;
+    }
+
+    public UIConfig getMaterialSelectorConfig() {
+        return materialSelectorConfig;
+    }
+
+    public UIItem getMaterialSelectorNext() {
+        return materialSelectorNext;
+    }
+
+    public UIItem getMaterialSelectorPre() {
+        return materialSelectorPre;
     }
 }

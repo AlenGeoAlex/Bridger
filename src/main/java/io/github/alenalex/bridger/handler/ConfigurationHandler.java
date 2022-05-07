@@ -1,10 +1,7 @@
 package io.github.alenalex.bridger.handler;
 
 import io.github.alenalex.bridger.Bridger;
-import io.github.alenalex.bridger.configs.ConfigurationFile;
-import io.github.alenalex.bridger.configs.IslandConfiguration;
-import io.github.alenalex.bridger.configs.ScoreboardConfiguration;
-import io.github.alenalex.bridger.configs.UIConfiguration;
+import io.github.alenalex.bridger.configs.*;
 import io.github.alenalex.bridger.interfaces.IHandler;
 
 import java.io.File;
@@ -16,6 +13,7 @@ public class ConfigurationHandler implements IHandler {
     private final UIConfiguration uiConfiguration;
     private final IslandConfiguration islandConfiguration;
     private final ScoreboardConfiguration scoreboardConfiguration;
+    private final HologramConfig hologramConfig;
 
     public ConfigurationHandler(Bridger plugin) {
         this.plugin = plugin;
@@ -23,6 +21,7 @@ public class ConfigurationHandler implements IHandler {
         this.uiConfiguration = new UIConfiguration(this);
         this.islandConfiguration = new IslandConfiguration(this);
         this.scoreboardConfiguration = new ScoreboardConfiguration(this);
+        this.hologramConfig = new HologramConfig(this);
     }
 
     @Override
@@ -33,7 +32,8 @@ public class ConfigurationHandler implements IHandler {
         return configurationFile.initConfigFile("config.yml", plugin.getDataFolder().getPath(), plugin().getResource("config.yml"))
                 && uiConfiguration.initConfigFile("gui.yml", plugin.getDataFolder().getPath()+File.separator+"gui", plugin().getResource("gui/gui.yml"))
                 && islandConfiguration.initYamlFile("islands.yml", plugin.getDataFolder().getPath()+File.separator+"data")
-                && scoreboardConfiguration.initYamlFile("scoreboard.yml", plugin.getDataFolder().getPath(), plugin.getResource("scoreboard.yml"));
+                && scoreboardConfiguration.initYamlFile("scoreboard.yml", plugin.getDataFolder().getPath(), plugin.getResource("scoreboard.yml"))
+                && hologramConfig.initYamlFile("hologram.yml", plugin.getDataFolder().getPath(), plugin.getResource("hologram.yml"));
 
 
     }
@@ -75,5 +75,9 @@ public class ConfigurationHandler implements IHandler {
 
     public ScoreboardConfiguration getScoreboardConfiguration() {
         return scoreboardConfiguration;
+    }
+
+    public HologramConfig getHologramConfig() {
+        return hologramConfig;
     }
 }

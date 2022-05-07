@@ -1,7 +1,10 @@
 package io.github.alenalex.bridger.hooks.placeholders;
 
 import io.github.alenalex.bridger.Bridger;
+import io.github.alenalex.bridger.manager.LeaderboardManager;
+import io.github.alenalex.bridger.models.leaderboard.LeaderboardPlayer;
 import io.github.alenalex.bridger.models.player.UserData;
+import io.github.alenalex.bridger.utils.adventure.MessageFormatter;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -65,12 +68,41 @@ public class PlaceholderManager extends PlaceholderExpansion {
             }else return null;
         }
 
-        if(params.equals("isplaying")){
+        if(params.equals("is_playing")){
             return String.valueOf(plugin.gameHandler().isPlayerPlaying(player));
         }
 
         if(params.equals("player-island")){
             return String.valueOf(plugin.gameHandler().getIslandOfPlayer(player).orElse(null));
+        }
+
+        if(params.equals("leaderboard_reset_in")){
+            return String.valueOf(plugin.leaderboardManager().nextResetIn());
+        }
+
+        if(params.equals("leaderboard_reset")){
+            return String.valueOf(LeaderboardManager.LEADERBOARD_RESET_DURATION);
+        }
+
+        if(params.startsWith("leaderboard_position")){
+            String[] splitArgs = params.split("_");
+            if(splitArgs.length != 3) return null;
+            int position = 0;
+            try {
+                 position = Integer.parseInt(splitArgs[2]);
+            }catch (Exception ignored){
+                plugin.getLogger().warning("The args provided placeholder leaderboard_position_[pos] is not a number. Provided - "+params);
+                return null;
+            }
+
+            if(position <= 0 || position >= 11) return MessageFormatter.colorizeLegacy("&cInvalid Position");
+
+
+            final LeaderboardPlayer playerData = plugin.leaderboardManager().ofPosition(position);
+            if(playerData == null)
+                return MessageFormatter.colorizeLegacy("&aNil");
+
+            return playerData.getPlayerName();
         }
 
         return null;

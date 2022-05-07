@@ -23,16 +23,16 @@ public interface IGui {
         openFor(player, null);
     }
 
-    default <T extends BaseGui>  T applyFiller(T gui, @NotNull UIConfig config) {
-        return applyFiller(gui, config.getFillers());
+    default <T extends BaseGui> void applyFiller(T gui, @NotNull UIConfig config) {
+        applyFiller(gui, config.getFillers());
     }
 
-    default <T extends BaseGui>  T applyFiller(T gui, @NotNull List<UIFiller> fillers) {
+    default <T extends BaseGui> void applyFiller(T gui, @NotNull List<UIFiller> fillers) {
         if(gui == null)
             throw new IllegalUIAccess("The gui provided for the filler is null");
 
         if(fillers.isEmpty())
-            return gui;
+            return;
 
         for(UIFiller filler : fillers){
             final GuiItem item = ItemBuilder.from(filler.itemStack())
@@ -45,10 +45,9 @@ public interface IGui {
             }
         }
 
-        return gui;
     }
 
-    default <T extends BaseGui>  T applyFiller(T gui, @NotNull UIFiller filler) {
+    default <T extends BaseGui> void applyFiller(T gui, @NotNull UIFiller filler) {
         if(gui == null)
             throw new IllegalUIAccess("The gui provided for the filler is null");
 
@@ -62,7 +61,6 @@ public interface IGui {
         }
 
 
-        return gui;
     }
 
 }

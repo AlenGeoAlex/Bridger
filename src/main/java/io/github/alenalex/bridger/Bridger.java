@@ -4,15 +4,9 @@ import com.google.gson.Gson;
 import io.github.alenalex.bridger.database.DataProvider;
 import io.github.alenalex.bridger.exceptions.FailedLocaleLoading;
 import io.github.alenalex.bridger.exceptions.IllegalInitializationException;
-import io.github.alenalex.bridger.handler.ConfigurationHandler;
-import io.github.alenalex.bridger.handler.GameHandler;
-import io.github.alenalex.bridger.handler.UIHandler;
-import io.github.alenalex.bridger.handler.WorkloadHandler;
+import io.github.alenalex.bridger.handler.*;
 import io.github.alenalex.bridger.listener.*;
-import io.github.alenalex.bridger.manager.CommandManager;
-import io.github.alenalex.bridger.manager.HookManager;
-import io.github.alenalex.bridger.manager.LocaleManager;
-import io.github.alenalex.bridger.manager.SetupSessionManager;
+import io.github.alenalex.bridger.manager.*;
 import io.github.alenalex.bridger.task.ScoreboardTask;
 import io.github.alenalex.bridger.task.PlayerGameTask;
 import io.github.alenalex.bridger.utils.adventure.MessagingUtils;
@@ -60,8 +54,10 @@ public final class Bridger extends JavaPlugin {
     private HookManager pluginHookManager;
     private CommandManager commandManager;
     private SetupSessionManager setupSessionManager;
+    private LeaderboardManager leaderboardManager;
     private PlayerGameTask playerGameTask;
     private ScoreboardTask scoreboardTask;
+    private HologramHandler hologramHandler;
 
     @Override
     public void onEnable() {
@@ -76,8 +72,10 @@ public final class Bridger extends JavaPlugin {
         this.pluginHookManager = new HookManager(this);
         this.commandManager = new CommandManager(this);
         this.setupSessionManager = new SetupSessionManager(this);
+        this.leaderboardManager = new LeaderboardManager(this);
         this.playerGameTask = new PlayerGameTask(this);
         this.scoreboardTask = new ScoreboardTask(this);
+        this.hologramHandler = new HologramHandler(this);
 
         if(!pluginHookManager.validateMinHookRequirements()) {
             getServer().getPluginManager().disablePlugin(this);
@@ -99,6 +97,8 @@ public final class Bridger extends JavaPlugin {
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
+
+        getLogger().info("Plugin has been connected to "+this.dataProvider.getDatabaseProvider().providerName());
 
         if(!this.workloadHandler.initHandler()){
             getLogger().severe("Failed to load workload threads!");
@@ -165,14 +165,20 @@ public final class Bridger extends JavaPlugin {
 
         this.playerGameTask.setThreadCallPeriod(this.configurationHandler.getConfigurationFile().getActionBarUpdateTime());
         if(!this.playerGameTask.startThread()) {
-            getLogger().warning("Failed to initialize thread pool for Game monitor");
+            getLogger().warning("Failed to initialize thread pool for Game monitor task");
         }
 
         if(this.configurationHandler.getScoreboardConfiguration().isScoreboardEnabled()) {
             this.scoreboardTask.setThreadCallPeriod(this.configurationHandler.getScoreboardConfiguration().getScoreboardUpdateTime());
             if (!this.scoreboardTask.startThread()) {
-                getLogger().warning("Failed to initialize thread pool for Scoreboards");
+                getLogger().warning("Failed to initialize thread pool for Scoreboard task");
             }
+        }
+
+        this.getServer().getScheduler().runTaskTimerAsynchronously(this, this.leaderboardManager.getCallable(), 0, 20);
+
+        if(getServer().getPluginManager().isPluginEnabled(HookManager.PROTOCOL_LIB) && configurationHandler.getHologramConfig().isHologramEnabled()){
+            hologramHandler.initHandler();
         }
     }
 
@@ -207,14 +213,14 @@ public final class Bridger extends JavaPlugin {
         this.playerGameTask.reloadThread();
         this.playerGameTask.setThreadCallPeriod(this.configurationHandler.getConfigurationFile().getActionBarUpdateTime());
         if(!this.playerGameTask.startThread()) {
-            getLogger().warning("Failed to initialize thread pool for Game monitor");
+            getLogger().warning("Failed to initialize thread pool for Game monitor task");
         }
 
         if(this.configurationHandler.getScoreboardConfiguration().isScoreboardEnabled()) {
             this.scoreboardTask.reloadThread();
             this.scoreboardTask.setThreadCallPeriod(this.configurationHandler.getScoreboardConfiguration().getScoreboardUpdateTime());
             if (!this.scoreboardTask.startThread()) {
-                getLogger().warning("Failed to initialize thread pool for Game monitor");
+                getLogger().warning("Failed to initialize thread pool for Scoreboard task");
             }
         }
         PLUGIN_RELOADING = false;
@@ -262,5 +268,13 @@ public final class Bridger extends JavaPlugin {
 
     public ScoreboardTask scoreboardTask(){
         return scoreboardTask;
+    }
+
+    public LeaderboardManager leaderboardManager(){
+        return leaderboardManager;
+    }
+
+    public HologramHandler hologramHandler(){
+        return hologramHandler;
     }
 }

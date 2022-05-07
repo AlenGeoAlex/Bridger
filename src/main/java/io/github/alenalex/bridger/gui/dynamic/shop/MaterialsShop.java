@@ -21,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 
-public class MaterialsShop extends AbstractDynamicGUI<PaginatedGui> {
+public final class MaterialsShop extends AbstractDynamicGUI<PaginatedGui> {
 
     public MaterialsShop(UIHandler handler) {
         super(handler);

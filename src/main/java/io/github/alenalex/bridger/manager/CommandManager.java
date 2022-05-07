@@ -110,6 +110,20 @@ public class CommandManager {
                         .collect(Collectors.toList());
             }
         });
+
+        commandManager.registerSuggestion(SuggestionKey.of(CommandCompletions.Keys.VALUES_1_10), new SuggestionResolver<CommandSender>() {
+            @Override
+            public @NotNull List<String> resolve(@NotNull CommandSender sender, @NotNull SuggestionContext context) {
+                return CommandCompletions.Parameters.VALUES_1_10;
+            }
+        });
+
+        commandManager.registerSuggestion(SuggestionKey.of(CommandCompletions.Keys.VALUES_SETBACK), new SuggestionResolver<CommandSender>() {
+            @Override
+            public @NotNull List<String> resolve(@NotNull CommandSender sender, @NotNull SuggestionContext context) {
+                return CommandCompletions.Parameters.VALUES_SETBACK;
+            }
+        });
     }
 
     public void registerCommands(){

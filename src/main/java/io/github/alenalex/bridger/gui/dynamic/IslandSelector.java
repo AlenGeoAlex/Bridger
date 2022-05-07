@@ -22,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 
-public class IslandSelector extends AbstractDynamicGUI<PaginatedGui> {
+public final class IslandSelector extends AbstractDynamicGUI<PaginatedGui> {
 
     public IslandSelector(UIHandler handler) {
         super(handler);

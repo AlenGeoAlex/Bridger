@@ -3,10 +3,13 @@ package io.github.alenalex.bridger.database.sql;
 import io.github.alenalex.bridger.Bridger;
 import io.github.alenalex.bridger.abstracts.AbstractSQL;
 import io.github.alenalex.bridger.interfaces.IDatabaseProvider;
+import io.github.alenalex.bridger.models.leaderboard.LeaderboardPlayer;
 import io.github.alenalex.bridger.models.player.UserCosmetics;
 import io.github.alenalex.bridger.models.player.UserData;
 import io.github.alenalex.bridger.models.player.UserSettings;
 import io.github.alenalex.bridger.models.player.UserStats;
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -52,6 +55,7 @@ public class SQLite extends AbstractSQL implements IDatabaseProvider {
                     "(`uid` VARCHAR(40) NOT NULL PRIMARY KEY, " +
                     "`fireworks` TEXT , " +
                     "`particles` TEXT , " +
+                    "`npc_texts` TEXT ," +
                     "`materials` TEXT" + ")");
         }};
     }
@@ -212,7 +216,7 @@ public class SQLite extends AbstractSQL implements IDatabaseProvider {
 
                     updateSettings.executeUpdate();
                     updateSettings.close();
-                try (final PreparedStatement updateData = connection.prepareStatement("UPDATE bridger_user SET wins = ?, blocks_placed = ?, games_played = ?, best_time = ? WHERE uid = ?");){
+                try (final PreparedStatement updateData = connection.prepareStatement("UPDATE bridger_user SET wins = ?, blocks_placed = ?, games_played = ?, best_time = ? WHERE uid = ?")){
 
                     updateData.setInt(1, user.userStats().getWins());
                     updateData.setInt(2, user.userStats().getBlocksPlaced());
@@ -306,6 +310,8 @@ public class SQLite extends AbstractSQL implements IDatabaseProvider {
                         updateSettings.setString(5, user.getPlayerUID().toString());
 
                         updateSettings.executeUpdate();
+                        updateSettings.close();
+
 
                         updateData.setInt(1, user.userStats().getWins());
                         updateData.setInt(2, user.userStats().getBlocksPlaced());
@@ -314,6 +320,8 @@ public class SQLite extends AbstractSQL implements IDatabaseProvider {
                         updateData.setString(5, user.getPlayerUID().toString());
 
                         updateData.executeUpdate();
+                        updateData.close();
+
 
                         cosmeticUpdate.setString(1, UserCosmetics.serialize(user.userCosmetics().getFireWorkUnlocked()));
                         cosmeticUpdate.setString(2, UserCosmetics.serialize(user.userCosmetics().getParticleUnlocked()));
@@ -321,14 +329,55 @@ public class SQLite extends AbstractSQL implements IDatabaseProvider {
                         cosmeticUpdate.setString(4, user.getPlayerUID().toString());
 
                         cosmeticUpdate.executeUpdate();
+                        cosmeticUpdate.close();
                     }
 
-                    updateSettings.close();
-                    updateData.close();
-                    cosmeticUpdate.close();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+            }
+        });
+    }
+
+    @Override
+    public String providerName() {
+        return "SQLite";
+    }
+
+    @Override
+    public CompletableFuture<List<LeaderboardPlayer>> getLeaderboardPlayers() {
+        return CompletableFuture.supplyAsync(new Supplier<List<LeaderboardPlayer>>() {
+            @Override
+            public List<LeaderboardPlayer> get() {
+                final List<LeaderboardPlayer> playerList = new ArrayList<>();
+
+                try(final PreparedStatement preparedStatement = connection.prepareStatement("SELECT (`uuid`, `best_time`) FROM bridger_user ORDER BY `best_time` ASC LIMIT 10;")){
+
+                    final ResultSet set = preparedStatement.executeQuery();
+
+                    if(set == null)
+                        return playerList;
+
+                    for(int j = 1;j<=10;j++){
+                     if(!set.next())
+                         break;
+
+                     final UUID playerUID = UUID.fromString(set.getString("uuid"));
+                     final OfflinePlayer player = Bukkit.getOfflinePlayer(playerUID);
+                     final String playerName = player == null ? null : player.getName();
+                     final long bestTime = set.getLong("best_time");
+
+
+                     final LeaderboardPlayer leaderBoardPlayer = new LeaderboardPlayer(j, playerUID, playerName, bestTime);
+                     playerList.add(leaderBoardPlayer);
+                    }
+                    set.close();
+                    preparedStatement.close();
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
+                return playerList;
             }
         });
     }

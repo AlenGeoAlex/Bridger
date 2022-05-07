@@ -1,0 +1,27 @@
+hologram-enabled: true
+
+spawn-point-hologram:
+  enabled: true
+  offset-x: 1
+  offset-y: 3
+  offset-z: 1
+  lines:
+    - "[MATERIAL]:WOOL"
+    - "<red>Hello %player%,"
+    - "<reset>"
+    - "<white>Place a block anywhere on this"
+    - "<white> island to begin your practice"
+    - "<reset>"
+    - "<white>Once placed, reach the endpoint"
+    - "<white>as soon as possible to beat the record!"
+
+end-point-hologram:
+  enabled: true
+  offset-x: 0
+  offset-y: 3
+  offset-z: 0
+  lines:
+    - "[MATERIAL]:GOLD_BLOCK"
+    - "<aqua>Stand on this block ↓"
+    - "<aqua>to complete your current"
+    - "<aqua>bridging session"

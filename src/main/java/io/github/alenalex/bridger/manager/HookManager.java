@@ -13,6 +13,10 @@ import java.util.Map;
 
 public class HookManager {
 
+    public static final String PLACEHOLDER_API = "PlaceholderAPI";
+    public static final String VAULT = "Vault";
+    public static final String PROTOCOL_LIB = "ProtocolLib";
+
     private final Bridger plugin;
     private IEconomyProvider economyProvider;
     private PlaceholderAPI placeholderAPI;
