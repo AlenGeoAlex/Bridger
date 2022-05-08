@@ -73,9 +73,6 @@ public final class Bridger extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
-        final BridgerAPIImpl apiImpl = new BridgerAPIImpl(this);
-
-        BRIDGER_API = apiImpl;
         this.configurationHandler = new ConfigurationHandler(this);
         this.workloadHandler = new WorkloadHandler(this);
         this.messagingUtils = new MessagingUtils(this);
@@ -90,6 +87,10 @@ public final class Bridger extends JavaPlugin {
         this.playerGameTask = new PlayerGameTask(this);
         this.scoreboardTask = new ScoreboardTask(this);
         this.hologramManager = new HologramManager(this);
+
+        final BridgerAPIImpl apiImpl = new BridgerAPIImpl(this);
+
+        BRIDGER_API = apiImpl;
 
         if(!pluginHookManager.validateMinHookRequirements()) {
             getServer().getPluginManager().disablePlugin(this);
