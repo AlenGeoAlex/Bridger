@@ -217,28 +217,35 @@ public final class Bridger extends JavaPlugin {
 
     public void prepareReloadTask(){
         PLUGIN_RELOADING = true;
-        this.configurationHandler.reloadHandler();
-        if(!this.localeManager.reloadLocaleManager()){
-            getLogger().severe("Failed to load locales!");
-            getLogger().severe("The plugin will be disabled!");
-            getServer().getPluginManager().disablePlugin(this);
-        }
-
-        this.playerGameTask.stopThread();
-        this.playerGameTask.reloadThread();
-        this.playerGameTask.setThreadCallPeriod(this.configurationHandler.getConfigurationFile().getActionBarUpdateTime());
-        if(!this.playerGameTask.startThread()) {
-            getLogger().warning("Failed to initialize thread pool for Game monitor task");
-        }
-
-        if(this.configurationHandler.getScoreboardConfiguration().isScoreboardEnabled()) {
-            this.scoreboardTask.reloadThread();
-            this.scoreboardTask.setThreadCallPeriod(this.configurationHandler.getScoreboardConfiguration().getScoreboardUpdateTime());
-            if (!this.scoreboardTask.startThread()) {
-                getLogger().warning("Failed to initialize thread pool for Scoreboard task");
+        try {
+            this.configurationHandler.reloadHandler();
+            if(!this.localeManager.reloadLocaleManager()){
+                getLogger().severe("Failed to load locales!");
+                getLogger().severe("The plugin will be disabled!");
+                getServer().getPluginManager().disablePlugin(this);
             }
+
+            this.playerGameTask.stopThread();
+            this.playerGameTask.reloadThread();
+            this.playerGameTask.setThreadCallPeriod(this.configurationHandler.getConfigurationFile().getActionBarUpdateTime());
+            if(!this.playerGameTask.startThread()) {
+                getLogger().warning("Failed to initialize thread pool for Game monitor task");
+            }
+
+            if(this.configurationHandler.getScoreboardConfiguration().isScoreboardEnabled()) {
+                this.scoreboardTask.reloadThread();
+                this.scoreboardTask.setThreadCallPeriod(this.configurationHandler.getScoreboardConfiguration().getScoreboardUpdateTime());
+                if (!this.scoreboardTask.startThread()) {
+                    getLogger().warning("Failed to initialize thread pool for Scoreboard task");
+                }
+            }
+        }catch (Exception e){
+            getLogger().severe("Failed to complete reload! The plugin encountered errors while reloading!");
+            e.printStackTrace();
+        }finally {
+            PLUGIN_RELOADING = false;
         }
-        PLUGIN_RELOADING = false;
+
     }
 
     public ConfigurationHandler configurationHandler() {
