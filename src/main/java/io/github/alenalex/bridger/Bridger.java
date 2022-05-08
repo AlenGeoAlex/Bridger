@@ -194,6 +194,8 @@ public final class Bridger extends JavaPlugin {
         if(getServer().getPluginManager().isPluginEnabled(HookManager.PROTOCOL_LIB) && configurationHandler.getHologramConfig().isHologramEnabled()){
             hologramManager.initHandler();
         }
+        getLogger().info("Plugin startup completed");
+        getLogger().info("Enabling plugin API");
         apiImpl.setAPIStatus(true);
     }
 
@@ -213,6 +215,11 @@ public final class Bridger extends JavaPlugin {
 
         if(this.scoreboardTask != null)
             this.scoreboardTask.stopThread();
+
+        this.messagingUtils.closeAdventure();
+
+        getLogger().info("All necessary shutdown's are completed!");
+        getLogger().info("Goodbye!");
     }
 
     public void prepareReloadTask(){
@@ -241,7 +248,9 @@ public final class Bridger extends JavaPlugin {
             }
         }catch (Exception e){
             getLogger().severe("Failed to complete reload! The plugin encountered errors while reloading!");
+            getLogger().severe("The plugin won't be functioning as expected!");
             e.printStackTrace();
+            getLogger().severe("If you don't know what this means, contact the developer!");
         }finally {
             PLUGIN_RELOADING = false;
         }

@@ -38,5 +38,7 @@ public class BridgerAPIImpl implements BridgerAPI {
 
     public void setAPIStatus(boolean status){
         this.enabled = status;
+        if(status)
+            plugin.getLogger().info("Plugin API has been enabled");
     }
 }

@@ -28,6 +28,11 @@ public final class MessagingUtils {
         this.placeholderAPIEnabled = plugin.getServer().getPluginManager().isPluginEnabled("PlaceholderAPI");
     }
 
+    public void closeAdventure(){
+        this.audiences.close();
+        plugin.getLogger().info("Closed Kyori's audience!");
+    }
+
     public void sendTo(@NotNull final Player player, String message){
         audiences.player(player).sendMessage(MessageFormatter.transform(message));
     }
