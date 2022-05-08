@@ -1,6 +1,7 @@
 package io.github.alenalex.bridger.listener;
 
 import io.github.alenalex.bridger.Bridger;
+import io.github.alenalex.bridger.api.events.UserDataLoadedEvent;
 import io.github.alenalex.bridger.manager.UserManager;
 import io.github.alenalex.bridger.models.player.UserData;
 import io.github.alenalex.bridger.variables.LangConfigurationPaths;
@@ -36,6 +37,8 @@ public final class PlayerConnectionListener implements Listener {
            }
 
            plugin.gameHandler().userManager().registerOverride(playerUUID, user);
+           final UserDataLoadedEvent userDataLoadedEvent = new UserDataLoadedEvent(player, user);
+           plugin.getServer().getPluginManager().callEvent(userDataLoadedEvent);
         });
         UserManager.handleLobbyTransport(player);
     }

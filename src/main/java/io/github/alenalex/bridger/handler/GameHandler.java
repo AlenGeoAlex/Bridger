@@ -1,6 +1,8 @@
 package io.github.alenalex.bridger.handler;
 
 import io.github.alenalex.bridger.Bridger;
+import io.github.alenalex.bridger.api.events.IslandAssignedEvent;
+import io.github.alenalex.bridger.api.events.IslandRequestEvent;
 import io.github.alenalex.bridger.manager.IslandManager;
 import io.github.alenalex.bridger.manager.UserManager;
 import io.github.alenalex.bridger.models.Island;
@@ -75,12 +77,24 @@ public class GameHandler {
             return Optional.empty();
         }
 
+        final IslandRequestEvent requestEvent = new IslandRequestEvent(player, userData);
+        plugin.getServer().getPluginManager().callEvent(requestEvent);
+
+        if(requestEvent.isCancelled())
+            return Optional.empty();
+
         Island island = islandManager.getFreeIslandByName(player, islandName).orElse(null);
 
         if(island == null){
             plugin.messagingUtils().sendTo(player, userData.userSettings().getLanguage().asComponent(LangConfigurationPaths.NO_FREE_ISLANDS));
             return Optional.empty();
         }
+
+        final IslandAssignedEvent event = new IslandAssignedEvent(player, userData, island, false);
+        plugin.getServer().getPluginManager().callEvent(event);
+
+        if(event.isCancelled())
+            return Optional.empty();
 
         island.setOccupied();
 
@@ -107,12 +121,24 @@ public class GameHandler {
             return Optional.empty();
         }
 
+        final IslandRequestEvent requestEvent = new IslandRequestEvent(player, userData);
+        plugin.getServer().getPluginManager().callEvent(requestEvent);
+
+        if(requestEvent.isCancelled())
+            return Optional.empty();
+
         Island island = islandManager.getAnyFreeIsland(player).orElse(null);
 
         if(island == null){
             plugin.messagingUtils().sendTo(player, userData.userSettings().getLanguage().asComponent(LangConfigurationPaths.NO_FREE_ISLANDS));
             return Optional.empty();
         }
+
+        final IslandAssignedEvent event = new IslandAssignedEvent(player, userData, island, false);
+        plugin.getServer().getPluginManager().callEvent(event);
+
+        if(event.isCancelled())
+            return Optional.empty();
 
         island.setOccupied();
 
@@ -132,6 +158,18 @@ public class GameHandler {
             plugin.messagingUtils().sendTo(player, userData.userSettings().getLanguage().asComponent(LangConfigurationPaths.ALREADY_HAVE_ISLAND));
             return;
         }
+
+        final IslandRequestEvent requestEvent = new IslandRequestEvent(player, userData);
+        plugin.getServer().getPluginManager().callEvent(requestEvent);
+
+        if(requestEvent.isCancelled())
+            return;
+
+        final IslandAssignedEvent event = new IslandAssignedEvent(player, userData, island, true);
+        plugin.getServer().getPluginManager().callEvent(event);
+
+        if(event.isCancelled())
+            return;
 
         island.setOccupied();
 
