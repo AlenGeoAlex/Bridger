@@ -1,7 +1,7 @@
 package io.github.alenalex.bridger.hooks.placeholders;
 
 import io.github.alenalex.bridger.Bridger;
-import io.github.alenalex.bridger.manager.LeaderboardManager;
+import io.github.alenalex.bridger.handler.LeaderboardHandler;
 import io.github.alenalex.bridger.models.leaderboard.LeaderboardPlayer;
 import io.github.alenalex.bridger.models.player.UserData;
 import io.github.alenalex.bridger.utils.adventure.MessageFormatter;
@@ -81,7 +81,7 @@ public class PlaceholderManager extends PlaceholderExpansion {
         }
 
         if(params.equals("leaderboard_reset")){
-            return String.valueOf(LeaderboardManager.LEADERBOARD_RESET_DURATION);
+            return String.valueOf(LeaderboardHandler.LEADERBOARD_RESET_DURATION);
         }
 
         if(params.startsWith("leaderboard_position")){

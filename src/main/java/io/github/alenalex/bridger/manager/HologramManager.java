@@ -1,4 +1,4 @@
-package io.github.alenalex.bridger.handler;
+package io.github.alenalex.bridger.manager;
 
 import com.github.unldenis.hologram.Hologram;
 import com.github.unldenis.hologram.HologramPool;
@@ -13,12 +13,12 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.function.Function;
 
-public class HologramHandler implements IHandler {
+public class HologramManager implements IHandler {
 
     private final Bridger plugin;
     private final HologramPool hologramPool;
 
-    public HologramHandler(Bridger plugin) {
+    public HologramManager(Bridger plugin) {
         this.plugin = plugin;
         this.hologramPool = new HologramPool(plugin, 70);
     }

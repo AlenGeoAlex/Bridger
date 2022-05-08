@@ -1,6 +1,7 @@
-package io.github.alenalex.bridger.manager;
+package io.github.alenalex.bridger.handler;
 
 import io.github.alenalex.bridger.Bridger;
+import io.github.alenalex.bridger.api.events.LeaderboardRefreshedEvent;
 import io.github.alenalex.bridger.models.leaderboard.LeaderboardPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -10,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class LeaderboardManager {
+public class LeaderboardHandler {
 
     public static final int LEADERBOARD_RESET_DURATION = 60;
 
@@ -26,7 +27,7 @@ public class LeaderboardManager {
 
     private int counterTime;
 
-    public LeaderboardManager(Bridger plugin) {
+    public LeaderboardHandler(Bridger plugin) {
         this.plugin = plugin;
         this.leaderboardPlayers = new ArrayList<>(10);
         this.counterTime = 0;
@@ -58,8 +59,10 @@ public class LeaderboardManager {
         this.plugin.dataProvider().getDatabaseProvider().getLeaderboardPlayers().thenAccept(new Consumer<List<LeaderboardPlayer>>() {
             @Override
             public void accept(List<LeaderboardPlayer> leaderboardPlayersList) {
+                final List<LeaderboardPlayer> oldLeaderboardPlayers = new ArrayList<>(leaderboardPlayers);
                 leaderboardPlayers.clear();
                 leaderboardPlayers.addAll(leaderboardPlayersList);
+                plugin.getServer().getPluginManager().callEvent(new LeaderboardRefreshedEvent(oldLeaderboardPlayers, leaderboardPlayersList));
             }
         });
         RELOADING = false;

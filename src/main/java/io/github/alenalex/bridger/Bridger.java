@@ -1,10 +1,12 @@
 package io.github.alenalex.bridger;
 
 import com.google.gson.Gson;
+import io.github.alenalex.bridger.api.BridgerAPI;
 import io.github.alenalex.bridger.database.DataProvider;
 import io.github.alenalex.bridger.exceptions.FailedLocaleLoading;
 import io.github.alenalex.bridger.exceptions.IllegalInitializationException;
 import io.github.alenalex.bridger.handler.*;
+import io.github.alenalex.bridger.impl.BridgerAPIImpl;
 import io.github.alenalex.bridger.listener.*;
 import io.github.alenalex.bridger.manager.*;
 import io.github.alenalex.bridger.task.ScoreboardTask;
@@ -15,6 +17,15 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.Random;
 
 public final class Bridger extends JavaPlugin {
+
+    private static BridgerAPI BRIDGER_API = null;
+
+    public static BridgerAPI getAPIInstance() throws IllegalStateException{
+        if(BRIDGER_API == null)
+            throw new IllegalStateException("API isn't yet initialized/disabled!");
+
+        return BRIDGER_API;
+    }
 
     private static boolean PLUGIN_RELOADING = false;
 
@@ -54,14 +65,17 @@ public final class Bridger extends JavaPlugin {
     private HookManager pluginHookManager;
     private CommandManager commandManager;
     private SetupSessionManager setupSessionManager;
-    private LeaderboardManager leaderboardManager;
+    private LeaderboardHandler leaderboardHandler;
     private PlayerGameTask playerGameTask;
     private ScoreboardTask scoreboardTask;
-    private HologramHandler hologramHandler;
+    private HologramManager hologramManager;
 
     @Override
     public void onEnable() {
         instance = this;
+        final BridgerAPIImpl apiImpl = new BridgerAPIImpl(this);
+
+        BRIDGER_API = apiImpl;
         this.configurationHandler = new ConfigurationHandler(this);
         this.workloadHandler = new WorkloadHandler(this);
         this.messagingUtils = new MessagingUtils(this);
@@ -72,10 +86,10 @@ public final class Bridger extends JavaPlugin {
         this.pluginHookManager = new HookManager(this);
         this.commandManager = new CommandManager(this);
         this.setupSessionManager = new SetupSessionManager(this);
-        this.leaderboardManager = new LeaderboardManager(this);
+        this.leaderboardHandler = new LeaderboardHandler(this);
         this.playerGameTask = new PlayerGameTask(this);
         this.scoreboardTask = new ScoreboardTask(this);
-        this.hologramHandler = new HologramHandler(this);
+        this.hologramManager = new HologramManager(this);
 
         if(!pluginHookManager.validateMinHookRequirements()) {
             getServer().getPluginManager().disablePlugin(this);
@@ -175,11 +189,12 @@ public final class Bridger extends JavaPlugin {
             }
         }
 
-        this.getServer().getScheduler().runTaskTimerAsynchronously(this, this.leaderboardManager.getCallable(), 0, 20);
+        this.getServer().getScheduler().runTaskTimerAsynchronously(this, this.leaderboardHandler.getCallable(), 0, 20);
 
         if(getServer().getPluginManager().isPluginEnabled(HookManager.PROTOCOL_LIB) && configurationHandler.getHologramConfig().isHologramEnabled()){
-            hologramHandler.initHandler();
+            hologramManager.initHandler();
         }
+        apiImpl.setAPIStatus(true);
     }
 
     @Override
@@ -270,11 +285,11 @@ public final class Bridger extends JavaPlugin {
         return scoreboardTask;
     }
 
-    public LeaderboardManager leaderboardManager(){
-        return leaderboardManager;
+    public LeaderboardHandler leaderboardManager(){
+        return leaderboardHandler;
     }
 
-    public HologramHandler hologramHandler(){
-        return hologramHandler;
+    public HologramManager hologramHandler(){
+        return hologramManager;
     }
 }
