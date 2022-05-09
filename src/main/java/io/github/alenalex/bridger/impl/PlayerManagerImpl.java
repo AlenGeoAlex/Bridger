@@ -27,4 +27,5 @@ public class PlayerManagerImpl implements PlayerManager {
     public Optional<UserData> ofPlayer(@NotNull UUID uuid) {
         return Optional.ofNullable(manager.of(uuid));
     }
+
 }

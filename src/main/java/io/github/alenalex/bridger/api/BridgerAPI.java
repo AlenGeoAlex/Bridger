@@ -3,8 +3,12 @@ package io.github.alenalex.bridger.api;
 import io.github.alenalex.bridger.Bridger;
 import io.github.alenalex.bridger.api.manager.IslandManager;
 import io.github.alenalex.bridger.api.manager.PlayerManager;
+import io.github.alenalex.bridger.models.Island;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Optional;
 
 public interface BridgerAPI {
 
@@ -37,6 +41,24 @@ public interface BridgerAPI {
      */
     @NotNull IslandManager getIslandManager();
 
+    /**
+     * Player Manager is useful for handing player related stuffs
+     * @return PlayerManager
+     */
     @NotNull PlayerManager getPlayerManager();
+
+    /**
+     * Gets the current player of the island
+     * @param island island instance
+     * @return player instance
+     */
+    @NotNull Optional<Player> getPlayerOfIsland(@NotNull Island island);
+
+    /**
+     * Gets the current player of the island
+     * @param islandName name of the island
+     * @return player instance
+     */
+    @NotNull Optional<Player> getPlayerOfIsland(@NotNull String islandName);
 
 }

@@ -1,9 +1,7 @@
 package io.github.alenalex.bridger.handler;
 
 import io.github.alenalex.bridger.Bridger;
-import io.github.alenalex.bridger.api.events.IslandAssignedEvent;
-import io.github.alenalex.bridger.api.events.IslandRequestEvent;
-import io.github.alenalex.bridger.api.events.PlayerBridgingStartedEvent;
+import io.github.alenalex.bridger.api.events.*;
 import io.github.alenalex.bridger.manager.IslandManager;
 import io.github.alenalex.bridger.manager.UserManager;
 import io.github.alenalex.bridger.models.Island;
@@ -223,6 +221,9 @@ public class GameHandler {
         userData.userStats().addAsCompletedGame();
         userData.userMatchCache().setCurrentTime(completeTime - userData.userMatchCache().getStartTime());
 
+        final PlayerPracticeWinEvent playerPracticeWinEvent = new PlayerPracticeWinEvent(userData, userData.getPlayer(), island);
+        plugin.getServer().getPluginManager().callEvent(playerPracticeWinEvent);
+
         if(userData.userMatchCache().getCurrentTime() < userData.userStats().getBestTime()){
             final String oldBestTime = userData.userStats().getBestTimeAsString();
             userData.userStats().setBestTime(userData.userMatchCache().getCurrentTime());
@@ -252,9 +253,11 @@ public class GameHandler {
                 }.runTaskAsynchronously(plugin);
             }
         }
+
         if(island.getRewards() > 0){
             plugin.pluginHookManager().getEconomyProvider().deposit(player, island.getRewards());
         }
+
         plugin.messagingUtils().sendTo(player,
                 userData.userSettings().getLanguage().asComponent(LangConfigurationPaths.COMPLETED_GAME,
                         MessagePlaceholder.of("%time%", userData.userMatchCache().getCurrentTimeAsString())
@@ -274,6 +277,10 @@ public class GameHandler {
         }
 
         final Island island = islandManager.of(activeBridges.get(player.getUniqueId()));
+
+        final PlayerPracticeFailedEvent practiceFailedEvent = new PlayerPracticeFailedEvent(player, userData, island);
+        plugin.getServer().getPluginManager().callEvent(practiceFailedEvent);
+
         userData.userStats().addGame();
         playerRestartGame(player);;
     }

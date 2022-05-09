@@ -13,6 +13,4 @@ public interface PlayerManager {
 
     Optional<UserData> ofPlayer(@NotNull UUID uuid);
 
-
-
 }
