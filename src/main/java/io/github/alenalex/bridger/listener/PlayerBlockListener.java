@@ -1,6 +1,7 @@
 package io.github.alenalex.bridger.listener;
 
 import io.github.alenalex.bridger.Bridger;
+import io.github.alenalex.bridger.api.events.PlayerBridgingStartedEvent;
 import io.github.alenalex.bridger.models.Island;
 import io.github.alenalex.bridger.models.player.UserData;
 import io.github.alenalex.bridger.models.player.UserMatchCache;
@@ -50,6 +51,12 @@ public final class PlayerBlockListener implements Listener {
                     plugin.messagingUtils().sendTo(player, userData.userSettings().getLanguage().asComponent(LangConfigurationPaths.ISLAND_STILL_RESETTING_BLOCKS_PLACED));
                     return;
                 }
+
+                final PlayerBridgingStartedEvent playerBridgingStartedEvent = new PlayerBridgingStartedEvent(userData.getPlayer(), userData);
+                plugin.getServer().getPluginManager().callEvent(playerBridgingStartedEvent);
+
+                if(event.isCancelled())
+                    return;
 
                 plugin.gameHandler().playerFirstBlock(userData);
                 userData.userMatchCache().addBlockToCache(event.getBlockPlaced());

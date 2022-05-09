@@ -18,10 +18,23 @@ public interface BridgerAPI {
         return Bridger.getAPIInstance();
     }
 
+    /**
+     *  Useful to know whether the plugin is reloading or not
+     * @return is plugin reloading or not.
+     */
     boolean isReloading();
 
+    /**
+     * Returns whether the plugin is enabled
+     * @return is plugin enabled
+     */
     boolean isEnabled();
 
+    /**
+     * Returns the Island Manager.
+     * Island manager is useful for handling island related stuffs
+     * @return IslandManager
+     */
     @NotNull IslandManager getIslandManager();
 
     @NotNull PlayerManager getPlayerManager();

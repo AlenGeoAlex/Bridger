@@ -3,6 +3,7 @@ package io.github.alenalex.bridger.handler;
 import io.github.alenalex.bridger.Bridger;
 import io.github.alenalex.bridger.api.events.IslandAssignedEvent;
 import io.github.alenalex.bridger.api.events.IslandRequestEvent;
+import io.github.alenalex.bridger.api.events.PlayerBridgingStartedEvent;
 import io.github.alenalex.bridger.manager.IslandManager;
 import io.github.alenalex.bridger.manager.UserManager;
 import io.github.alenalex.bridger.models.Island;
@@ -184,6 +185,8 @@ public class GameHandler {
     }
 
     public void playerFirstBlock(@NotNull UserData userData){
+
+
         userData.userMatchCache().setPlayerAsPlaying();
     }
 

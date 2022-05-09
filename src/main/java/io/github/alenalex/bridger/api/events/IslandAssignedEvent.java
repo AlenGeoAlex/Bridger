@@ -7,6 +7,11 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
+/**
+ * The event is called when an island is assigned to a player,
+ * This is called just before assigning them to the island!
+ * This is a cancellable event.
+ */
 public class IslandAssignedEvent extends Event implements Cancellable {
 
     private static final HandlerList HANDLERS_LIST = new HandlerList();

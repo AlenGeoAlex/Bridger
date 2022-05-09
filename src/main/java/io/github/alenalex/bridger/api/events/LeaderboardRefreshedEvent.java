@@ -6,8 +6,11 @@ import org.bukkit.event.HandlerList;
 
 import java.util.List;
 
-
-public class LeaderboardRefreshedEvent extends Event {
+/**
+ * This event is called when a leaderboard refresh happens
+ * This is not a cancellable event
+ */
+public final class LeaderboardRefreshedEvent extends Event {
 
     private static final HandlerList HANDLERS_LIST = new HandlerList();
 

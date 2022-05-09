@@ -2,6 +2,8 @@ package io.github.alenalex.bridger.models;
 
 
 import io.github.alenalex.bridger.Bridger;
+import io.github.alenalex.bridger.api.events.AsyncIslandResetCompleteEvent;
+import io.github.alenalex.bridger.api.events.AsyncIslandResetStartedEvent;
 import io.github.alenalex.bridger.variables.IslandStatus;
 import io.github.alenalex.bridger.utils.MaterialsUtils;
 import net.minecraft.server.v1_8_R3.BlockPosition;
@@ -177,10 +179,17 @@ public final class Island {
         spectators.remove(uuid);
     }
 
+    public Island getIslandObject(){
+        return this;
+    }
+
     public CompletableFuture<Boolean> resetIsland() {
         return CompletableFuture.supplyAsync(new Supplier<Boolean>() {
             @Override
             public Boolean get() {
+                final AsyncIslandResetStartedEvent islandResetStartedEvent = new AsyncIslandResetStartedEvent(getIslandObject());
+                Bukkit.getServer().getPluginManager().callEvent(islandResetStartedEvent);
+                final long startTime = System.currentTimeMillis();
                 setResetting();
                 Bukkit.getLogger().info("The island " + islandName + " has been prepared for resetting.");
                 getPossibleBlocksToRemove().thenAccept(blocks -> {
@@ -204,6 +213,8 @@ public final class Island {
                 }
 
                 setIdle();
+                final AsyncIslandResetCompleteEvent islandResetCompleteEvent = new AsyncIslandResetCompleteEvent(getIslandObject(), System.currentTimeMillis() - startTime);
+                Bukkit.getServer().getPluginManager().callEvent(islandResetCompleteEvent);
                 Bukkit.getLogger().info("The island " + islandName + " is now available for use.");
                 return true;
             }

@@ -6,7 +6,12 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public class IslandRequestEvent extends Event implements Cancellable {
+/**
+ * This event is called when a player request an island.
+ * This can be either through GUI or through command or just normal /island
+ * This is a cancellable event
+ */
+public final class IslandRequestEvent extends Event implements Cancellable {
 
     private static final HandlerList HANDLERS_LIST = new HandlerList();
 
