@@ -6,7 +6,7 @@ import io.github.alenalex.bridger.database.DataProvider;
 import io.github.alenalex.bridger.exceptions.FailedLocaleLoading;
 import io.github.alenalex.bridger.exceptions.IllegalInitializationException;
 import io.github.alenalex.bridger.handler.*;
-import io.github.alenalex.bridger.impl.BridgerAPIImpl;
+import io.github.alenalex.bridger.implementation.BridgerAPIImpl;
 import io.github.alenalex.bridger.listener.*;
 import io.github.alenalex.bridger.manager.*;
 import io.github.alenalex.bridger.task.ScoreboardTask;

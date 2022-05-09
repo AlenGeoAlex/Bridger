@@ -5,7 +5,7 @@ import io.github.alenalex.bridger.handler.ConfigurationHandler;
 
 import java.util.List;
 
-public class HologramConfig extends AbstractFileSettings {
+public final class HologramConfig extends AbstractFileSettings {
 
     private boolean hologramEnabled;
 

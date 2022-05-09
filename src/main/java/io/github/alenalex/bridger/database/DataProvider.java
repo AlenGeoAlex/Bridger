@@ -6,7 +6,7 @@ import io.github.alenalex.bridger.database.sql.MySQL;
 import io.github.alenalex.bridger.database.sql.SQLite;
 import io.github.alenalex.bridger.interfaces.IDatabaseProvider;
 
-public class DataProvider {
+public final class DataProvider {
 
     private final Bridger plugin;
 

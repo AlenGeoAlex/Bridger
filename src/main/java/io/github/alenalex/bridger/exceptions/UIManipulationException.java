@@ -1,6 +1,6 @@
 package io.github.alenalex.bridger.exceptions;
 
-public class UIManipulationException extends RuntimeException{
+public final class UIManipulationException extends RuntimeException{
 
     public UIManipulationException(String message, Throwable cause) {
         super(message, cause);

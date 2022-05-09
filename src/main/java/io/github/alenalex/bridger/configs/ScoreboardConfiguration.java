@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ScoreboardConfiguration extends AbstractFileSettings {
+public final class ScoreboardConfiguration extends AbstractFileSettings {
 
     private long scoreboardUpdateTime;
     private boolean scoreboardEnabled;

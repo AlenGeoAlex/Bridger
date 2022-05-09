@@ -3,7 +3,6 @@ package io.github.alenalex.bridger.handler;
 import io.github.alenalex.bridger.Bridger;
 import io.github.alenalex.bridger.api.events.LeaderboardRefreshedEvent;
 import io.github.alenalex.bridger.models.leaderboard.LeaderboardPlayer;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -11,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class LeaderboardHandler {
+public final class LeaderboardHandler {
 
     public static final int LEADERBOARD_RESET_DURATION = 60;
 

@@ -67,7 +67,7 @@ public abstract class AbstractThreadTask {
             throw new ThreadInitializationError("The provided runnable task for thread execution is empty!");
 
 
-        this.servicePool.scheduleAtFixedRate(callableTask(), 0L, threadCallPeriod, TimeUnit.MILLISECONDS);
+        this.servicePool.scheduleAtFixedRate(runnableTask, 0L, threadCallPeriod, TimeUnit.MILLISECONDS);
         this.running = true;
         plugin.getLogger().info("Thread spawned for "+threadName+" task!");
         return true;

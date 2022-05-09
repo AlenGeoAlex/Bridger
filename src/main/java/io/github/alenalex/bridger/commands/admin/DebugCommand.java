@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
-public class DebugCommand extends AbstractCommand {
+public final class DebugCommand extends AbstractCommand {
 
     public DebugCommand(CommandManager manager) {
         super(manager, "bridgerdebug");

@@ -21,7 +21,7 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 
-public class SQLite extends AbstractSQL implements IDatabaseProvider {
+public final class SQLite extends AbstractSQL implements IDatabaseProvider {
 
     public static final String SQLITE_DRIVER = "org.sqlite.JDBC";
 

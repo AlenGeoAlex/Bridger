@@ -1,16 +1,16 @@
 package io.github.alenalex.bridger.handler;
 
 import io.github.alenalex.bridger.Bridger;
-import io.github.alenalex.bridger.gui.dynamic.IslandSelector;
-import io.github.alenalex.bridger.gui.dynamic.cosmetics.MaterialSelector;
-import io.github.alenalex.bridger.gui.dynamic.profile.PlayerSettings;
-import io.github.alenalex.bridger.gui.dynamic.shop.FireworkShop;
-import io.github.alenalex.bridger.gui.dynamic.shop.MaterialsShop;
-import io.github.alenalex.bridger.gui.statics.CosmeticShop;
-import io.github.alenalex.bridger.gui.statics.SetBackSelector;
+import io.github.alenalex.bridger.ui.dynamic.IslandSelector;
+import io.github.alenalex.bridger.ui.dynamic.cosmetics.MaterialSelector;
+import io.github.alenalex.bridger.ui.dynamic.profile.PlayerSettings;
+import io.github.alenalex.bridger.ui.dynamic.shop.FireworkShop;
+import io.github.alenalex.bridger.ui.dynamic.shop.MaterialsShop;
+import io.github.alenalex.bridger.ui.statics.CosmeticShop;
+import io.github.alenalex.bridger.ui.statics.SetBackSelector;
 import io.github.alenalex.bridger.interfaces.IHandler;
 
-public class UIHandler implements IHandler {
+public final class UIHandler implements IHandler {
 
     private final Bridger plugin;
 

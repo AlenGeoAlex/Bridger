@@ -6,7 +6,7 @@ import io.github.alenalex.bridger.variables.ConfigurationPaths;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 
-public class ConnectionConfig {
+public final class ConnectionConfig {
 
     private final String username;
     private final String password;

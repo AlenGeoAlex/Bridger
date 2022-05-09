@@ -14,7 +14,7 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 
-public class MySQL extends AbstractSQL implements  IDatabaseProvider {
+public final class MySQL extends AbstractSQL implements  IDatabaseProvider {
 
     public static final String MYSQL_DRIVER = "com.mysql.jdbc.Driver";
 

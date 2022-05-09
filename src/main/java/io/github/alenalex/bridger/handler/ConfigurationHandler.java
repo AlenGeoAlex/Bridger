@@ -6,7 +6,7 @@ import io.github.alenalex.bridger.interfaces.IHandler;
 
 import java.io.File;
 
-public class ConfigurationHandler implements IHandler {
+public final class ConfigurationHandler implements IHandler {
 
     private final Bridger plugin;
     private final ConfigurationFile configurationFile;

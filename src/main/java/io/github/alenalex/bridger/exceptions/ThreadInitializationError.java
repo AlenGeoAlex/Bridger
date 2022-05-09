@@ -1,6 +1,6 @@
 package io.github.alenalex.bridger.exceptions;
 
-public class ThreadInitializationError extends RuntimeException{
+public final class ThreadInitializationError extends RuntimeException{
 
     public ThreadInitializationError(String message) {
         super(message);

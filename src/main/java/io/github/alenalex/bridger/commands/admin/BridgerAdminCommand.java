@@ -20,7 +20,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
-public class BridgerAdminCommand extends AbstractCommand {
+public final class BridgerAdminCommand extends AbstractCommand {
     public BridgerAdminCommand(CommandManager manager) {
         super(manager, "bridgeradmin");
         registerHelpMessage("reload", "Reloads the entire plugin.");

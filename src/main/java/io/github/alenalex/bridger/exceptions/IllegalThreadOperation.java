@@ -1,6 +1,6 @@
 package io.github.alenalex.bridger.exceptions;
 
-public class IllegalThreadOperation extends RuntimeException{
+public final class IllegalThreadOperation extends RuntimeException{
 
     public IllegalThreadOperation() {
     }

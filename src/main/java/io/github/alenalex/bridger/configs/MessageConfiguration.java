@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.util.List;
 
-public class MessageConfiguration {
+public final class MessageConfiguration {
 
     private @NotNull final Bridger plugin;
     private @NotNull final FlatFile file;

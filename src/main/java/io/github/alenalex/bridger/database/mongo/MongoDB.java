@@ -16,8 +16,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
-//TODO
-public class MongoDB implements IDatabaseProvider{
+public final class MongoDB implements IDatabaseProvider{
 
     private final Bridger plugin;
     private MongoClient mongoClient = null;

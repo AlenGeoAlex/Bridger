@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
-public class IslandConfiguration extends AbstractFileSettings {
+public final class IslandConfiguration extends AbstractFileSettings {
 
     public IslandConfiguration(ConfigurationHandler handler) {
         super(handler);

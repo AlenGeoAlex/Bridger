@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
-public class LeaveCommand extends AbstractCommand {
+public final class LeaveCommand extends AbstractCommand {
     public LeaveCommand(CommandManager manager) {
         super(manager, "leave");
     }

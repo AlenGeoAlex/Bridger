@@ -2,7 +2,7 @@ package io.github.alenalex.bridger.manager;
 
 import io.github.alenalex.bridger.Bridger;
 import io.github.alenalex.bridger.abstracts.AbstractRegistry;
-import io.github.alenalex.bridger.gui.config.HotBarConfig;
+import io.github.alenalex.bridger.ui.config.HotBarConfig;
 import io.github.alenalex.bridger.models.player.UserData;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;

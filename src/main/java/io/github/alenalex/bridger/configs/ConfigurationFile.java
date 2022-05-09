@@ -1,24 +1,22 @@
 package io.github.alenalex.bridger.configs;
 
 import io.github.alenalex.bridger.abstracts.AbstractFileSettings;
-import io.github.alenalex.bridger.gui.config.HotBarConfig;
+import io.github.alenalex.bridger.ui.config.HotBarConfig;
 import io.github.alenalex.bridger.handler.ConfigurationHandler;
 import io.github.alenalex.bridger.utils.FlatFileUtils;
 import io.github.alenalex.bridger.utils.adventure.MessageFormatter;
 import io.github.alenalex.bridger.variables.ConfigurationPaths;
 import org.apache.commons.lang3.EnumUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.entity.Firework;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
 import java.util.function.Supplier;
 
-public class ConfigurationFile extends AbstractFileSettings {
+public final class ConfigurationFile extends AbstractFileSettings {
 
     private String storageType;
     private Location spawnLocation;

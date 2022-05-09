@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 
-public class ScoreboardCommand extends AbstractCommand {
+public final class ScoreboardCommand extends AbstractCommand {
 
     public ScoreboardCommand(CommandManager manager) {
         super(manager, "scoreboard");

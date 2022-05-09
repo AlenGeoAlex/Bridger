@@ -19,7 +19,7 @@ import java.util.HashMap;
 
 import java.util.Map;
 
-public class SessionCommand extends AbstractCommand {
+public final class SessionCommand extends AbstractCommand {
 
     public SessionCommand(CommandManager manager) {
         super(manager, "session");

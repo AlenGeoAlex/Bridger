@@ -1,7 +1,7 @@
 package io.github.alenalex.bridger.listener;
 
 import io.github.alenalex.bridger.Bridger;
-import io.github.alenalex.bridger.gui.config.HotBarConfig;
+import io.github.alenalex.bridger.ui.config.HotBarConfig;
 import io.github.alenalex.bridger.models.player.UserData;
 import io.github.alenalex.bridger.variables.Permissions;
 import org.bukkit.entity.Player;

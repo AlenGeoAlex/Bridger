@@ -5,7 +5,7 @@ import com.mongodb.event.ServerHeartbeatStartedEvent;
 import com.mongodb.event.ServerHeartbeatSucceededEvent;
 import com.mongodb.event.ServerMonitorListener;
 
-public class MongoConnectionListener implements ServerMonitorListener {
+public final class MongoConnectionListener implements ServerMonitorListener {
 
     private boolean connectionOpen;
 

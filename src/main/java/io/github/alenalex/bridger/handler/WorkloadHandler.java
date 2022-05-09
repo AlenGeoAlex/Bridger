@@ -2,11 +2,11 @@ package io.github.alenalex.bridger.handler;
 
 import io.github.alenalex.bridger.Bridger;
 import io.github.alenalex.bridger.interfaces.IHandler;
-import io.github.alenalex.bridger.workload.core.WorkloadDistributor;
-import io.github.alenalex.bridger.workload.core.WorkloadThread;
+import io.github.alenalex.bridger.scheduler.core.WorkloadDistributor;
+import io.github.alenalex.bridger.scheduler.core.WorkloadThread;
 import org.bukkit.scheduler.BukkitTask;
 
-public class WorkloadHandler implements IHandler {
+public final class WorkloadHandler implements IHandler {
 
     private final Bridger plugin;
 
@@ -24,7 +24,7 @@ public class WorkloadHandler implements IHandler {
     @Override
     public boolean initHandler(){
         this.syncThread = workloadDistributor.createThread(220000L);
-        return syncThread != null;
+        return true;
     }
 
     @Override
@@ -41,7 +41,6 @@ public class WorkloadHandler implements IHandler {
     public void disableHandler() {
         if(syncTask != null)
             syncTask.cancel();
-
     }
 
     public WorkloadThread getSyncThread() {

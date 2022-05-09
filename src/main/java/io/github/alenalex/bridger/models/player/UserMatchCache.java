@@ -4,7 +4,7 @@ import fr.mrmicky.fastboard.FastBoard;
 import io.github.alenalex.bridger.Bridger;
 import io.github.alenalex.bridger.models.Island;
 import io.github.alenalex.bridger.utils.StringUtils;
-import io.github.alenalex.bridger.workload.core.Workload;
+import io.github.alenalex.bridger.scheduler.core.Workload;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.metadata.FixedMetadataValue;

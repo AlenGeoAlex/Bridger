@@ -20,7 +20,7 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 
-public class IslandCommand extends AbstractCommand {
+public final class IslandCommand extends AbstractCommand {
 
     public IslandCommand(CommandManager manager) {
         super(manager, "island", Arrays.asList("is","isl","bridge"));

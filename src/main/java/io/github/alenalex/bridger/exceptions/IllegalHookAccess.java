@@ -1,6 +1,6 @@
 package io.github.alenalex.bridger.exceptions;
 
-public class IllegalHookAccess extends RuntimeException{
+public final class IllegalHookAccess extends RuntimeException{
 
     public IllegalHookAccess(String message) {
         super(message);

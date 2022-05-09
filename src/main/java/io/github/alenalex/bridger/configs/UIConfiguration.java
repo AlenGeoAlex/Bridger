@@ -1,11 +1,11 @@
 package io.github.alenalex.bridger.configs;
 
 import io.github.alenalex.bridger.abstracts.AbstractFileSettings;
-import io.github.alenalex.bridger.gui.config.UIConfig;
-import io.github.alenalex.bridger.gui.config.UIItem;
+import io.github.alenalex.bridger.ui.config.UIConfig;
+import io.github.alenalex.bridger.ui.config.UIItem;
 import io.github.alenalex.bridger.handler.ConfigurationHandler;
 
-public class UIConfiguration extends AbstractFileSettings {
+public final class UIConfiguration extends AbstractFileSettings {
 
     private UIConfig fireWorkShopConfig;
     private UIItem fireWorkShopItem;

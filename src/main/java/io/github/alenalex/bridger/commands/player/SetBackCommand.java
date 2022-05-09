@@ -17,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 
-public class SetBackCommand extends AbstractCommand {
+public final class SetBackCommand extends AbstractCommand {
     public SetBackCommand(CommandManager manager) {
         super(manager, "setback", Arrays.asList("sb"));
         this.registerHelpMessage("set [value]" , "Sets the setback to provided value");
