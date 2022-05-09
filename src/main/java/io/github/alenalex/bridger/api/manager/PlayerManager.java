@@ -9,8 +9,8 @@ import java.util.UUID;
 
 public interface PlayerManager {
 
-    Optional<UserData> ofPlayer(@NotNull Player player);
+    @NotNull Optional<UserData> ofPlayer(@NotNull Player player);
 
-    Optional<UserData> ofPlayer(@NotNull UUID uuid);
+    @NotNull Optional<UserData> ofPlayer(@NotNull UUID uuid);
 
 }

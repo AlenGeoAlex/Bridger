@@ -18,12 +18,12 @@ public final class PlayerManagerImpl implements PlayerManager {
     }
 
     @Override
-    public Optional<UserData> ofPlayer(@NotNull Player player) {
+    public @NotNull Optional<UserData> ofPlayer(@NotNull Player player) {
         return Optional.ofNullable(manager.of(player.getUniqueId()));
     }
 
     @Override
-    public Optional<UserData> ofPlayer(@NotNull UUID uuid) {
+    public @NotNull Optional<UserData> ofPlayer(@NotNull UUID uuid) {
         return Optional.ofNullable(manager.of(uuid));
     }
 

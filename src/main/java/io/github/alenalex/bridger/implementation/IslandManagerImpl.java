@@ -17,7 +17,7 @@ public final class IslandManagerImpl implements IslandManager {
     }
 
     @Override
-    public Optional<Island> getIslandByName(@NotNull String islandName) {
+    public @NotNull Optional<Island> getIslandByName(@NotNull String islandName) {
         return Optional.ofNullable(islandManager.of(islandName));
     }
 
@@ -40,27 +40,27 @@ public final class IslandManagerImpl implements IslandManager {
     }
 
     @Override
-    public Collection<Island> getAllLoadedIslands() {
+    public @NotNull Collection<Island> getAllLoadedIslands() {
         return islandManager.getModifiableValueList();
     }
 
     @Override
-    public Collection<Island> getAllOccupiedIslands() {
+    public @NotNull Collection<Island> getAllOccupiedIslands() {
         return islandManager.getAllOccupiedIsland();
     }
 
     @Override
-    public Collection<Island> getAllEnabledIsland() {
+    public @NotNull Collection<Island> getAllEnabledIsland() {
         return islandManager.getAllEnabledIsland();
     }
 
     @Override
-    public Collection<Island> getAllFreeIslands() {
+    public @NotNull Collection<Island> getAllFreeIslands() {
         return islandManager.getAllFreeIslands();
     }
 
     @Override
-    public Optional<IslandStatus> getStatusOf(@NotNull String islandName) {
+    public @NotNull Optional<IslandStatus> getStatusOf(@NotNull String islandName) {
         final Island island = islandManager.of(islandName);
         if(island == null)
             return Optional.empty();
