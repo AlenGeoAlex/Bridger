@@ -54,6 +54,10 @@ public enum LangConfigurationPaths {
     SETBACK_SET("setback-set-to"),
     SETBACK_REMOVED("setback-turned-off"),
     SETBACK_REACHED("setback-reached"),
+
+    COMMAND_HELP_HEADER("command-header"),
+    COMMAND_HELP_FOOTER("command-footer"),
+    COMMAND_HELP_DESCRIPTION("command-description")
     ;
     private final String path;
 

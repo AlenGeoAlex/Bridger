@@ -5,6 +5,9 @@ import io.github.alenalex.bridger.ui.config.UIConfig;
 import io.github.alenalex.bridger.ui.config.UIItem;
 import io.github.alenalex.bridger.handler.ConfigurationHandler;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public final class UIConfiguration extends AbstractFileSettings {
 
     private UIConfig fireWorkShopConfig;
@@ -22,8 +25,12 @@ public final class UIConfiguration extends AbstractFileSettings {
     private UIConfig materialSelectorConfig;
     private UIItem materialSelectorNext, materialSelectorPre;
 
+    private UIConfig leaderboardMenuConfig;
+    private List<UIItem> leaderboardPlayersConfig;
+
     public UIConfiguration(ConfigurationHandler handler) {
         super(handler);
+        this.leaderboardPlayersConfig = new ArrayList<>();
     }
 
     @Override
@@ -50,11 +57,16 @@ public final class UIConfiguration extends AbstractFileSettings {
         this.materialSelectorConfig = UIConfig.buildFrom(getSectionOf("selector.material"));
         this.materialSelectorNext = UIItem.buildFrom(getSectionOf("selector.material.buttons.next-button"));
         this.materialSelectorPre = UIItem.buildFrom(getSectionOf("selector.material.buttons.pre-button"));
+        this.leaderboardMenuConfig = UIConfig.buildFrom(getSectionOf("leaderboard"));
+        for(int i =1 ;i<=10; i++){
+            final UIItem item = UIItem.buildAsNullable(getSectionOf("leaderboard.buttons.pos-"+i));
+            this.leaderboardPlayersConfig.add(item);
+        }
     }
 
     @Override
     public void prepareReload() {
-
+        this.leaderboardPlayersConfig.clear();
     }
 
     public UIConfig getFireWorkShopConfig() {
@@ -127,5 +139,13 @@ public final class UIConfiguration extends AbstractFileSettings {
 
     public UIItem getMaterialSelectorPre() {
         return materialSelectorPre;
+    }
+
+    public UIConfig getLeaderboardMenuConfig() {
+        return leaderboardMenuConfig;
+    }
+
+    public List<UIItem> getLeaderboardPlayersConfig() {
+        return leaderboardPlayersConfig;
     }
 }

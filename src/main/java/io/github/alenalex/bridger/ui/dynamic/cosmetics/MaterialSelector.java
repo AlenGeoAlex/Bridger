@@ -94,8 +94,8 @@ public final class MaterialSelector extends AbstractDynamicGUI<PaginatedGui> {
                                 .from(material)
                                 .name(MessageFormatter.transform("<green>"+name))
                                 .lore(MessageFormatter.transform("<gray>This is your current material"))
-                                 .glow()
-                                 .asGuiItem();
+                                .glow()
+                                .asGuiItem();
                     }else{
                         item = ItemBuilder
                                 .from(material)

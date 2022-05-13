@@ -1,4 +1,4 @@
-package io.github.alenalex.bridger.implementation;
+package io.github.alenalex.bridger.api.implementation;
 
 import io.github.alenalex.bridger.api.manager.PlayerManager;
 import io.github.alenalex.bridger.manager.UserManager;

@@ -6,7 +6,7 @@ import io.github.alenalex.bridger.database.DataProvider;
 import io.github.alenalex.bridger.exceptions.FailedLocaleLoading;
 import io.github.alenalex.bridger.exceptions.IllegalInitializationException;
 import io.github.alenalex.bridger.handler.*;
-import io.github.alenalex.bridger.implementation.BridgerAPIImpl;
+import io.github.alenalex.bridger.api.implementation.BridgerAPIImpl;
 import io.github.alenalex.bridger.listener.*;
 import io.github.alenalex.bridger.manager.*;
 import io.github.alenalex.bridger.task.ScoreboardTask;
@@ -20,7 +20,7 @@ public final class Bridger extends JavaPlugin {
 
     private static BridgerAPI BRIDGER_API = null;
 
-    public static BridgerAPI getAPIInstance() throws IllegalStateException{
+    public BridgerAPI getAPIInstance() throws IllegalStateException{
         if(BRIDGER_API == null)
             throw new IllegalStateException("API isn't yet initialized/disabled!");
 
@@ -69,6 +69,7 @@ public final class Bridger extends JavaPlugin {
     private PlayerGameTask playerGameTask;
     private ScoreboardTask scoreboardTask;
     private HologramManager hologramManager;
+    private NPCManager npcManager;
 
     @Override
     public void onEnable() {
@@ -87,6 +88,7 @@ public final class Bridger extends JavaPlugin {
         this.playerGameTask = new PlayerGameTask(this);
         this.scoreboardTask = new ScoreboardTask(this);
         this.hologramManager = new HologramManager(this);
+        this.npcManager = new NPCManager(this);
 
         final BridgerAPIImpl apiImpl = new BridgerAPIImpl(this);
 
@@ -124,7 +126,7 @@ public final class Bridger extends JavaPlugin {
 
         this.workloadHandler.prepareHandler();
 
-        if( !this.dataProvider.getDatabaseProvider().prepareDatabase() ){
+        if(!this.dataProvider.getDatabaseProvider().prepareDatabase() ){
             getLogger().severe("Failed to prepare database!");
             getLogger().severe("The plugin will be disabled!");
             getServer().getPluginManager().disablePlugin(this);
@@ -192,12 +194,26 @@ public final class Bridger extends JavaPlugin {
 
         this.getServer().getScheduler().runTaskTimerAsynchronously(this, this.leaderboardHandler.getCallable(), 0, 20);
 
-        if(getServer().getPluginManager().isPluginEnabled(HookManager.PROTOCOL_LIB) && configurationHandler.getHologramConfig().isHologramEnabled()){
-            hologramManager.initHandler();
+        if(configurationHandler.getHologramConfig().isHologramEnabled()){
+            if(getServer().getPluginManager().isPluginEnabled(HookManager.PROTOCOL_LIB)){
+                hologramManager.initHandler();
+            }else{
+                getLogger().warning("Holograms are enabled, but "+HookManager.PROTOCOL_LIB+" is missing!");
+                getLogger().warning("Holograms won't be handled!");
+            }
         }
+
+        if(getServer().getPluginManager().isPluginEnabled(HookManager.PROTOCOL_LIB)){
+            if(!npcManager.initNPC()){
+                getServer().getLogger().severe("Failed to initialize NPC's handler");
+                getServer().getPluginManager().disablePlugin(this);
+                return;
+            }
+        }
+
         getLogger().info("Plugin startup completed");
         getLogger().info("Enabling plugin API");
-        apiImpl.setAPIStatus(true);
+        apiImpl.setAPIEnabled(true);
     }
 
     @Override

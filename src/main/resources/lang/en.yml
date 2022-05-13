@@ -44,3 +44,6 @@ cheat-protection:
   failed-min-time: "<red>You completed practice so fast, This won't be counted!"
   failed-min-blocks: "<red>You completed practice without placing the minimum blocks to be placed, This won't be counted!"
   failed-completed-on-idle: "&cYou reached the end island without starting the practice!"
+command-header: "<gray>----------------<aqua>Bridger<gray>---------------"
+command-footer: "<gray>-------------------------------------"
+command-description: "<red>%command%<white> - <yellow>%description%"

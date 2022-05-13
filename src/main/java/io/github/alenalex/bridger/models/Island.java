@@ -1,6 +1,7 @@
 package io.github.alenalex.bridger.models;
 
 
+import com.github.unldenis.hologram.Hologram;
 import io.github.alenalex.bridger.Bridger;
 import io.github.alenalex.bridger.api.events.AsyncIslandResetCompleteEvent;
 import io.github.alenalex.bridger.api.events.AsyncIslandResetStartedEvent;
@@ -40,6 +41,8 @@ public final class Island {
 
     private boolean enabled;
     private transient IslandStatus status;
+    private transient Hologram spawnHologram;
+    private transient Hologram endHologram;
 
     private double joinCost;
     private double rewards;
@@ -58,6 +61,9 @@ public final class Island {
         this.joinCost = joinCost;
         this.rewards = rewards;
 
+        this.spawnHologram = null;
+        this.endHologram = null;
+
         this.enabled = true;
         this.status = IslandStatus.IDLE;
         this.spectators = new ArrayList<>();
@@ -74,6 +80,9 @@ public final class Island {
         this.minBlocksRequired = minBlocksRequired;
         this.joinCost = joinCost;
         this.rewards = rewards;
+
+        this.spawnHologram = null;
+        this.endHologram = null;
 
         this.enabled = true;
         this.status = IslandStatus.IDLE;
@@ -267,6 +276,22 @@ public final class Island {
 
     public double getRewards() {
         return rewards;
+    }
+
+    public Hologram getSpawnHologram() {
+        return spawnHologram;
+    }
+
+    public void setSpawnHologram(Hologram spawnHologram) {
+        this.spawnHologram = spawnHologram;
+    }
+
+    public Hologram getEndHologram() {
+        return endHologram;
+    }
+
+    public void setEndHologram(Hologram endHologram) {
+        this.endHologram = endHologram;
     }
 
     @Override

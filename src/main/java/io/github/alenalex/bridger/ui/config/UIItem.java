@@ -10,6 +10,7 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.List;
@@ -74,9 +75,22 @@ public class UIItem {
         return lore;
     }
 
-    //TODO Check out this
     public static UIItem buildFrom(@NotNull FlatFileSection section){
         return buildFrom(section, false);
+    }
+
+    @Nullable
+    public static UIItem buildAsNullable(@NotNull FlatFileSection section){
+        ItemStack stack = FlatFileUtils.deserializeItemStack(section.getString("item"));
+        final String name = section.getString("name");
+        final List<String> loreList = section.getStringList("lore");
+        final int slot = section.getInt("slot");
+        final int amount = section.getInt("amount");
+
+        if(stack == null)
+            return null;
+
+        return new UIItem(name, slot, loreList, amount, stack);
     }
 
     public static UIItem buildFrom(@NotNull FlatFileSection section, boolean allowDummyMaterial){

@@ -129,6 +129,7 @@ public class IslandManager extends AbstractRegistry<String, Island> {
         }else {
             island.setEnabled(false);
         }
+        plugin.hologramHandler().removeHologramOfIsland(island);
     }
 
     public void removeSpectators(@NotNull Island island){

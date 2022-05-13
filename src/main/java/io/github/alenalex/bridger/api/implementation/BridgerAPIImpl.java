@@ -1,9 +1,10 @@
-package io.github.alenalex.bridger.implementation;
+package io.github.alenalex.bridger.api.implementation;
 
 import io.github.alenalex.bridger.Bridger;
 import io.github.alenalex.bridger.api.BridgerAPI;
 import io.github.alenalex.bridger.api.manager.IslandManager;
 import io.github.alenalex.bridger.api.manager.PlayerManager;
+import io.github.alenalex.bridger.handler.ConfigurationHandler;
 import io.github.alenalex.bridger.models.Island;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -13,6 +14,7 @@ import java.util.Optional;
 public final class BridgerAPIImpl implements BridgerAPI {
 
     private final Bridger plugin;
+
     private final PlayerManager playerManager;
     private final IslandManager islandManager;
 
@@ -54,7 +56,12 @@ public final class BridgerAPIImpl implements BridgerAPI {
         return plugin.gameHandler().getPlayerOfIsland(islandName);
     }
 
-    public void setAPIStatus(boolean status){
+    @Override
+    public @NotNull ConfigurationHandler getConfigurationHandler() {
+        return plugin.configurationHandler();
+    }
+
+    public void setAPIEnabled(boolean status){
         this.enabled = status;
         if(status)
             plugin.getLogger().info("Plugin API has been enabled");

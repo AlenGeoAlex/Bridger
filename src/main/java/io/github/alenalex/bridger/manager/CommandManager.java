@@ -12,6 +12,7 @@ import io.github.alenalex.bridger.commands.Test;
 import io.github.alenalex.bridger.commands.admin.BridgerAdminCommand;
 import io.github.alenalex.bridger.commands.admin.DebugCommand;
 import io.github.alenalex.bridger.commands.island.IslandCommand;
+import io.github.alenalex.bridger.commands.player.LeaderboardCommand;
 import io.github.alenalex.bridger.commands.player.LeaveCommand;
 import io.github.alenalex.bridger.commands.player.ScoreboardCommand;
 import io.github.alenalex.bridger.commands.setup.SessionCommand;
@@ -134,7 +135,8 @@ public class CommandManager {
                 new DebugCommand(this),
                 new LeaveCommand(this),
                 new ScoreboardCommand(this),
-                new BridgerAdminCommand(this)
+                new BridgerAdminCommand(this),
+                new LeaderboardCommand(this)
         );
 
     }

@@ -174,3 +174,105 @@ selector:
           - "<reset>"
           - "<gray>Click to go to previous page!"
           - "<white>You are currently on <green>%page%<gray>/<red>%total%"
+leaderboard:
+  title: "<gold>Leaderboards</gold>"
+  rows: 6
+  fillers:
+    "[LEGACY]:STAINED_GLASS_PANE:7":
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
+      - 17
+      - 18
+      - 26
+      - 27
+      - 35
+      - 36
+      - 44
+      - 45
+      - 46
+      - 47
+      - 48
+      - 49
+      - 50
+      - 51
+      - 52
+      - 53
+    "[LEGACY]:STAINED_GLASS_PANE:1":
+      - 10
+      - 11
+      - 12
+      - 14
+      - 15
+      - 16
+      - 13
+      - 31
+    "[LEGACY]:STAINED_GLASS_PANE:4":
+      - 19
+      - 20
+      - 24
+      - 25
+      - 28
+      - 29
+      - 33
+      - 34
+      - 37
+      - 43
+  buttons:
+    pos-1:
+      item: "DIAMOND_BLOCK"
+      name: "<red>%name%</red>"
+      slot: 13
+      lore: []
+    pos-2:
+      item: "GOLD_BLOCK"
+      name: "<red>%name%</red>"
+      slot: 21
+      lore: []
+    pos-3:
+      item: "IRON_BLOCK"
+      slot: 23
+      name: "<red>%name%</red>"
+      lore: []
+    pos-4:
+      item: "IRON_BLOCK"
+      slot: 30
+      name: "<red>%name%</red>"
+      lore: []
+    pos-5:
+      item: "IRON_BLOCK"
+      slot: 32
+      name: "<red>%name%</red>"
+      lore: []
+    pos-6:
+      item: "IRON_BLOCK"
+      slot: 38
+      name: "<red>%name%</red>"
+      lore: []
+    pos-7:
+      item: "IRON_BLOCK"
+      slot: 39
+      name: "<red>%name%</red>"
+      lore: []
+    pos-8:
+      item: "IRON_BLOCK"
+      slot: 40
+      name: "<red>%name%</red>"
+      lore: []
+    pos-9:
+      item: "IRON_BLOCK"
+      slot: 41
+      name: "<red>%name%</red>"
+      lore: []
+    pos-10:
+      item: "IRON_BLOCK"
+      slot: 42
+      name: "<red>%name%</red>"
+      lore: []

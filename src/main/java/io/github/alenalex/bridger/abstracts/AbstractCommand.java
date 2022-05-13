@@ -2,7 +2,9 @@ package io.github.alenalex.bridger.abstracts;
 
 import dev.triumphteam.cmd.core.BaseCommand;
 import io.github.alenalex.bridger.manager.CommandManager;
+import io.github.alenalex.bridger.models.player.UserData;
 import io.github.alenalex.bridger.utils.adventure.internal.MessagePlaceholder;
+import io.github.alenalex.bridger.variables.LangConfigurationPaths;
 import io.github.alenalex.bridger.variables.PluginResponses;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -36,14 +38,18 @@ public abstract class AbstractCommand extends BaseCommand {
         if(getCommandDescriptionMap() == null || getCommandDescriptionMap().isEmpty())
             return;
 
-        manager.plugin().messagingUtils().sendTo(player, PluginResponses.Commands.CommandHelpLayout.HEADER);
+        final UserData data = manager.plugin().gameHandler().userManager().of(player.getUniqueId());
+        if(data == null)
+            return;
+
+        manager.plugin().messagingUtils().sendTo(player, data.userSettings().getLanguage().asComponent(LangConfigurationPaths.COMMAND_HELP_FOOTER));
         getCommandDescriptionMap().forEach((command, desc) -> {
-            manager.plugin().messagingUtils().sendTo(player, PluginResponses.Commands.CommandHelpLayout.HELP_COMMAND,
-                    MessagePlaceholder.of("%command%", getCommand()+" "+command),
-                    MessagePlaceholder.of("%description%", desc)
-                    );
+            manager.plugin().messagingUtils().sendTo(player, data.userSettings().getLanguage().asComponent(LangConfigurationPaths.COMMAND_HELP_DESCRIPTION,
+                            MessagePlaceholder.of("%command%", getCommand()+" "+command),
+                            MessagePlaceholder.of("%description%", desc))
+            );
         });
-        manager.plugin().messagingUtils().sendTo(player, PluginResponses.Commands.CommandHelpLayout.FOOTER);
+        manager.plugin().messagingUtils().sendTo(player, data.userSettings().getLanguage().asComponent(LangConfigurationPaths.COMMAND_HELP_FOOTER));
     }
 
     public void registerHelpMessage(@NotNull String commandName, @NotNull String description){

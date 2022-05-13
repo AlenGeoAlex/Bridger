@@ -44,6 +44,7 @@ public final class ConfigurationHandler implements IHandler {
         uiConfiguration.loadFile();
         islandConfiguration.loadFile();
         scoreboardConfiguration.loadFile();
+        hologramConfig.loadFile();
     }
 
     @Override
@@ -57,6 +58,7 @@ public final class ConfigurationHandler implements IHandler {
         uiConfiguration.prepareReload();
         islandConfiguration.prepareReload();
         scoreboardConfiguration.prepareReload();
+        hologramConfig.prepareReload();
         this.prepareHandler();
     }
 

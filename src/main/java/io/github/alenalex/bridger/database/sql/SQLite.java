@@ -351,7 +351,7 @@ public final class SQLite extends AbstractSQL implements IDatabaseProvider {
             public List<LeaderboardPlayer> get() {
                 final List<LeaderboardPlayer> playerList = new ArrayList<>();
 
-                try(final PreparedStatement preparedStatement = connection.prepareStatement("SELECT (`uuid`, `best_time`) FROM bridger_user ORDER BY `best_time` ASC LIMIT 10;")){
+                try(final PreparedStatement preparedStatement = connection.prepareStatement("SELECT `uid`, `best_time` FROM bridger_user ORDER BY `best_time` ASC LIMIT 10;")){
 
                     final ResultSet set = preparedStatement.executeQuery();
 
@@ -362,7 +362,7 @@ public final class SQLite extends AbstractSQL implements IDatabaseProvider {
                      if(!set.next())
                          break;
 
-                     final UUID playerUID = UUID.fromString(set.getString("uuid"));
+                     final UUID playerUID = UUID.fromString(set.getString("uid"));
                      final OfflinePlayer player = Bukkit.getOfflinePlayer(playerUID);
                      final String playerName = player == null ? null : player.getName();
                      final long bestTime = set.getLong("best_time");

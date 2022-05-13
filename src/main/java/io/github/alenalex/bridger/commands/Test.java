@@ -19,7 +19,7 @@ public class Test extends BaseCommand {
 
     @Default
     public void onDefaultCommand(@NotNull Player player){
-            commandManager.plugin().uiHandler().getCosmeticShop().openFor(player);
+            commandManager.plugin().uiHandler().getLeaderboardMenu().openFor(player);
     }
 
 }
