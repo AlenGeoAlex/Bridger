@@ -1,6 +1,7 @@
 package io.github.alenalex.bridger.abstracts;
 
 import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import io.github.alenalex.bridger.Bridger;
 import io.github.alenalex.bridger.database.config.ConnectionConfig;
 import org.apache.commons.lang3.StringUtils;
@@ -110,7 +111,10 @@ public abstract class AbstractSQL {
                             connectionConfig.useSSL()
                     )
             );
-            this.connection = config.getDataSource().getConnection();
+            config.setUsername(connectionConfig.getUsername());
+            config.setPassword(connectionConfig.getPassword());
+
+            this.connection = new HikariDataSource(config).getConnection();
             return isConnected();
         }catch (Exception e){
             e.printStackTrace();

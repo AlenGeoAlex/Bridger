@@ -38,12 +38,12 @@ public class HologramManager implements IHandler {
     }
 
     public void enableIslandHologramOfIsland(@NotNull Island island){
-        if (plugin.configurationHandler().getHologramConfig().getSpawnPointHoloData().isEnabled() && island.getSpawnHologram() == null) {
+        if (plugin.configurationHandler().getHologramConfig().getSpawnPointHoloConfigData().isEnabled() && island.getSpawnHologram() == null) {
             final Location islandSpawnLocation = island.getSpawnLocation();
             final Location hologramSpawnLocation = islandSpawnLocation.clone();
-            hologramSpawnLocation.setX(islandSpawnLocation.getX() + plugin.configurationHandler().getHologramConfig().getSpawnPointHoloData().getOffSetX());
-            hologramSpawnLocation.setY(islandSpawnLocation.getY() + plugin.configurationHandler().getHologramConfig().getSpawnPointHoloData().getOffSetY());
-            hologramSpawnLocation.setZ(islandSpawnLocation.getZ() + plugin.configurationHandler().getHologramConfig().getSpawnPointHoloData().getOffSetZ());
+            hologramSpawnLocation.setX(islandSpawnLocation.getX() + plugin.configurationHandler().getHologramConfig().getSpawnPointHoloConfigData().getOffSetX());
+            hologramSpawnLocation.setY(islandSpawnLocation.getY() + plugin.configurationHandler().getHologramConfig().getSpawnPointHoloConfigData().getOffSetY());
+            hologramSpawnLocation.setZ(islandSpawnLocation.getZ() + plugin.configurationHandler().getHologramConfig().getSpawnPointHoloConfigData().getOffSetZ());
 
             final Hologram.Builder builder = Hologram.builder();
             builder.location(hologramSpawnLocation);
@@ -60,7 +60,7 @@ public class HologramManager implements IHandler {
                 }
             });
 
-            for (String eachLine : plugin.configurationHandler().getHologramConfig().getSpawnPointHoloData().getLines()) {
+            for (String eachLine : plugin.configurationHandler().getHologramConfig().getSpawnPointHoloConfigData().getLines()) {
                 if (eachLine.startsWith("[MATERIAL]:")) {
                     final String materialName = (String) eachLine.subSequence("[MATERIAL]:".length(), eachLine.length());
                     final ItemStack materialStack = FlatFileUtils.deserializeItemStack(materialName);
@@ -82,12 +82,12 @@ public class HologramManager implements IHandler {
             island.setSpawnHologram(builder.build(hologramPool));
         }
 
-        if (plugin.configurationHandler().getHologramConfig().getEndPointHoloData().isEnabled() && island.getEndHologram() == null) {
+        if (plugin.configurationHandler().getHologramConfig().getEndPointHoloConfigData().isEnabled() && island.getEndHologram() == null) {
             final Location islandEndLocation = island.getEndLocation();
             final Location hologramEndLocation = islandEndLocation.clone();
-            hologramEndLocation.setX(islandEndLocation.getX() + plugin.configurationHandler().getHologramConfig().getEndPointHoloData().getOffSetX());
-            hologramEndLocation.setY(islandEndLocation.getY() + plugin.configurationHandler().getHologramConfig().getEndPointHoloData().getOffSetY());
-            hologramEndLocation.setZ(islandEndLocation.getZ() + plugin.configurationHandler().getHologramConfig().getEndPointHoloData().getOffSetZ());
+            hologramEndLocation.setX(islandEndLocation.getX() + plugin.configurationHandler().getHologramConfig().getEndPointHoloConfigData().getOffSetX());
+            hologramEndLocation.setY(islandEndLocation.getY() + plugin.configurationHandler().getHologramConfig().getEndPointHoloConfigData().getOffSetY());
+            hologramEndLocation.setZ(islandEndLocation.getZ() + plugin.configurationHandler().getHologramConfig().getEndPointHoloConfigData().getOffSetZ());
 
             final Hologram.Builder builder = Hologram.builder();
             builder.location(hologramEndLocation);
@@ -104,7 +104,7 @@ public class HologramManager implements IHandler {
                 }
             });
 
-            for (String eachLine : plugin.configurationHandler().getHologramConfig().getEndPointHoloData().getLines()) {
+            for (String eachLine : plugin.configurationHandler().getHologramConfig().getEndPointHoloConfigData().getLines()) {
                 if (eachLine.startsWith("[MATERIAL]:")) {
                     final String materialName = (String) eachLine.subSequence("[MATERIAL]:".length(), eachLine.length());
                     final ItemStack materialStack = FlatFileUtils.deserializeItemStack(materialName);
@@ -140,6 +140,10 @@ public class HologramManager implements IHandler {
             this.hologramPool.remove(island.getEndHologram());
             island.setEndHologram(null);
         }
+    }
+
+    public void updateLeaderboardHologram(){
+
     }
 
 

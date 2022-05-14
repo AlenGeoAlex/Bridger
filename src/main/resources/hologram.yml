@@ -25,3 +25,11 @@ end-point-hologram:
     - "<aqua>Stand on this block ↓"
     - "<aqua>to complete your current"
     - "<aqua>bridging session"
+
+leaderboard-hologram:
+  enabled: true
+  offset-x: 0
+  offset-y: 3
+  offset-z: 0
+  lines:
+    - "%name% - %time%"

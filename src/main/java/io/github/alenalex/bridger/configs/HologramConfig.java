@@ -10,6 +10,7 @@ public final class HologramConfig extends AbstractFileSettings {
     private boolean hologramEnabled;
 
     private HoloConfigData spawnPointHoloConfigData, endPointHoloConfigData;
+    private HoloConfigData leaderboardHoloConfigData;
 
     public HologramConfig(ConfigurationHandler handler) {
         super(handler);
@@ -33,6 +34,14 @@ public final class HologramConfig extends AbstractFileSettings {
                 this.file.getInt("end-point-hologram.offset-z"),
                 this.file.getBoolean("end-point-hologram.enabled")
         );
+
+        this.leaderboardHoloConfigData = new HoloConfigData(
+                this.file.getStringList("leaderboard-hologram.lines"),
+                this.file.getInt("leaderboard-hologram.offset-x"),
+                this.file.getInt("leaderboard-hologram.offset-y"),
+                this.file.getInt("leaderboard-hologram.offset-z"),
+                this.file.getBoolean("leaderboard-hologram.enabled")
+        );
     }
 
     @Override
@@ -44,12 +53,16 @@ public final class HologramConfig extends AbstractFileSettings {
         return hologramEnabled;
     }
 
-    public HoloConfigData getSpawnPointHoloData() {
+    public HoloConfigData getSpawnPointHoloConfigData() {
         return spawnPointHoloConfigData;
     }
 
-    public HoloConfigData getEndPointHoloData() {
+    public HoloConfigData getEndPointHoloConfigData() {
         return endPointHoloConfigData;
+    }
+
+    public HoloConfigData getLeaderboardHoloConfigData() {
+        return leaderboardHoloConfigData;
     }
 
     public class HoloConfigData {
