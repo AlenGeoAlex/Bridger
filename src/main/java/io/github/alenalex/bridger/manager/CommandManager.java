@@ -9,13 +9,10 @@ import dev.triumphteam.cmd.core.suggestion.SuggestionKey;
 import dev.triumphteam.cmd.core.suggestion.SuggestionResolver;
 import io.github.alenalex.bridger.Bridger;
 import io.github.alenalex.bridger.commands.Test;
-import io.github.alenalex.bridger.commands.admin.BridgerAdminCommand;
-import io.github.alenalex.bridger.commands.admin.DebugCommand;
-import io.github.alenalex.bridger.commands.island.IslandCommand;
-import io.github.alenalex.bridger.commands.player.LeaderboardCommand;
-import io.github.alenalex.bridger.commands.player.LeaveCommand;
-import io.github.alenalex.bridger.commands.player.ScoreboardCommand;
-import io.github.alenalex.bridger.commands.setup.SessionCommand;
+import io.github.alenalex.bridger.commands.subcommands.admin.BridgerAdminCommand;
+import io.github.alenalex.bridger.commands.subcommands.admin.DebugCommand;
+import io.github.alenalex.bridger.commands.subcommands.player.*;
+import io.github.alenalex.bridger.commands.subcommands.setup.SessionCommand;
 import io.github.alenalex.bridger.models.player.UserData;
 import io.github.alenalex.bridger.variables.CommandCompletions;
 import io.github.alenalex.bridger.variables.LangConfigurationPaths;
@@ -131,14 +128,27 @@ public class CommandManager {
         commandManager.registerCommand(
                 new Test(this),
                 new SessionCommand(this),
-                new IslandCommand(this),
                 new DebugCommand(this),
-                new LeaveCommand(this),
-                new ScoreboardCommand(this),
-                new BridgerAdminCommand(this),
-                new LeaderboardCommand(this)
+                new BridgerAdminCommand(this)
         );
 
+        if(plugin.configurationHandler().getConfigurationFile().getIslandCommand().isEnabled())
+            new IslandCommand(this);
+
+        if(plugin.configurationHandler().getConfigurationFile().getLeaveCommand().isEnabled())
+            new LeaveCommand(this);
+
+        if(plugin.configurationHandler().getConfigurationFile().getShopCommand().isEnabled())
+            new ShopCommand(this);
+
+        if(plugin.configurationHandler().getConfigurationFile().getLeaderboardCommand().isEnabled())
+            new LeaderboardCommand(this);
+
+        if(plugin.configurationHandler().getConfigurationFile().getScoreboardCommand().isEnabled())
+            new ScoreboardCommand(this);
+
+        if(plugin.configurationHandler().getConfigurationFile().getSetBackCommand().isEnabled())
+            new SetBackCommand(this);
     }
 
     public Bridger plugin(){

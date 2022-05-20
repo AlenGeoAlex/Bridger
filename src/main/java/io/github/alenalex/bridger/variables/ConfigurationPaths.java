@@ -46,8 +46,17 @@ public enum ConfigurationPaths {
     SERVER_LEAVE_MESSAGE("server-leave-message"),
 
     BLOCK_COUNT_MATCH("match-settings.no-of-blocks"),
-    MATCH_LEAVE_GAME_ITEM("match-settings.leave-match")
+    MATCH_LEAVE_GAME_ITEM("match-settings.leave-match"),
 
+    PARTICLE_ENABLED("cosmetics.enabled"),
+    ALL_ENABLED_PARTICLES("cosmetics.allowed-particles"),
+
+    ISLAND_COMMAND("commands.island"),
+    LEAVE_COMMAND("commands.leave"),
+    LEADERBOARD_COMMAND("commands.leaderboard"),
+    SETBACK_COMMAND("commands.setback"),
+    SCOREBOARD_COMMAND("commands.scoreboard"),
+    SHOP_COMMAND("commands.shop")
     ;
 
     private String path;

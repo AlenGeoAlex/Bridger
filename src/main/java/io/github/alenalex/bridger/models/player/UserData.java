@@ -1,7 +1,8 @@
 package io.github.alenalex.bridger.models.player;
 
 import io.github.alenalex.bridger.Bridger;
-import io.github.alenalex.bridger.variables.Fireworks;
+import io.github.alenalex.bridger.utils.FireworkUtils;
+import io.github.alenalex.bridger.utils.ParticleUtils;
 import io.github.alenalex.bridger.variables.LangConfigurationPaths;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
@@ -13,6 +14,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import xyz.xenondevs.particle.ParticleEffect;
 
 import java.util.List;
 import java.util.Optional;
@@ -60,6 +62,8 @@ public final class UserData {
         return userSettings;
     }
 
+
+
     public void doFireworksOnPlayerLocation (){
         final Player player = getOptionalPlayer().orElse(null);
         if(player == null || !player.isOnline()) return;
@@ -76,9 +80,9 @@ public final class UserData {
             Bridger.instance().getServer().getScheduler().runTask(Bridger.instance(), () -> {
                 Firework fw = (Firework) player.getWorld().spawnEntity(player.getLocation(), EntityType.FIREWORK);
                 FireworkMeta fwm = fw.getFireworkMeta();
-                Color c1 = Fireworks.getRandomColor();
-                Color c2 = Fireworks.getRandomColor();
-                Color c3 = Fireworks.getRandomColor();
+                Color c1 = FireworkUtils.getRandomColor();
+                Color c2 = FireworkUtils.getRandomColor();
+                Color c3 = FireworkUtils.getRandomColor();
                 FireworkEffect effect = FireworkEffect.
                         builder().
                         withColor(c1, c3).
@@ -129,6 +133,20 @@ public final class UserData {
                     return b;
                 }).
                 collect(Collectors.toList());
+    }
+
+    public List<ParticleEffect> fetchLockedParticles(){
+        return Bridger.instance()
+                .configurationHandler()
+                .getConfigurationFile()
+                .getEnabledParticle()
+                .keySet()
+                .stream()
+                .filter(type -> {
+                    boolean b = !userCosmetics.getParticleUnlocked().contains(type.getFieldName());
+                    return b;
+                })
+                .collect(Collectors.toList());
     }
 
     @Nullable

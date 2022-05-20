@@ -1,4 +1,4 @@
-package io.github.alenalex.bridger.commands.player;
+package io.github.alenalex.bridger.commands.subcommands.player;
 
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.annotation.Default;
@@ -19,7 +19,7 @@ import java.util.Arrays;
 
 public final class SetBackCommand extends AbstractCommand {
     public SetBackCommand(CommandManager manager) {
-        super(manager, "setback", Arrays.asList("sb"));
+        super(manager, manager.plugin().configurationHandler().getConfigurationFile().getSetBackCommand());
         this.registerHelpMessage("set [value]" , "Sets the setback to provided value");
         this.registerHelpMessage("add [value]", "Adds the current value to setback");
         this.registerHelpMessage("decrease [value]", "Decrease the current value to setback");

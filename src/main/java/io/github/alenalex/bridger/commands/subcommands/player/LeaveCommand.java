@@ -1,4 +1,4 @@
-package io.github.alenalex.bridger.commands.player;
+package io.github.alenalex.bridger.commands.subcommands.player;
 
 import dev.triumphteam.cmd.core.annotation.Default;
 import io.github.alenalex.bridger.abstracts.AbstractCommand;
@@ -10,7 +10,7 @@ import java.util.Map;
 
 public final class LeaveCommand extends AbstractCommand {
     public LeaveCommand(CommandManager manager) {
-        super(manager, "leave");
+        super(manager, manager.plugin().configurationHandler().getConfigurationFile().getLeaveCommand());
     }
 
     @Override

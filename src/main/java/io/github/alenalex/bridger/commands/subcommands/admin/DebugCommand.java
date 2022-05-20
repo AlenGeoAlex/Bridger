@@ -1,4 +1,4 @@
-package io.github.alenalex.bridger.commands.admin;
+package io.github.alenalex.bridger.commands.subcommands.admin;
 
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.annotation.*;

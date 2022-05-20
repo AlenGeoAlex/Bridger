@@ -1,4 +1,4 @@
-package io.github.alenalex.bridger.commands.player;
+package io.github.alenalex.bridger.commands.subcommands.player;
 
 import dev.triumphteam.cmd.core.annotation.Default;
 import dev.triumphteam.cmd.core.annotation.SubCommand;
@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 public final class ScoreboardCommand extends AbstractCommand {
 
     public ScoreboardCommand(CommandManager manager) {
-        super(manager, "scoreboard");
+        super(manager, manager.plugin().configurationHandler().getConfigurationFile().getScoreboardCommand());
         this.registerHelpMessage("on", "Turn on the scoreboard");
         this.registerHelpMessage("off", "Turn off the scoreboard");
         this.registerHelpMessage("help", "Shows this help message");

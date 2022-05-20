@@ -9,6 +9,9 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.jetbrains.annotations.NotNull;
+import xyz.xenondevs.particle.ParticleBuilder;
+import xyz.xenondevs.particle.ParticleEffect;
+import xyz.xenondevs.particle.task.TaskManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,20 +61,24 @@ public class UserMatchCache {
         if(placedBlocks.isEmpty())
             return;
 
+        final ParticleEffect effect = userData.userSettings().getParticle().orElse(null);
+
         for(Block block: placedBlocks){
             try {
                 Workload workload = () -> {
                     block.setType(Material.AIR);
                     if(block.hasMetadata(Island.PLACED_BLOCK))
                         block.removeMetadata(Island.PLACED_BLOCK, Bridger.instance());
-                    if(userData.userSettings().hasParticle()){
 
-                    }
+                    if(effect != null)
+                         new ParticleBuilder(effect, block.getLocation()).display(block.getWorld().getPlayers());
+
                 };
                 Bridger.instance().workloadHandler().getSyncThread().submit(workload);
             }catch (Exception ignored){}
 
         }
+
         userData.userStats().addBlock(placedBlocks.size());
         placedBlocks.clear();
     }

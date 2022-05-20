@@ -1,4 +1,4 @@
-package io.github.alenalex.bridger.variables;
+package io.github.alenalex.bridger.utils;
 
 import io.github.alenalex.bridger.Bridger;
 import org.apache.commons.lang3.EnumUtils;
@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 
-public final class Fireworks {
+public final class FireworkUtils {
 
     private static final List<Color> COLOR_LIST = new ArrayList<Color>(){{
         add(org.bukkit.Color.BLUE);

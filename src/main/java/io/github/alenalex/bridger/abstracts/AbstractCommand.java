@@ -1,6 +1,7 @@
 package io.github.alenalex.bridger.abstracts;
 
 import dev.triumphteam.cmd.core.BaseCommand;
+import io.github.alenalex.bridger.commands.config.CommandInfoConfig;
 import io.github.alenalex.bridger.manager.CommandManager;
 import io.github.alenalex.bridger.models.player.UserData;
 import io.github.alenalex.bridger.utils.adventure.internal.MessagePlaceholder;
@@ -26,6 +27,12 @@ public abstract class AbstractCommand extends BaseCommand {
 
     public AbstractCommand(CommandManager manager, @NotNull String commandName) {
         super(commandName);
+        this.manager = manager;
+        this.commandDescription = new HashMap<>();
+    }
+
+    public AbstractCommand(CommandManager manager, @NotNull CommandInfoConfig commandConfig){
+        super(commandConfig.getCommandName(), commandConfig.getAliases());
         this.manager = manager;
         this.commandDescription = new HashMap<>();
     }

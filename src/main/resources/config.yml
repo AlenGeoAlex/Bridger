@@ -97,3 +97,37 @@ cosmetics:
       STAINED_GLASS_PANE: 2600
       WOOL: 6500
       GOLD_BLOCK: 4500
+  particles:
+    enabled: true
+    allowed-particles:
+      ASH: 200
+      BLOCK_CRACK: 600
+
+commands:
+  island:
+    enabled: true
+    name: "island"
+    aliases: []
+  shop:
+    enabled: true
+    name: "shop"
+    aliases:
+      - "bridgershop"
+      - "bridgershop"
+  leave:
+    enabled: true
+    name: "leave"
+    aliases:
+      - "brleave"
+  leaderboard:
+    enabled: true
+    name: "leaderboard"
+    aliases: []
+  setback:
+    enabled: true
+    name: "setback"
+    aliases: []
+  scoreboard:
+    enabled: true
+    name: "scoreboard"
+    aliases: []

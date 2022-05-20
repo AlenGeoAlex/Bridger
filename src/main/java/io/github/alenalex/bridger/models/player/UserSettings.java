@@ -3,12 +3,14 @@ package io.github.alenalex.bridger.models.player;
 import com.google.common.base.Objects;
 import io.github.alenalex.bridger.Bridger;
 import io.github.alenalex.bridger.configs.MessageConfiguration;
-import io.github.alenalex.bridger.variables.Fireworks;
+import io.github.alenalex.bridger.utils.FireworkUtils;
 import io.github.alenalex.bridger.utils.MaterialsUtils;
+import io.github.alenalex.bridger.utils.ParticleUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.bukkit.FireworkEffect;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import xyz.xenondevs.particle.ParticleEffect;
 
 import java.util.Optional;
 
@@ -77,6 +79,12 @@ public final class UserSettings {
         return particle;
     }
 
+    public Optional<ParticleEffect> getParticle(){
+        if(hasParticle())
+            return ParticleUtils.getParticleByName(this.particle);
+        else return Optional.empty();
+    }
+
     public boolean hasFireWork() {
         return fireWork != null;
     }
@@ -86,7 +94,7 @@ public final class UserSettings {
     }
 
     public Optional<FireworkEffect.Type> getFireWork() {
-        return Fireworks.getFireworkTypeByName(fireWork);
+        return FireworkUtils.getFireworkTypeByName(fireWork);
     }
 
     public boolean hasParticle() {
@@ -156,6 +164,7 @@ public final class UserSettings {
     public void resetSetBack(){
         this.setBack = 0;
     }
+
 
     @Override
     public boolean equals(Object o) {

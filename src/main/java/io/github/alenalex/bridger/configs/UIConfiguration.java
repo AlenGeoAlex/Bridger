@@ -25,8 +25,14 @@ public final class UIConfiguration extends AbstractFileSettings {
     private UIConfig materialSelectorConfig;
     private UIItem materialSelectorNext, materialSelectorPre;
 
+    private UIConfig particleShopConfig;
+    private UIItem particleShopItem;
+
     private UIConfig leaderboardMenuConfig;
-    private List<UIItem> leaderboardPlayersConfig;
+    private final List<UIItem> leaderboardPlayersConfig;
+
+    private UIConfig playerShopMainConfig;
+    private UIItem playerShopFireWorkItem, playerShopParticleItem, playerShopMaterialItem, playerShopCloseItem;
 
     public UIConfiguration(ConfigurationHandler handler) {
         super(handler);
@@ -62,6 +68,15 @@ public final class UIConfiguration extends AbstractFileSettings {
             final UIItem item = UIItem.buildAsNullable(getSectionOf("leaderboard.buttons.pos-"+i));
             this.leaderboardPlayersConfig.add(item);
         }
+
+        this.particleShopConfig = UIConfig.buildFrom(getSectionOf("shop.particle"));
+        this.particleShopItem = UIItem.buildFrom(getSectionOf("shop.particle.buttons.item-button"));
+
+        this.playerShopMainConfig = UIConfig.buildFrom(getSectionOf("player.shop"));
+        this.playerShopFireWorkItem = UIItem.buildFrom(getSectionOf("player.shop.buttons.firework"));
+        this.playerShopCloseItem = UIItem.buildFrom(getSectionOf("player.shop.buttons.close-button"));
+        this.playerShopMaterialItem = UIItem.buildFrom(getSectionOf("player.shop.buttons.material"));
+        this.playerShopParticleItem = UIItem.buildFrom(getSectionOf("player.shop.buttons.particle"));
     }
 
     @Override
@@ -147,5 +162,33 @@ public final class UIConfiguration extends AbstractFileSettings {
 
     public List<UIItem> getLeaderboardPlayersConfig() {
         return leaderboardPlayersConfig;
+    }
+
+    public UIConfig getParticleShopConfig() {
+        return particleShopConfig;
+    }
+
+    public UIItem getParticleShopItem() {
+        return particleShopItem;
+    }
+
+    public UIConfig getPlayerShopMainConfig() {
+        return playerShopMainConfig;
+    }
+
+    public UIItem getPlayerShopFireWorkItem() {
+        return playerShopFireWorkItem;
+    }
+
+    public UIItem getPlayerShopParticleItem() {
+        return playerShopParticleItem;
+    }
+
+    public UIItem getPlayerShopMaterialItem() {
+        return playerShopMaterialItem;
+    }
+
+    public UIItem getPlayerShopCloseItem() {
+        return playerShopCloseItem;
     }
 }

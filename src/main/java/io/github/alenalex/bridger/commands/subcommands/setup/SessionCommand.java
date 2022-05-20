@@ -1,4 +1,4 @@
-package io.github.alenalex.bridger.commands.setup;
+package io.github.alenalex.bridger.commands.subcommands.setup;
 
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.annotation.*;
@@ -14,10 +14,6 @@ import org.apache.commons.lang3.text.WordUtils;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.HashMap;
-
-import java.util.Map;
 
 public final class SessionCommand extends AbstractCommand {
 

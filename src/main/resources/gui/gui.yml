@@ -117,6 +117,70 @@ player:
         slot: 22
         name: "<red>Close"
         lore: []
+  shop:
+    title: "<red>Player Shop"
+    rows: 3
+    fillers:
+      "[LEGACY]:STAINED_GLASS_PANE:5":
+        - 0
+        - 1
+        - 2
+        - 3
+        - 4
+        - 5
+        - 6
+        - 7
+        - 8
+        - 9
+        - 17
+        - 18
+        - 19
+        - 20
+        - 21
+        - 23
+        - 24
+        - 25
+        - 26
+    buttons:
+      material:
+        item: "WOOL"
+        slot: 11
+        name: "<yellow>Materials</yellow>"
+        lore:
+          - "<reset>"
+          - "<gray>Select your default practice material!"
+          - "<white>All your unlocked materials"
+          - "<white>will be shown here."
+          - "<reset>"
+          - "<white>You can unlock more on <red>Shop"
+      particle:
+        item: "REDSTONE_DUST"
+        slot: 12
+        name: "<yellow>Particles</yellow>"
+        lore:
+          - "<reset>"
+          - "<gray>Select your reset particles!"
+          - "<white>All your unlocked particles"
+          - "<white>will be shown here."
+          - "<reset>"
+          - "<white>You can unlock more on <red>Shop"
+      firework:
+        item: "FIREWORK"
+        slot: 13
+        name: "<yellow>Firework</yellow>"
+        lore:
+          - "<reset>"
+          - "<gray>Select your victory firework!"
+          - "<white>All your unlocked particles"
+          - "<white>will be shown here."
+          - "<reset>"
+          - "<white>You can unlock more on <red>Shop"
+      close-button:
+        item: "BARRIER"
+        slot: 22
+        name: "<red>Close"
+        lore: []
+
 shop:
   fireworks:
     title: "<aqua>Unlock Fireworks</aqua>"
@@ -142,6 +206,19 @@ shop:
         lore:
           - "<reset>"
           - "<gray>Click to buy this material"
+          - "<reset>"
+          - "<gray>Cost: %cost% coins"
+  particle:
+    title: "<aqua>Unlock Particles</aqua>"
+    rows: 5
+    fillers:
+    buttons:
+      item-button:
+        item: "BLAZE_POWDER"
+        name: "<red>%name%</red>"
+        lore:
+          - "<reset>"
+          - "<gray>Click to buy this particle"
           - "<reset>"
           - "<gray>Cost: %cost% coins"
 

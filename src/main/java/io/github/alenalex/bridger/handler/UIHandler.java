@@ -7,7 +7,9 @@ import io.github.alenalex.bridger.ui.dynamic.LeaderboardMenu;
 import io.github.alenalex.bridger.ui.dynamic.cosmetics.MaterialSelector;
 import io.github.alenalex.bridger.ui.dynamic.profile.PlayerSettings;
 import io.github.alenalex.bridger.ui.dynamic.shop.FireworkShop;
+import io.github.alenalex.bridger.ui.dynamic.shop.MainShopMenu;
 import io.github.alenalex.bridger.ui.dynamic.shop.MaterialsShop;
+import io.github.alenalex.bridger.ui.dynamic.shop.ParticleShop;
 import io.github.alenalex.bridger.ui.statics.CosmeticShop;
 import io.github.alenalex.bridger.ui.statics.SetBackSelector;
 import io.github.alenalex.bridger.interfaces.IHandler;
@@ -19,6 +21,7 @@ public final class UIHandler implements IHandler {
     private final IGui fireworkShop;
     private final CosmeticShop cosmeticShop;
     private final IGui materialsShop;
+    private final IGui particleShop;
 
     private final IGui islandSelector;
 
@@ -28,6 +31,8 @@ public final class UIHandler implements IHandler {
     private final IGui materialSelector;
 
     private final IGui leaderboardMenu;
+
+    private final MainShopMenu mainShopMenu;
 
     public UIHandler(Bridger plugin) {
         this.plugin = plugin;
@@ -39,11 +44,15 @@ public final class UIHandler implements IHandler {
         this.setBackSelector = new SetBackSelector(this);
         this.materialSelector = new MaterialSelector(this);
         this.leaderboardMenu = new LeaderboardMenu(this);
+        this.particleShop = new ParticleShop(this);
+        this.mainShopMenu = new MainShopMenu(this);
     }
 
     @Override
     public boolean initHandler() {
-        return cosmeticShop.initGui() && setBackSelector.initGui();
+        return cosmeticShop.initGui()
+                && setBackSelector.initGui()
+                && mainShopMenu.initGui();
     }
 
     @Override
@@ -96,5 +105,13 @@ public final class UIHandler implements IHandler {
 
     public IGui getLeaderboardMenu() {
         return leaderboardMenu;
+    }
+
+    public IGui getParticleShop() {
+        return particleShop;
+    }
+
+    public MainShopMenu getMainShopMenu() {
+        return mainShopMenu;
     }
 }

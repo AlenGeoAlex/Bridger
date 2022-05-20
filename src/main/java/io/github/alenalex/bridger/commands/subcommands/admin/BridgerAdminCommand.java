@@ -1,4 +1,4 @@
-package io.github.alenalex.bridger.commands.admin;
+package io.github.alenalex.bridger.commands.subcommands.admin;
 
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.annotation.Optional;
@@ -17,8 +17,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Map;
 
 public final class BridgerAdminCommand extends AbstractCommand {
     public BridgerAdminCommand(CommandManager manager) {

@@ -1,9 +1,11 @@
 package io.github.alenalex.bridger.configs;
 
 import io.github.alenalex.bridger.abstracts.AbstractFileSettings;
+import io.github.alenalex.bridger.commands.config.CommandInfoConfig;
 import io.github.alenalex.bridger.ui.config.HotBarConfig;
 import io.github.alenalex.bridger.handler.ConfigurationHandler;
 import io.github.alenalex.bridger.utils.FlatFileUtils;
+import io.github.alenalex.bridger.utils.ParticleUtils;
 import io.github.alenalex.bridger.utils.adventure.MessageFormatter;
 import io.github.alenalex.bridger.variables.ConfigurationPaths;
 import org.apache.commons.lang3.EnumUtils;
@@ -12,8 +14,10 @@ import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import xyz.xenondevs.particle.ParticleEffect;
 
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public final class ConfigurationFile extends AbstractFileSettings {
@@ -26,6 +30,8 @@ public final class ConfigurationFile extends AbstractFileSettings {
     private final Map<FireworkEffect.Type, Integer> enabledFireworkModels;
     private ItemStack defaultMaterial;
     private final Map<ItemStack, Integer> enabledMaterials;
+    private boolean particleEnabled;
+    private final Map<ParticleEffect, Integer> enabledParticle;
 
     private boolean broadcastNewBestTimeToAllPlayersEnabled;
     private boolean doAllowPlacingBlocksOnLobby;
@@ -52,6 +58,8 @@ public final class ConfigurationFile extends AbstractFileSettings {
     private int blockCount;
     private HotBarConfig matchLeaveItem;
 
+    private CommandInfoConfig islandCommand, leaderboardCommand, leaveCommand, scoreboardCommand, setBackCommand, shopCommand;
+
     public ConfigurationFile(ConfigurationHandler handler) {
         super(handler);
         this.enabledFireworkModels = new HashMap<>();
@@ -59,6 +67,7 @@ public final class ConfigurationFile extends AbstractFileSettings {
         this.commandToBlock = new ArrayList<>();
         this.placementBlockedMaterial = new ArrayList<>();
         this.lobbyOther = new ArrayList<>();
+        this.enabledParticle = new HashMap<>();
     }
 
     @Override
@@ -138,6 +147,29 @@ public final class ConfigurationFile extends AbstractFileSettings {
 
         this.blockCount = this.file.getInt(ConfigurationPaths.BLOCK_COUNT_MATCH.getPath());
         this.matchLeaveItem = HotBarConfig.of(getSectionOf(ConfigurationPaths.MATCH_LEAVE_GAME_ITEM.getPath()));
+
+        this.particleEnabled = this.file.getBoolean(ConfigurationPaths.PARTICLE_ENABLED.getPath());
+        for(String s : this.file.keySet(ConfigurationPaths.ALL_ENABLED_PARTICLES.getPath())){
+            Optional<ParticleEffect> any = ParticleEffect
+                    .getAvailableEffects()
+                    .stream()
+                    .filter(particleEffect -> particleEffect.getFieldName().equals(s))
+                    .findAny();
+
+            any.ifPresent(new Consumer<ParticleEffect>() {
+                @Override
+                public void accept(ParticleEffect particleEffect) {
+                    ParticleUtils.registerParticle(particleEffect);
+                    enabledParticle.put(particleEffect, file.getInt(ConfigurationPaths.PARTICLE_ENABLED.getPath()+"."+s));
+                }
+            });
+        }
+
+        this.islandCommand = CommandInfoConfig.buildFrom(getSectionOf(ConfigurationPaths.ISLAND_COMMAND.getPath()));
+        this.setBackCommand = CommandInfoConfig.buildFrom(getSectionOf(ConfigurationPaths.SETBACK_COMMAND.getPath()));
+        this.leaveCommand = CommandInfoConfig.buildFrom(getSectionOf(ConfigurationPaths.LEAVE_COMMAND.getPath()));
+        this.scoreboardCommand = CommandInfoConfig.buildFrom(getSectionOf(ConfigurationPaths.SCOREBOARD_COMMAND.getPath()));
+        this.shopCommand = CommandInfoConfig.buildFrom(getSectionOf(ConfigurationPaths.SHOP_COMMAND.getPath()));
     }
 
     @Override
@@ -147,6 +179,7 @@ public final class ConfigurationFile extends AbstractFileSettings {
         this.commandToBlock.clear();
         this.placementBlockedMaterial.clear();
         this.lobbyOther.clear();
+        this.enabledParticle.clear();
     }
 
     public String getStorageType() {
@@ -255,5 +288,37 @@ public final class ConfigurationFile extends AbstractFileSettings {
 
     public HotBarConfig getMatchLeaveItem() {
         return matchLeaveItem;
+    }
+
+    public boolean isParticleEnabled() {
+        return particleEnabled;
+    }
+
+    public Map<ParticleEffect, Integer> getEnabledParticle() {
+        return enabledParticle;
+    }
+
+    public CommandInfoConfig getIslandCommand() {
+        return islandCommand;
+    }
+
+    public CommandInfoConfig getLeaderboardCommand() {
+        return leaderboardCommand;
+    }
+
+    public CommandInfoConfig getLeaveCommand() {
+        return leaveCommand;
+    }
+
+    public CommandInfoConfig getScoreboardCommand() {
+        return scoreboardCommand;
+    }
+
+    public CommandInfoConfig getSetBackCommand() {
+        return setBackCommand;
+    }
+
+    public CommandInfoConfig getShopCommand() {
+        return shopCommand;
     }
 }

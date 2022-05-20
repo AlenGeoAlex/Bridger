@@ -264,6 +264,7 @@ public final class GameHandler {
                         )
                 );
         playerRestartGame(player);
+        userData.doFireworksOnPlayerLocation();
     }
 
     public void playerFailedGame(@NotNull Player player){

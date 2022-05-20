@@ -1,4 +1,4 @@
-package io.github.alenalex.bridger.commands.player;
+package io.github.alenalex.bridger.commands.subcommands.player;
 
 import dev.triumphteam.cmd.core.annotation.Default;
 import dev.triumphteam.cmd.core.annotation.SubCommand;
@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 public class LeaderboardCommand extends AbstractCommand {
 
     public LeaderboardCommand(CommandManager manager) {
-        super(manager, "leaderboard");
+        super(manager, manager.plugin().configurationHandler().getConfigurationFile().getLeaderboardCommand());
         this.registerHelpMessage("gui", "Opens up the GUI leaderboard menu");
     }
 

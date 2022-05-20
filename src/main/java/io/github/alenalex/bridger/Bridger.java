@@ -11,6 +11,7 @@ import io.github.alenalex.bridger.listener.*;
 import io.github.alenalex.bridger.manager.*;
 import io.github.alenalex.bridger.task.ScoreboardTask;
 import io.github.alenalex.bridger.task.PlayerGameTask;
+import io.github.alenalex.bridger.utils.ParticleUtils;
 import io.github.alenalex.bridger.utils.adventure.MessagingUtils;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -242,6 +243,7 @@ public final class Bridger extends JavaPlugin {
     public void prepareReloadTask(){
         PLUGIN_RELOADING = true;
         try {
+            ParticleUtils.clearParticleMap();
             this.configurationHandler.reloadHandler();
             if(!this.localeManager.reloadLocaleManager()){
                 getLogger().severe("Failed to load locales!");

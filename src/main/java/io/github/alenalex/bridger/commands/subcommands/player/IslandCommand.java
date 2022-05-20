@@ -1,4 +1,4 @@
-package io.github.alenalex.bridger.commands.island;
+package io.github.alenalex.bridger.commands.subcommands.player;
 
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.annotation.Async;
@@ -15,15 +15,13 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.function.Consumer;
 
 
 public final class IslandCommand extends AbstractCommand {
 
     public IslandCommand(CommandManager manager) {
-        super(manager, "island", Arrays.asList("is","isl","bridge"));
+        super(manager, manager.plugin().configurationHandler().getConfigurationFile().getIslandCommand());
         this.registerHelpMessage("island", "Join any free island available.");
         this.registerHelpMessage("help", "Shows this help menu.");
         this.registerHelpMessage("join [name]", "Joins an island with the provided name if its available!");
