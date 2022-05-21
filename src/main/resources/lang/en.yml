@@ -47,3 +47,6 @@ cheat-protection:
 command-header: "<gray>----------------<aqua>Bridger<gray>---------------"
 command-footer: "<gray>-------------------------------------"
 command-description: "<red>%command%<white> - <yellow>%description%"
+material-selected: "<green>Your build material has been switched to %material-name%"
+particle-selected: "<green>Your reset particle has been switched to %particle-name%"
+particle-select-reset: "<yellow>Your particle selection has been removed"

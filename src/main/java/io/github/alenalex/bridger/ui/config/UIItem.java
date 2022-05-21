@@ -28,6 +28,7 @@ public class UIItem {
     private final List<String> lore;
     private final int amount;
     private final ItemStack itemStack;
+    private boolean glow;
 
     public UIItem(String name, int slot, List<String> lore, int amount, ItemStack itemStack) {
         int amount1;
@@ -42,6 +43,23 @@ public class UIItem {
         }else amount1 = amount;
         this.amount = amount1;
     }
+
+    public UIItem(String name, int slot, List<String> lore, int amount, ItemStack itemStack, boolean glow) {
+        int amount1;
+        this.name = name;
+        this.slot = slot;
+        this.lore = lore;
+        amount1 = amount;
+        this.itemStack = itemStack;
+
+        if(amount <= 0) {
+            amount1 = 1;
+        }else amount1 = amount;
+        this.amount = amount1;
+        this.glow = glow;
+    }
+
+
 
     public String nameAsString(MessagePlaceholder... placeholders){
         return MessagePlaceholder.replacePlaceholders(Arrays.asList(placeholders), name);
@@ -71,6 +89,10 @@ public class UIItem {
         return MessageFormatter.transform(MessagePlaceholder.replacePlaceholders(Arrays.asList(placeholders), lore));
     }
 
+    public boolean shouldGlow(){
+        return glow;
+    }
+
     public List<String> lore(){
         return lore;
     }
@@ -86,6 +108,7 @@ public class UIItem {
         final List<String> loreList = section.getStringList("lore");
         final int slot = section.getInt("slot");
         final int amount = section.getInt("amount");
+        final boolean glow = section.contains("glow") && section.getBoolean("glow");
 
         if(stack == null)
             return null;
@@ -99,6 +122,7 @@ public class UIItem {
         final List<String> loreList = section.getStringList("lore");
         final int slot = section.getInt("slot");
         final int amount = section.getInt("amount");
+        final boolean glow = section.contains("glow") && section.getBoolean("glow");
 
         if(stack == null) {
             if(allowDummyMaterial)

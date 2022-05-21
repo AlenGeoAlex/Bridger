@@ -23,7 +23,7 @@ public final class UIConfiguration extends AbstractFileSettings {
     private UIItem playerSelectingMaterial, playerSelectingFirework, playerSelectingParticle, playerSelectingClose, playerSelectingSetBack;
 
     private UIConfig materialSelectorConfig;
-    private UIItem materialSelectorNext, materialSelectorPre;
+    private UIItem materialSelectorNext, materialSelectorPre, materialSelectorButton, materialSelectorCurrent;
 
     private UIConfig particleShopConfig;
     private UIItem particleShopItem;
@@ -33,6 +33,9 @@ public final class UIConfiguration extends AbstractFileSettings {
 
     private UIConfig playerShopMainConfig;
     private UIItem playerShopFireWorkItem, playerShopParticleItem, playerShopMaterialItem, playerShopCloseItem;
+
+    private UIConfig particleSelectorConfig;
+    private UIItem particleSelectorNext, particleSelectorPre, particleSelectorButton, particleSelectorCurrent, particleSelectReset;
 
     public UIConfiguration(ConfigurationHandler handler) {
         super(handler);
@@ -63,6 +66,9 @@ public final class UIConfiguration extends AbstractFileSettings {
         this.materialSelectorConfig = UIConfig.buildFrom(getSectionOf("selector.material"));
         this.materialSelectorNext = UIItem.buildFrom(getSectionOf("selector.material.buttons.next-button"));
         this.materialSelectorPre = UIItem.buildFrom(getSectionOf("selector.material.buttons.pre-button"));
+        this.materialSelectorButton = UIItem.buildFrom(getSectionOf("selector.material.buttons.material-button"), true);
+        this.materialSelectorCurrent = UIItem.buildFrom(getSectionOf("selector.material.buttons.current-material-button"), true);
+
         this.leaderboardMenuConfig = UIConfig.buildFrom(getSectionOf("leaderboard"));
         for(int i =1 ;i<=10; i++){
             final UIItem item = UIItem.buildAsNullable(getSectionOf("leaderboard.buttons.pos-"+i));
@@ -77,6 +83,13 @@ public final class UIConfiguration extends AbstractFileSettings {
         this.playerShopCloseItem = UIItem.buildFrom(getSectionOf("player.shop.buttons.close-button"));
         this.playerShopMaterialItem = UIItem.buildFrom(getSectionOf("player.shop.buttons.material"));
         this.playerShopParticleItem = UIItem.buildFrom(getSectionOf("player.shop.buttons.particle"));
+
+        this.particleSelectorConfig = UIConfig.buildFrom(getSectionOf("selector.particle"));
+        this.particleSelectorNext = UIItem.buildFrom(getSectionOf("selector.particle.buttons.next-button"));
+        this.particleSelectorPre = UIItem.buildFrom(getSectionOf("selector.particle.buttons.pre-button"));
+        this.particleSelectorButton = UIItem.buildFrom(getSectionOf("selector.particle.buttons.particle-button"));
+        this.particleSelectorCurrent = UIItem.buildFrom(getSectionOf("selector.particle.buttons.current-particle-button"));
+        this.particleSelectReset = UIItem.buildFrom(getSectionOf("selector.particle.buttons.reset-particle"));
     }
 
     @Override
@@ -190,5 +203,37 @@ public final class UIConfiguration extends AbstractFileSettings {
 
     public UIItem getPlayerShopCloseItem() {
         return playerShopCloseItem;
+    }
+
+    public UIItem getMaterialSelectorButton() {
+        return materialSelectorButton;
+    }
+
+    public UIItem getMaterialSelectorCurrent() {
+        return materialSelectorCurrent;
+    }
+
+    public UIConfig getParticleSelectorConfig() {
+        return particleSelectorConfig;
+    }
+
+    public UIItem getParticleSelectorNext() {
+        return particleSelectorNext;
+    }
+
+    public UIItem getParticleSelectorPre() {
+        return particleSelectorPre;
+    }
+
+    public UIItem getParticleSelectorButton() {
+        return particleSelectorButton;
+    }
+
+    public UIItem getParticleSelectorCurrent() {
+        return particleSelectorCurrent;
+    }
+
+    public UIItem getParticleSelectReset() {
+        return particleSelectReset;
     }
 }

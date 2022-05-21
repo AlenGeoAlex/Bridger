@@ -9,22 +9,20 @@ import io.github.alenalex.bridger.abstracts.AbstractDynamicGUI;
 import io.github.alenalex.bridger.handler.UIHandler;
 import io.github.alenalex.bridger.models.player.UserData;
 import io.github.alenalex.bridger.models.player.UserMatchCache;
-import io.github.alenalex.bridger.utils.adventure.MessageFormatter;
 import io.github.alenalex.bridger.utils.adventure.internal.MessagePlaceholder;
 import io.github.alenalex.bridger.variables.LangConfigurationPaths;
-import org.apache.commons.lang3.EnumUtils;
 import org.apache.commons.lang3.text.WordUtils;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.jetbrains.annotations.NotNull;
+import xyz.xenondevs.particle.ParticleEffect;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 
-public final class MaterialSelector extends AbstractDynamicGUI<PaginatedGui> {
+public class ParticleSelector extends AbstractDynamicGUI<PaginatedGui> {
 
-    public MaterialSelector(UIHandler handler) {
+    public ParticleSelector(UIHandler handler) {
         super(handler);
     }
 
@@ -33,7 +31,6 @@ public final class MaterialSelector extends AbstractDynamicGUI<PaginatedGui> {
         return CompletableFuture.supplyAsync(new Supplier<PaginatedGui>() {
             @Override
             public PaginatedGui get() {
-
                 final UserData data = handler.plugin().gameHandler().userManager().getOrDefault(player.getUniqueId(), null);
                 if (data == null) {
                     handler.plugin().getLogger().warning("User data is null for player " + player.getName()+", at prepGui()");
@@ -51,16 +48,16 @@ public final class MaterialSelector extends AbstractDynamicGUI<PaginatedGui> {
                 final PaginatedGui gui = Gui
                         .paginated()
                         .disableAllInteractions()
-                        .title(getConfiguration().getMaterialSelectorConfig().titleAsComponent())
-                        .rows(getConfiguration().getIslandSelectorConfig().rows())
+                        .title(getConfiguration().getParticleSelectorConfig().titleAsComponent())
+                        .rows(getConfiguration().getParticleSelectorConfig().rows())
                         .create();
 
-                applyFiller(gui, getConfiguration().getMaterialSelectorConfig());
+                applyFiller(gui, getConfiguration().getParticleSelectorConfig());
 
                 final GuiItem nextItem = ItemBuilder
-                        .from(getConfiguration().getMaterialSelectorNext().itemStack())
-                        .name(getConfiguration().getMaterialSelectorNext().nameAsComponent())
-                        .lore(getConfiguration().getMaterialSelectorNext().loreAsComponent(
+                        .from(getConfiguration().getParticleSelectorNext().itemStack())
+                        .name(getConfiguration().getParticleSelectorNext().nameAsComponent())
+                        .lore(getConfiguration().getParticleSelectorNext().loreAsComponent(
                                 MessagePlaceholder.of("%page%", gui.getCurrentPageNum()),
                                 MessagePlaceholder.of("%total%", gui.getNextPageNum())
                         ))
@@ -71,12 +68,12 @@ public final class MaterialSelector extends AbstractDynamicGUI<PaginatedGui> {
                             }
                         });
 
-                gui.setItem(getConfiguration().getMaterialSelectorNext().slot(), nextItem);
+                gui.setItem(getConfiguration().getParticleSelectorNext().slot(), nextItem);
 
                 final GuiItem preItem = ItemBuilder
-                        .from(getConfiguration().getMaterialSelectorPre().itemStack())
-                        .name(getConfiguration().getMaterialSelectorPre().nameAsComponent())
-                        .lore(getConfiguration().getMaterialSelectorPre().loreAsComponent(
+                        .from(getConfiguration().getParticleSelectorPre().itemStack())
+                        .name(getConfiguration().getParticleSelectorPre().nameAsComponent())
+                        .lore(getConfiguration().getParticleSelectorPre().loreAsComponent(
                                 MessagePlaceholder.of("%page%", gui.getCurrentPageNum()),
                                 MessagePlaceholder.of("%total%", gui.getNextPageNum())
                         ))
@@ -87,47 +84,53 @@ public final class MaterialSelector extends AbstractDynamicGUI<PaginatedGui> {
                             }
                         });
 
-                gui.setItem(getConfiguration().getMaterialSelectorPre().slot(), preItem);
+                gui.setItem(getConfiguration().getParticleSelectorPre().slot(), preItem);
 
+                final GuiItem resetButton = ItemBuilder
+                        .from(getConfiguration().getParticleSelectReset().itemStack())
+                        .name(getConfiguration().getParticleSelectReset().nameAsComponent())
+                        .lore(getConfiguration().getParticleSelectReset().loreAsComponent())
+                        .glow(getConfiguration().getParticleSelectReset().shouldGlow())
+                        .asGuiItem(event -> {
+                            data.userSettings().setParticle(null);
+                            handler.plugin().messagingUtils().sendTo(player, data.userSettings().getLanguage().asComponent(LangConfigurationPaths.PARTICLE_SELECT_RESET));
+                        });
 
+                final ParticleEffect currentParticle = data.userSettings().getParticle().orElse(null);
 
-                final Material currentMaterial = data.userSettings().getCurrentBlock().getType();
-                for(String materialUnlocked : data.userCosmetics().getMaterialUnlocked()){
-                    if(!EnumUtils.isValidEnum(Material.class, materialUnlocked))
-                        continue;
+                for(String eachUnlockedParticle : data.userCosmetics().getParticleUnlocked()){
+                    final String name = WordUtils.capitalize(eachUnlockedParticle.toLowerCase()).replace("_"," ");
 
-                    final Material material = Material.getMaterial(materialUnlocked);
-                    final String name = WordUtils.capitalize(material.name().toLowerCase()).replace("_"," ");
                     final GuiItem item;
-                    if(material == currentMaterial){
-                         item = ItemBuilder
-                                .from(material)
-                                .name(getConfiguration().getMaterialSelectorCurrent().nameAsComponent(
+                    if(currentParticle != null && currentParticle.getFieldName().equals(eachUnlockedParticle)){
+                        item = ItemBuilder
+                                .from(getConfiguration().getParticleSelectorCurrent().itemStack())
+                                .name(getConfiguration().getParticleSelectorCurrent().nameAsComponent(
                                         MessagePlaceholder.of("%name", name)
                                 ))
-                                .lore(getConfiguration().getMaterialSelectorCurrent().loreAsComponent(
+                                .lore(getConfiguration().getParticleSelectorCurrent().loreAsComponent(
 
                                 ))
-                                .glow(getConfiguration().getMaterialSelectorCurrent().shouldGlow())
+                                .glow(getConfiguration().getParticleSelectorCurrent().shouldGlow())
                                 .asGuiItem();
                     }else{
                         item = ItemBuilder
-                                .from(material)
-                                .name(getConfiguration().getMaterialSelectorButton().nameAsComponent(
+                                .from(getConfiguration().getParticleSelectorButton().itemStack())
+                                .name(getConfiguration().getParticleSelectorButton().nameAsComponent(
                                         MessagePlaceholder.of("%name", name)
                                 ))
-                                .lore(getConfiguration().getMaterialSelectorButton().loreAsComponent(
+                                .lore(getConfiguration().getParticleSelectorButton().loreAsComponent(
 
                                 ))
-                                .glow(getConfiguration().getMaterialSelectorButton().shouldGlow())
+                                .glow(getConfiguration().getParticleSelectorButton().shouldGlow())
                                 .asGuiItem(event -> {
-                                    data.userSettings().setMaterial(material.name());
-                                    handler.plugin().messagingUtils().sendTo(player, data.userSettings().getLanguage().asComponent(LangConfigurationPaths.MATERIAL_SELECTED, MessagePlaceholder.of("%material-name%", name)));
+                                    data.userSettings().setParticle(eachUnlockedParticle);
+                                    handler.plugin().messagingUtils().sendTo(player, data.userSettings().getLanguage().asComponent(LangConfigurationPaths.PARTICLE_SELECTED, MessagePlaceholder.of("%particle-name%", name)));
                                 });
                     }
 
-                    gui.addItem(item);
                 }
+
                 return gui;
             }
         });

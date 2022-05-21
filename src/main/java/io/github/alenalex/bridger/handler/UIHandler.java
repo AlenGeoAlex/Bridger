@@ -5,6 +5,7 @@ import io.github.alenalex.bridger.interfaces.IGui;
 import io.github.alenalex.bridger.ui.dynamic.IslandSelector;
 import io.github.alenalex.bridger.ui.dynamic.LeaderboardMenu;
 import io.github.alenalex.bridger.ui.dynamic.cosmetics.MaterialSelector;
+import io.github.alenalex.bridger.ui.dynamic.cosmetics.ParticleSelector;
 import io.github.alenalex.bridger.ui.dynamic.profile.PlayerSettings;
 import io.github.alenalex.bridger.ui.dynamic.shop.FireworkShop;
 import io.github.alenalex.bridger.ui.dynamic.shop.MainShopMenu;
@@ -34,6 +35,8 @@ public final class UIHandler implements IHandler {
 
     private final MainShopMenu mainShopMenu;
 
+    private final ParticleSelector particleSelector;
+
     public UIHandler(Bridger plugin) {
         this.plugin = plugin;
         this.cosmeticShop = new CosmeticShop(this);
@@ -46,6 +49,7 @@ public final class UIHandler implements IHandler {
         this.leaderboardMenu = new LeaderboardMenu(this);
         this.particleShop = new ParticleShop(this);
         this.mainShopMenu = new MainShopMenu(this);
+        this.particleSelector = new ParticleSelector(this);
     }
 
     @Override
@@ -113,5 +117,9 @@ public final class UIHandler implements IHandler {
 
     public MainShopMenu getMainShopMenu() {
         return mainShopMenu;
+    }
+
+    public ParticleSelector getParticleSelector() {
+        return particleSelector;
     }
 }

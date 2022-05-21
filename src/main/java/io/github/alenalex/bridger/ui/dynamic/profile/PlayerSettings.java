@@ -49,7 +49,7 @@ public final class PlayerSettings extends AbstractDynamicGUI<Gui> {
                         .from(getConfiguration().getPlayerSelectingParticle().itemStack())
                         .name(getConfiguration().getPlayerSelectingParticle().nameAsComponent())
                         .lore(getConfiguration().getPlayerSelectingParticle().loreAsComponent())
-                        .asGuiItem();
+                        .asGuiItem(event -> handler.getParticleSelector().openFor(player));
 
                 gui.setItem(getConfiguration().getPlayerSelectingParticle().slot(), particleButton);
 

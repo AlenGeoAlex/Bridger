@@ -4,6 +4,7 @@ import io.github.alenalex.bridger.Bridger;
 import io.github.alenalex.bridger.api.BridgerAPI;
 import io.github.alenalex.bridger.exceptions.DuplicateAPIRequest;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,11 +40,12 @@ public class BridgerAPIProvider {
      * @return {@link BridgerAPI} instance
      * @throws DuplicateAPIRequest if your plugin is already registered
      * @throws IllegalStateException if the api isn't initialized
-     * @throws IllegalArgumentException if the provided {@link JavaPlugin} is null
+     * @throws IllegalArgumentException if the provided {@link JavaPlugin} is of Bridger's
+     * @throws NullPointerException if the provided plugin is null
      */
-    public BridgerAPI createAPI( JavaPlugin yourPlugin) throws DuplicateAPIRequest, IllegalStateException, IllegalArgumentException {
+    public BridgerAPI getApi(@NotNull JavaPlugin yourPlugin) throws NullPointerException, DuplicateAPIRequest, IllegalStateException, IllegalArgumentException {
         if(yourPlugin == null)
-            throw new IllegalArgumentException("The provided plugin is null");
+            throw new NullPointerException("The provided plugin is null");
 
         if(yourPlugin.equals(Bridger.instance()))
             throw new IllegalArgumentException("You have provided the bridger instance!");

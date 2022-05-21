@@ -57,7 +57,11 @@ public enum LangConfigurationPaths {
 
     COMMAND_HELP_HEADER("command-header"),
     COMMAND_HELP_FOOTER("command-footer"),
-    COMMAND_HELP_DESCRIPTION("command-description")
+    COMMAND_HELP_DESCRIPTION("command-description"),
+
+    MATERIAL_SELECTED("material-selected"),
+    PARTICLE_SELECTED("particle-selected"),
+    PARTICLE_SELECT_RESET("particle-select-reset"),
     ;
     private final String path;
 
