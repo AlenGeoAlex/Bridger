@@ -141,7 +141,7 @@
         <dependency>
             <groupId>com.github.simplix-softworks</groupId>
             <artifactId>simplixstorage</artifactId>
-            <version>3.2.4</version>
+            <version>3.2.5</version>
         </dependency>
 
         <dependency>
